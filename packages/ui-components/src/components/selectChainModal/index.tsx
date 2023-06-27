@@ -21,12 +21,12 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
 
   useEffect(()=>{
     if(fromChainID==null&&toChainID==null&&dataType){
-
-      const networkGOERLI =getChainInfo(USECHAIN_IDS[0])
-      const networkFUJITEST =getChainInfo(USECHAIN_IDS[1])
+    console.log('设置默认值',USECHAIN_IDS[0],USECHAIN_IDS[1])
+      const networkFrom =getChainInfo(USECHAIN_IDS[0])
+      const networkTo =getChainInfo(USECHAIN_IDS[1])
       
-      setFromOrTOChain(networkFUJITEST,false,USECHAIN_IDS[0])
-      setFromOrTOChain(networkGOERLI,true,USECHAIN_IDS[1])
+      setFromOrTOChain(networkFrom,true ,USECHAIN_IDS[0]) // true from 
+      setFromOrTOChain(networkTo,false,USECHAIN_IDS[1])  //false to
 
     }
 

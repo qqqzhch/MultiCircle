@@ -65,7 +65,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
           state.counter++;
         }),
       setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean,chainID:SupportedChainId)=>{
-        if(dataType){
+        if(dataType==true){
           set((state)=>{
             state.fromChain=data
             state.fromChainID=chainID

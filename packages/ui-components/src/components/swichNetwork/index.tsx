@@ -12,8 +12,8 @@ const SwichNetwork = () => {
     const swichFN=useCallback(()=>{
         if(fromChainInfo&&toChainInfo&&fromChainID!==null&&toChainID!==null){
 
-            setFromOrTOChain(fromChainInfo,false,fromChainID) 
-            setFromOrTOChain(toChainInfo,true,toChainID)   
+            setFromOrTOChain(fromChainInfo,false,fromChainID) //false to
+            setFromOrTOChain(toChainInfo,true,toChainID)   //true from 
         }
        
 
