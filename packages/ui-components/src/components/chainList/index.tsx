@@ -57,7 +57,7 @@ const ChainList:FC<Props> = ({children}) => {
  },[library,unsupported])
  useEffect(()=>{
   EventEmitter.on("UnsupportedChainId",(Unsupported)=>{
-    setUnsupported(Unsupported)
+    // setUnsupported(Unsupported)
     
     
   })

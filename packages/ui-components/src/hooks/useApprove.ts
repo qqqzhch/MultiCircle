@@ -5,12 +5,14 @@ import {useAsyncFn} from 'react-use';
 import erc20ABI from './../constants/ABI/ERC20.json'
 import useRelayerAddress from './useRelayer'
 import useUSDCAddress from './useUsdc'
+import { useToasts } from 'react-toast-notifications'
 
 
 export default function useErc20Approve() {
     const { library,account } = useWeb3React()
     const checkAddress = useRelayerAddress();
     const contractAddress =useUSDCAddress()
+    const { addToast } = useToasts()
   
 
   
@@ -20,12 +22,13 @@ export default function useErc20Approve() {
           const signer = library.getSigner()
           const contract = new Contract(contractAddress, erc20ABI, signer)
           const result = await contract.approve(checkAddress,ethers.constants.MaxUint256 )
-          await result.wait([1])
+          addToast('Approving', { appearance: 'success' })
+          await result.wait([2])
           return result
         }
       
     
-    }, [account, library, contractAddress,checkAddress])
+    }, [account, library, contractAddress,checkAddress,addToast])
   
     return {
         state,
