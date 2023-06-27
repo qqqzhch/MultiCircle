@@ -1,11 +1,11 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback,useEffect,useMemo } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { useAppStore } from '../../state'
 import { formatUnitsErc20 } from '../../utils'
 import useRelayCall from '../../hooks/useRelayCall'
 import { Else, If, Then, When } from 'react-if'
-
+import useTxStatus from '../../hooks/useTxStatus';
 
 interface componentprops {
   isOpen: boolean
@@ -21,11 +21,35 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const output = useAppStore((state)=>state.output)
     const fee = useAppStore((state)=>state.fee)
     const RelayCall =useRelayCall()
+    const [txHash,setTxHash]= useState(undefined)
+    const status = useTxStatus(txHash)
+    const statusMint= useMemo(()=>{
+      if(status&&status.data&&status.data.data&&status.data.data.mint=="done"){
+          return true
+      }else{
+          return false
+      }
+
+  },[status])
+  useEffect(()=>{
+    if(isOpen==false){
+      setTxHash(undefined)
+    }
+
+  },[isOpen])
 
     const SubmitFN = useCallback(async ()=>{
-     await RelayCall.doFetch()
-     closeModal()
-    },[RelayCall,closeModal])
+    const {hash} =  await RelayCall.doFetch()
+    setTxHash(hash)
+    
+
+    },[RelayCall,setTxHash])
+    useEffect(()=>{
+     if(statusMint){
+      closeModal()
+     }
+    },[statusMint,closeModal])
+    
 
 
 
@@ -90,14 +114,21 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                   </div>
 
                   <div className="mt-4 flex">
-                    <If condition={RelayCall.state.loading}>
+                  <When condition={statusMint}>
+                    <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                        <span className="font-medium">Success </span> 
+                    </div>
+                  </When>
+
+
+                    <If condition={RelayCall.state.loading||(RelayCall.state.loading==false&&statusMint==false&&txHash!==undefined)}>
                       <Then>
                       <button
                       type="button"
                       className="inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium  text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                      
                     >
-                     loading
+                     Verfying...
                     </button>
 
                       </Then>
