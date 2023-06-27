@@ -31,7 +31,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
 
   useEffect(()=>{
     if(fromChainID==null&&toChainID==null&&dataType){
-    console.log('设置默认值',USECHAIN_IDS[0],USECHAIN_IDS[1])
+    console.log('set default value',USECHAIN_IDS[0],USECHAIN_IDS[1])
       const networkFrom =getChainInfo(USECHAIN_IDS[0])
       const networkTo =getChainInfo(USECHAIN_IDS[1])
       
@@ -45,12 +45,16 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const clickFn = useCallback(async (network: L1ChainInfo | L2ChainInfo,chainId:SupportedChainId)=>{
   console.log('- -')
     setFromOrTOChain(network,dataType,chainId);
-    closeModal() 
-    if(dataType){
-     await switchingNetwork.doSwitch()
-    }
+    closeModal()
+    setTimeout(()=>{
+      if(dataType){
+         switchingNetwork.doSwitch(chainId)
+       }
+    },0) 
+    
     
   },[switchingNetwork,dataType,setFromOrTOChain,closeModal])
+  
 
   return (
       <Transition appear show={isOpen} as={Fragment}>
