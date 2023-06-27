@@ -73,7 +73,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
        <span className="ml-auto text-gray-900">{toChainInfo?.label}</span>
      </div>
      <div className="flex border-t border-gray-200 py-2">
-       <span className="text-gray-500">INPUT AMOUNT</span>
+       <span className="text-gray-500">AMOUNT</span>
        <span className="ml-auto text-gray-900">{formatUnitsErc20(input,'usdc',6)}</span>
      </div>
      <div className="flex border-t border-gray-200 py-2">
@@ -81,7 +81,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
        <span className="ml-auto text-gray-900">{formatUnitsErc20(input,'usdc',6)}</span>
      </div>
      <div className="flex border-t border-b mb-6 border-gray-200 py-2">
-       <span className="text-gray-500">FEE</span>
+       <span className="text-gray-500">Protocol Fee</span>
        <span className="ml-auto text-gray-900">{formatUnitsErc20(fee ,fromChainInfo?.nativeCurrency.symbol||"",fromChainInfo?.nativeCurrency.decimals||18)}</span>
      </div>
   
