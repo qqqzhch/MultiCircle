@@ -1,10 +1,12 @@
-import React, { useMemo ,useEffect} from 'react';
+import React, { useMemo ,useEffect, useCallback} from 'react';
 import { Dialog,Transition  } from '@headlessui/react'
 import { Fragment, FC  } from 'react'
 import { Else, If, Then } from 'react-if';
 import { SupportedChainId, TESTNET_CHAIN_IDS,USECHAIN_IDS } from '../../constants/chains';
-import { getChainInfo } from '../../constants/chainInfo';
+import { L1ChainInfo, L2ChainInfo, getChainInfo } from '../../constants/chainInfo';
 import { useAppStore } from '../../state';
+import useSwitchingNetwork from '../../hooks/useSwitchingNetwork';
+
 
 
 
@@ -18,6 +20,15 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const setFromOrTOChain = useAppStore((state)=>state.setFromOrTOChain)
   const fromChainID = useAppStore((state)=>state.fromChainID)
   const toChainID = useAppStore((state)=>state.toChainID)
+  const switchingNetwork = useSwitchingNetwork()
+  const listIng = useMemo(()=>{
+    console.log('***')
+    if(dataType){
+      return  USECHAIN_IDS.filter((item)=>{return  item!==toChainID})
+    }else{
+      return  USECHAIN_IDS.filter((item)=>{return  item!==fromChainID})
+    }
+  },[dataType,fromChainID,toChainID])
 
   useEffect(()=>{
     if(fromChainID==null&&toChainID==null&&dataType){
@@ -31,6 +42,16 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
     }
 
   },[fromChainID,toChainID,dataType,setFromOrTOChain])
+
+  const clickFn = useCallback(async (network: L1ChainInfo | L2ChainInfo,chainId:SupportedChainId)=>{
+  console.log('- -')
+    setFromOrTOChain(network,dataType,chainId);
+    closeModal() 
+    if(dataType){
+     await switchingNetwork.doSwitch()
+    }
+    
+  },[switchingNetwork,dataType,setFromOrTOChain,closeModal])
 
   return (
       <Transition appear show={isOpen} as={Fragment}>
@@ -75,10 +96,10 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
                 <div className="mt-2">
                  
 <ul className="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
-  {USECHAIN_IDS.map((chainId,index)=>{
+  {listIng.map((chainId,index)=>{
     const network =getChainInfo(chainId)
 
-    return (<li key={index} onClick={()=>{setFromOrTOChain(network,dataType,chainId);closeModal() }}  className="pb-3 pt-2 sm:pb-4 cursor-pointer">
+    return (<li key={index} onClick={()=>{clickFn(network,chainId);}}  className="pb-3 pt-2 sm:pb-4 cursor-pointer">
     <div className="flex items-center space-x-4 ">
        <div className="flex-shrink-0">
           <img className="w-8 h-8 rounded-full" src={network.logoUrl} >

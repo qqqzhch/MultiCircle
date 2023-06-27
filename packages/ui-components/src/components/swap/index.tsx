@@ -16,6 +16,7 @@ import PreviewModal from '../preview'
 import SwichNetwork from '../swichNetwork'
 import useRelayerFee from '../../hooks/useRelayerFee'
 import EventBus from '../../EventEmitter/index'
+import usdclogo from '../../assets/icon/usdc.png'
 
 
 
@@ -141,8 +142,8 @@ const Swap = () => {
          
         </div>
         </div>
-        <div className="relative z-0 w-full mb-6 group  flex flex-row">
-          <div className=' flex-1'>
+        <div className="relative z-0 w-full mb-6 group  flex flex-row justify-between">
+          <div className=' flex-1 '>
           <input
             type="text"
             name="input"
@@ -152,10 +153,13 @@ const Swap = () => {
             onChange={(e)=>{inputAmountChange(e.currentTarget.value)}}
           />
           </div>
-          <div className='flex  flex-col  text-gray-500 '>
+          <div className=' flex   flex-row  text-gray-500 items-center justify-end'>
+            <div className=' flex flex-col mr-2 text-sm   text-gray-400'>
             <div>Balance</div>
-            <div>{formatUnitsErc20(usdcBalance.balance,'usdc',6)} </div>
-
+            <div>{formatUnitsErc20(usdcBalance.balance,'',6)} </div>
+            </div>
+            
+            <img className=' w-10 h-10' src={usdclogo}></img>
           </div>
           
           <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
@@ -169,13 +173,13 @@ const Swap = () => {
         <div className="relative z-0 w-full  group  mb-14">
           
           <label className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          You will receive:{inputAmount} USDC
+          You will receive: {" "}  {inputAmount} USDC
           </label>
         </div>
         <div className="relative z-0 w-full  group mb-20">
           
           <label className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          Protocol Fee:{fromChainID!==null&&formatUnits(fromChainID,RelayerFee,true) } 
+          Protocol Fee: {" "} {fromChainID!==null&&formatUnits(fromChainID,RelayerFee,true) } 
           </label>
         </div>
         <div className=' relative z-0 w-full mb-6 group flex mt-10'>
@@ -191,12 +195,24 @@ const Swap = () => {
         <If condition={allowance&&fromChainID==chainId&&fromChainID!==toChainID}>
          <Then>
           
+          <When condition={ApproveUSDT.state.loading}>
+          <button
+          className="text-white flex-1  bg-red-400 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  cursor-wait"
+        >
+         Approve loading  
+        </button>
+
+          </When>
+          <When condition={ApproveUSDT.state.loading!==true}>
           <button
          onClick={ApproveUSDT.doFetch}
           className="text-white flex-1  bg-red-400 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-         { ApproveUSDT.state.loading?"Approve loading":"Approve"}  
+         Approve  
         </button>
+
+          </When>
+          
 
           
         

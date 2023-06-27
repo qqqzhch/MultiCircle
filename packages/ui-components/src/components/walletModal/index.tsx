@@ -9,6 +9,7 @@ import { useWeb3React } from '@web3-react/core'
 // import { accountDataType } from '../../web3react/types'
 import {  useEffect, useCallback } from 'react'
 import EventEmitter from '../../EventEmitter/index'
+import metamask from '../../assets/icon/metamask.svg'
 
 
 
@@ -73,7 +74,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   //   // setAccountData(null)
   // }
   const walletsToDisplay = [
-    { id: 1, title: 'MetaMask', imgSrc: '', fn: connectMetaMask },
+    { id: 1, title: 'MetaMask', imgSrc: metamask, fn: connectMetaMask },
     // { id: 3, title: 'WalletConnect', imgSrc: '', fn: connectWalletConnect }
   ]
   // connect on load
@@ -128,9 +129,17 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                   <div className="mt-2">
                     <p className="text-sm text-gray-500 flex flex-col items-center">
                       {walletsToDisplay.map(el => (
-                      <div className="my-1 flex-1" key={el.id}>
-                        <button key={el.id} onClick={el.fn} type="button" className="px-8 py-3 font-semibold border rounded border-blue-800 text-blue-800  w-48">{el.title}</button>
-                      </div>
+                       <div className="my-1 flex-1" key={el.id}>
+                       <button
+                         key={el.id}
+                         onClick={el.fn}
+                         type="button"
+                         className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2 min-w-full"
+                       >
+                         <img src={el.imgSrc} className="w-6 h-5 mr-2 -ml-1"></img>
+                         {el.title}
+                       </button>
+                     </div>
                       ))}
                     </p>
                   </div>
