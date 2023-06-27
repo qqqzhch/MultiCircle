@@ -37,4 +37,4 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }
 
-  export const BaseUrl="http://3.89.186.206:12000/cctp/"
+  export const BaseUrl="https://express-hello-world-p8m1l2gqb-qqqzhch.vercel.app/api"
