@@ -53,7 +53,7 @@ const Swap = () => {
 
 
   const ApproveUSDT = useErc20Approve()
-  console.log('ApproveUSDT.state.loading',ApproveUSDT.state.loading)
+ 
   const {allowance}= useErcCheckAllowance(inputAmountBigNum)
   const switchingNetwork = useSwitchingNetwork()  
  
