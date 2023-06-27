@@ -23,12 +23,11 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const switchingNetwork = useSwitchingNetwork()
   const listIng = useMemo(()=>{
     console.log('***')
-    if(dataType){
-      return  USECHAIN_IDS.filter((item)=>{return  item!==toChainID})
-    }else{
+    if(dataType==false){
       return  USECHAIN_IDS.filter((item)=>{return  item!==fromChainID})
     }
-  },[dataType,fromChainID,toChainID])
+    return USECHAIN_IDS
+  },[dataType,fromChainID])
 
   useEffect(()=>{
     if(fromChainID==null&&toChainID==null&&dataType){
