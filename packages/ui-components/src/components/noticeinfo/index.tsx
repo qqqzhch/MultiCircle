@@ -37,7 +37,7 @@ export default function Noticeinfo() {
       
        <div onClick={openModal} className="relative py-2   cursor-pointer mr-4">
               <FontAwesomeIcon icon={icon({ name: 'bell', style: 'solid' })} />
-              <When condition={account}>
+              <When condition={account&&list.length>0}>
               <span className="absolute  rounded-full bg-red-400 py-0 px-1.5 text-xs text-white">{list.length}</span>
               </When>
              
