@@ -11,7 +11,7 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
     const fromChainInfo = getChainInfo(Item.fromChainID)
     const toChainInfo = getChainInfo(Item.toChainID)
     const status = useTxStatus(Item.txhash)
-    console.log(status.data)
+
     //{"code":0,"data":{"attest":"done","mint":"done","scan":"done"}}
     const statusMint= useMemo(()=>{
         const statusText={

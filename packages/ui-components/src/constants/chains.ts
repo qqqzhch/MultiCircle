@@ -78,16 +78,16 @@ export const TESTNET_CHAIN_IDS = [
   SupportedChainId.ARBITRUM_Goerli,
   // SupportedChainId.OPTIMISM_GOERLI,
   SupportedChainId.AVALANCHE_FUJITEST
-] as const
+] 
 
 export const MAINNET_CHAIN_IDS = [
  
   SupportedChainId.MAINNET,
   SupportedChainId.ARBITRUM_ONE,
   SupportedChainId.AVALANCHE_C_HAIN
-] as const
+] 
 
-export const USECHAIN_IDS=MAINNET_CHAIN_IDS 
+export const USECHAIN_IDS=import.meta.env.DEV?TESTNET_CHAIN_IDS:MAINNET_CHAIN_IDS 
 
 export type SupportedTestnetChainId = typeof TESTNET_CHAIN_IDS[number]
 
