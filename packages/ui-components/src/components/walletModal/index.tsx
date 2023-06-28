@@ -21,7 +21,7 @@ interface componentprops {
 const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   ////
   const { addToast } = useToasts()
-  const {  activate} = useWeb3React()
+  const {  activate,active} = useWeb3React()
   
   // const [accountData, setAccountData] = useState<null | accountDataType>(null)
   // const noderef= useRef()
@@ -40,13 +40,14 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       
       status = true
     })
-
+    console.log('connectMetaMask')
     if (!status) {
-      localStorage.setItem('walletIsConnectedTo', 'metamask')
       addToast('Connected to MetaMask', { appearance: 'success' })
+      localStorage.setItem('walletIsConnectedTo', 'metamask')
       closeModal()
     }
   }, [activate, addToast,closeModal])
+
   const connectWalletConnect = useCallback(async () => {
     let status = false
     await activate(connectors.walletConnect, (err: Error) => {
@@ -89,9 +90,11 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
         await connectWalletConnect()
       }
     }
-
-    connectWalletOnPageLoad()
-  }, [connectMetaMask, connectWalletConnect])
+    if(active==false){
+      connectWalletOnPageLoad()
+    }
+    
+  }, [connectMetaMask, connectWalletConnect,active])
 
   
   
