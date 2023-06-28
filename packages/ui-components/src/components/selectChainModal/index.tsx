@@ -30,8 +30,10 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   },[dataType,fromChainID])
 
   useEffect(()=>{
-    if(fromChainID==null&&toChainID==null&&dataType){
-    console.log('set default value',USECHAIN_IDS[0],USECHAIN_IDS[1])
+    const need=fromChainID==null||toChainID==null||USECHAIN_IDS.includes(fromChainID)==false||USECHAIN_IDS.includes(toChainID)==false
+    //set default
+    if(need&&dataType){
+
       const networkFrom =getChainInfo(USECHAIN_IDS[0])
       const networkTo =getChainInfo(USECHAIN_IDS[1])
       

@@ -17,6 +17,8 @@ import SwichNetwork from '../swichNetwork'
 import useRelayerFee from '../../hooks/useRelayerFee'
 import EventBus from '../../EventEmitter/index'
 import usdclogo from '../../assets/icon/usdc.png'
+import { USECHAIN_IDS } from '../../constants/chains'
+
 
 
 
@@ -68,7 +70,18 @@ const Swap = () => {
       setinputError(undefined)
       if(error==undefined){
         setInputAmount(value)
-        setInput(ethers.utils.parseUnits(value,6).toString())
+        const valueHaveUnits=ethers.utils.parseUnits(value,6).toString()
+        setInput(valueHaveUnits)
+
+        if(usdcBalance.balance!=undefined){
+          const inputAmount= BigNumber.from(valueHaveUnits);
+          const usdcBalanceamount= BigNumber.from(usdcBalance.balance);
+
+          if(inputAmount.gt(usdcBalanceamount)){ 
+            setinputError('The value entered is greater than the balance')
+          }
+        }
+        
       }else{
         setinputError(error)
         setInput("0")
@@ -76,24 +89,16 @@ const Swap = () => {
       }
     })
     
-  },[startTransition,setInput,setInputAmount,setinputError])
+  },[startTransition,setInput,setInputAmount,setinputError,usdcBalance])
 
-  useEffect(()=>{
-  if(usdcBalance.balance!=undefined){
-    const inputAmount= BigNumber.from(inputAmountBigNum);
-    const usdcBalanceamount= BigNumber.from(usdcBalance.balance);
-    if(inputAmount.gt(usdcBalanceamount)){
-      // addToast("The value entered is greater than the balance", { appearance: 'error' })
-     
-      setinputError('The value entered is greater than the balance')
 
-    }
-  }
-    
-
-  },[inputAmountBigNum,usdcBalance,addToast])
 
   const ValidateAmountFN = useCallback(()=>{
+
+    if(fromChainID==null||toChainID==null|| USECHAIN_IDS.includes(fromChainID)==false||USECHAIN_IDS.includes(toChainID)==false){
+      addToast("Please check the network", { appearance: 'error' })
+      return false
+    }
     const  num =BigNumber.from(inputAmountBigNum)
     if(usdcBalance.balance==undefined){
       addToast("Please check the balance", { appearance: 'error' })
@@ -107,7 +112,7 @@ const Swap = () => {
       return false
     }
 
-  },[inputAmountBigNum,usdcBalance,addToast])
+  },[inputAmountBigNum,usdcBalance,addToast,fromChainID,toChainID])
 
   const connectWallet = useCallback(() => {
     EventBus.emit('connectwallet')
