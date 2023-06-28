@@ -33,24 +33,38 @@ export default function useRelayCall() {
 
           const signer = library.getSigner()
           const contract = new Contract(contractAddress, UsdcRelayerABI, signer)
-          const result = await contract.callout(amount,destinationDomain,mintRecipient,burnToken,{
-            value:RelayerFee
-          })
-          console.log(result)
-          addToHistory({
-            fromChainID:fromChainID, 
-            toChainID:toChainID, 
-            input:inputAmount, 
-            fee:RelayerFee,
-            txhash:result.hash,
-            creattime:Date.now(),
-            user:account
-          })
-          addToast('Transactions have been sent', { appearance: 'success',autoDismissTimeout:1000*10 })
-
-          const txinfo = await result.wait([1])
-          console.log(txinfo)
-          return result
+          try {
+            const result = await contract.callout(amount,destinationDomain,mintRecipient,burnToken,{
+              value:RelayerFee
+            })
+            console.log(result)
+            addToHistory({
+              fromChainID:fromChainID, 
+              toChainID:toChainID, 
+              input:inputAmount, 
+              fee:RelayerFee,
+              txhash:result.hash,
+              creattime:Date.now(),
+              user:account
+            })
+            addToast('Transactions have been sent', { appearance: 'success',autoDismissTimeout:1000*10 })
+  
+            const txinfo = await result.wait([1])
+            console.log(txinfo)
+            return result
+            
+          } catch (error:any) {
+            let  msg
+            if(error.data){
+               msg =error.data.message
+            }else{
+               msg=error.message
+            }
+            
+            addToast(msg, { appearance: 'error',autoDismissTimeout:1000*5 })
+  
+          }
+         
         }
       
     

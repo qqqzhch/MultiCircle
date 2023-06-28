@@ -21,22 +21,35 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const output = useAppStore((state)=>state.output)
     const fee = useAppStore((state)=>state.fee)
     const RelayCall =useRelayCall()
-    const [txHash,setTxHash]= useState(undefined)
+    const [txHash,setTxHash]= useState<string|null>(null)
     const status = useTxStatus(txHash)
     const statusMint= useMemo(()=>{
-      if(status&&status.data&&status.data.data&&status.data.data.mint=="done"){
-          return true
-      }else{
-          return false
+      const statusText={
+          text:"",
+          step:0,
+          isloading:status.isLoading
       }
+      if(status&&status.data&&status.data.data){
+          if(status.data.data.scan=="done"){
+              statusText.text="Waiting for attest"
+              statusText.step=1
+          }
+          if(status.data.data.attest=="done"){
+              statusText.text="Waiting for mint"
+              statusText.step=2
+          }
+          if(status.data.data.mint=="done"){
+              statusText.text="Success"
+              statusText.step=3
+          }
+      }else{
+          statusText.text="Waiting for scan "
+      }
+      return statusText
 
   },[status])
-  useEffect(()=>{
-    if(isOpen==false){
-      setTxHash(undefined)
-    }
 
-  },[isOpen])
+
 
     const SubmitFN = useCallback(async ()=>{
     const {hash} =  await RelayCall.doFetch()
@@ -44,19 +57,24 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     
 
     },[RelayCall,setTxHash])
+
     useEffect(()=>{
-     if(statusMint){
-      closeModal()
+     if(statusMint.step==3){
+      // closeModal()
      }
     },[statusMint,closeModal])
-    
 
+    const closeModalFn= useCallback(()=>{
+      setTxHash(null)
+      closeModal()
+    },[closeModal,setTxHash])
 
+  console.log('- -')
 
     return (
     <div>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={closeModalFn}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -113,22 +131,22 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
    </div>
                   </div>
 
-                  <div className="mt-4 flex">
-                  <When condition={statusMint}>
+                  <div className="mt-4 flex flex-col">
+                  <When condition={statusMint.step==3}>
                     <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
                         <span className="font-medium">Success </span> 
                     </div>
                   </When>
+                  <When condition={statusMint.step!==3}>
 
-
-                    <If condition={RelayCall.state.loading||(RelayCall.state.loading==false&&statusMint==false&&txHash!==undefined)}>
+                    <If condition={RelayCall.state.loading||(statusMint.step!==3&&status.data!==undefined)}>
                       <Then>
                       <button
                       type="button"
                       className="inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium  text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                      
                     >
-                     Verfying...
+                     Verfying...({statusMint.text})
                     </button>
 
                       </Then>
@@ -144,7 +162,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
 
                       </Else>
                     </If>
-                    
+                  </When>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

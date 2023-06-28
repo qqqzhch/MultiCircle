@@ -15,7 +15,7 @@ interface statusType {
   }
 }
 
-async function fetcher(txhash: string|undefined ): Promise< statusType | undefined> {
+async function fetcher(txhash: string|undefined|null ): Promise< statusType | undefined> {
   if (txhash == null || txhash == undefined) {
     return
   }
@@ -28,7 +28,7 @@ async function fetcher(txhash: string|undefined ): Promise< statusType | undefin
   }
 }
 
-export default function useTxStatus(txhash: string|undefined) {
+export default function useTxStatus(txhash: string|undefined|null) {
 
 
   const { data, error, isLoading } = useSWR(txhash ? ['/smw/txhash', txhash] : null, () => fetcher(txhash), {

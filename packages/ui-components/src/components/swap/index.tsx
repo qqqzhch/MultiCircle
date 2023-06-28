@@ -66,6 +66,7 @@ const Swap = () => {
       
       setInputAmount(value)
       setInput(ethers.utils.parseUnits(value,6).toString())
+
     }
   },[])
   useEffect(()=>{
@@ -101,6 +102,11 @@ const Swap = () => {
   const connectWallet = useCallback(() => {
     EventBus.emit('connectwallet')
   }, [])
+
+  const closePreModel= useCallback(()=>{
+    console.log('closePreModel')
+    setPreviewOpen(false)
+  },[setPreviewOpen])
   
   
 
@@ -273,7 +279,7 @@ const Swap = () => {
       </div>
         <SelectChainModal isOpen={ isFromOpen} closeModal={()=>{setIsFromOpen (false)}}  dataType={true}   ></SelectChainModal>
         <SelectChainModal isOpen={ isToOpen} closeModal={()=>{setIsToOpen(false)}} dataType={false} ></SelectChainModal>
-        <PreviewModal isOpen={isPreviewOpen} closeModal={()=>{setPreviewOpen(false)}}></PreviewModal>
+        <PreviewModal isOpen={isPreviewOpen} closeModal={closePreModel}></PreviewModal>
     </div>
   )
 }
