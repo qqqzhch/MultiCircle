@@ -6,6 +6,8 @@ import { formatUnitsErc20 } from '../../utils'
 import useRelayCall from '../../hooks/useRelayCall'
 import { Else, If, Then, When } from 'react-if'
 import useTxStatus from '../../hooks/useTxStatus';
+import Loading from '../loading'
+
 
 interface componentprops {
   isOpen: boolean
@@ -23,9 +25,10 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const RelayCall =useRelayCall()
     const [txHash,setTxHash]= useState<string|null>(null)
     const status = useTxStatus(txHash)
+    const [isTxLoading,setIsTxLoading]=useState(false)
     const statusMint= useMemo(()=>{
       const statusText={
-          text:"",
+          text:"Waiting for scan",
           step:0,
           isloading:status.isLoading
       }
@@ -42,8 +45,6 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
               statusText.text="Success"
               statusText.step=3
           }
-      }else{
-          statusText.text="Waiting for scan "
       }
       return statusText
 
@@ -52,21 +53,28 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
 
 
     const SubmitFN = useCallback(async ()=>{
-    const {hash} =  await RelayCall.doFetch()
-    setTxHash(hash)
-    
+    setIsTxLoading(true)
+    try {
+      const {hash} =  await RelayCall.doFetch()
+      setTxHash(hash)    
+    } catch (ex:any) {
+      setTxHash(null)
+      setIsTxLoading(false)
+    }
+  
 
-    },[RelayCall,setTxHash])
+    },[RelayCall,setTxHash,setIsTxLoading])
 
     useEffect(()=>{
      if(statusMint.step==3){
-      // closeModal()
+      setIsTxLoading(false)
      }
     },[statusMint,closeModal])
 
     const closeModalFn= useCallback(()=>{
       setTxHash(null)
       closeModal()
+      setIsTxLoading(false)
     },[closeModal,setTxHash])
 
   console.log('- -')
@@ -139,13 +147,14 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                   </When>
                   <When condition={statusMint.step!==3}>
 
-                    <If condition={RelayCall.state.loading||(statusMint.step!==3&&status.data!==undefined)}>
+                    <If condition={isTxLoading}>
                       <Then>
                       <button
                       type="button"
                       className="inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium  text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                      
                     >
+                     <Loading></Loading>
                      Verfying...{statusMint.text}
                     </button>
 
@@ -156,9 +165,10 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                       className="inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-700 px-4 py-2 text-sm font-medium  text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                      onClick={SubmitFN}
                     >
+                  
                      Submit
                     </button>
-                      
+                    
 
                       </Else>
                     </If>

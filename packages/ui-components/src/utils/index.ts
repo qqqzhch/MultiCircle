@@ -53,9 +53,9 @@ function numFormat(value: string | number, mantissa?: number) {
     if (!amount || isNaN(Number(amount))) {
       return 'The value must be a number'
     }
-    const isnum = /^(?!0\d)\d+(\.\d+)?$/.test(amount)
+    const isnum = /^(?!0\d)\d+(\.\d{1,6})?$/.test(amount)
     if (isnum == false) {
-      return 'The value must be a number'
+      return 'The value must be a number,with 6 decimal places'
     }
   
     if (parseFloat(amount) <= 0) {

@@ -1,4 +1,4 @@
-import React,{useCallback, useEffect, useMemo, useState} from 'react'
+import React,{useCallback, useEffect, useMemo, useState, useTransition} from 'react'
 import SelectChainModal from '../selectChainModal'
 import { ArrowDownIcon } from '@heroicons/react/24/solid'
 import { useAppStore } from '../../state'
@@ -17,6 +17,8 @@ import SwichNetwork from '../swichNetwork'
 import useRelayerFee from '../../hooks/useRelayerFee'
 import EventBus from '../../EventEmitter/index'
 import usdclogo from '../../assets/icon/usdc.png'
+import { USECHAIN_IDS } from '../../constants/chains'
+
 
 
 
@@ -38,6 +40,8 @@ const Swap = () => {
   const USDCAddress = useUSDCAddress()
   const usdcBalance=  useErc20Balance(account,USDCAddress)
   const RelayerFee = useRelayerFee()
+  const [isPending, startTransition] = useTransition();
+  const [inputError,setinputError]=useState<string|undefined>()
 
 
   const inputAmountBigNum = useMemo(()=>{
@@ -61,43 +65,54 @@ const Swap = () => {
 
   const inputAmountChange= useCallback((value:string)=>{
     
+    startTransition(()=>{
+      const error=validateAmount(value)
+      setinputError(undefined)
+      if(error==undefined){
+        setInputAmount(value)
+        const valueHaveUnits=ethers.utils.parseUnits(value,6).toString()
+        setInput(valueHaveUnits)
+
+        if(usdcBalance.balance!=undefined){
+          const inputAmount= BigNumber.from(valueHaveUnits);
+          const usdcBalanceamount= BigNumber.from(usdcBalance.balance);
+
+          if(inputAmount.gt(usdcBalanceamount)){ 
+            setinputError('The value entered is greater than the balance')
+          }
+        }
+        
+      }else{
+        setinputError(error)
+        setInput("0")
+        setInputAmount("0")
+      }
+    })
     
-    if(validateAmount(value)==undefined){
-      
-      setInputAmount(value)
-      setInput(ethers.utils.parseUnits(value,6).toString())
+  },[startTransition,setInput,setInputAmount,setinputError,usdcBalance])
 
+
+
+  const ValidateAmountFN = useCallback(()=>{
+
+    if(fromChainID==null||toChainID==null|| USECHAIN_IDS.includes(fromChainID)==false||USECHAIN_IDS.includes(toChainID)==false){
+      addToast("Please check the network", { appearance: 'error' })
+      return false
     }
-  },[])
-  useEffect(()=>{
-  if(usdcBalance.balance!=undefined){
-    const inputAmount= BigNumber.from(inputAmountBigNum);
-    const usdcBalanceamount= BigNumber.from(usdcBalance.balance);
-    if(inputAmount.gt(usdcBalanceamount)){
-      // addToast("The value entered is greater than the balance", { appearance: 'error' })
-      setInputIsgtebalance(true)
-      console.log('The value entered is greater than the balance')
-    }else{
-      setInputIsgtebalance(false)
-    }
-  }
-    
-
-  },[inputAmountBigNum,usdcBalance,addToast])
-
-  const ValidateAmount = useCallback(()=>{
     const  num =BigNumber.from(inputAmountBigNum)
     if(usdcBalance.balance==undefined){
+      addToast("Please check the balance", { appearance: 'error' })
       return false
     }
     if(num.gt(0)&&num.lte(usdcBalance.balance)){
       setPreviewOpen(true)
       return true
     }else{
+      addToast("Please check the values entered", { appearance: 'error' })
       return false
     }
 
-  },[inputAmountBigNum,usdcBalance])
+  },[inputAmountBigNum,usdcBalance,addToast,fromChainID,toChainID])
 
   const connectWallet = useCallback(() => {
     EventBus.emit('connectwallet')
@@ -158,6 +173,7 @@ const Swap = () => {
             required
             onChange={(e)=>{inputAmountChange(e.currentTarget.value)}}
           />
+          <p className=' text-red-400'>{inputError}</p>
           </div>
           <div className=' flex   flex-row  text-gray-500 items-center justify-end'>
             <div className=' flex flex-col mr-2 text-sm   text-gray-400'>
@@ -188,13 +204,7 @@ const Swap = () => {
           Protocol Fee: {" "} {fromChainID!==null&&formatUnits(fromChainID,RelayerFee,true) } 
           </label>
         </div>
-        <div className=' relative z-0 w-full mb-6 group flex mt-10'>
-        <When condition={inputIsgtebalance}>
-        <div className="p-4 mb-4 w-full text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-        The value entered is greater than the balance
-            </div>
-        </When>
-        </div>
+       
         <div className=' relative z-0 w-full mb-6 group flex mt-10'>
         
         <When condition={account!==undefined&&account!==null}>
@@ -228,7 +238,7 @@ const Swap = () => {
           <If condition={fromChainID==chainId&&fromChainID!==toChainID}>
             <Then>
             <button
-            onClick={()=>{ValidateAmount()}}
+            onClick={()=>{ValidateAmountFN()}}
           
           className="text-white flex-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
