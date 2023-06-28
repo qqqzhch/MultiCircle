@@ -87,7 +87,7 @@ export const MAINNET_CHAIN_IDS = [
   SupportedChainId.AVALANCHE_C_HAIN
 ] as const
 
-export const USECHAIN_IDS=(import.meta.env.DEV)?TESTNET_CHAIN_IDS:MAINNET_CHAIN_IDS 
+export const USECHAIN_IDS=MAINNET_CHAIN_IDS 
 
 export type SupportedTestnetChainId = typeof TESTNET_CHAIN_IDS[number]
 
