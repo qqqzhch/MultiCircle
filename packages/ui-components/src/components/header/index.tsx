@@ -25,7 +25,7 @@ export const Header:FC = () => {
         </a>
         <div className="flex  sm:hidden pl-2">
           {/* <FontAwesomeIcon icon={icon({ name: 'bars', style: 'solid' })} /> */}
-          <img src={mobilelogo}  className=' w-8 '></img>
+          <img src={mobilelogo}  className=' w-8 h-8 '></img>
         </div>
 
         <nav className="md:ml-auto flex flex-wrap items-center text-base  justify-end  ">
