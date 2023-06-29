@@ -28,7 +28,7 @@ export const Header:FC = () => {
           <img src={mobilelogo}  className=' w-8 '></img>
         </div>
 
-        <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center  ">
+        <nav className="md:ml-auto flex flex-wrap items-center text-base  justify-end  ">
           {/* <div className="pr-4 pl-4    hover:text-gray-900 border-r border-gray-400 last:border-r-0 hidden lg:block">
             <button type="button" className="px-6 py-2 font-semibold border rounded border-gray-800 text-gray-800">
               Switch to bnb BNB Smart Chain

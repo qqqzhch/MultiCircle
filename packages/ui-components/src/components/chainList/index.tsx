@@ -45,7 +45,7 @@ const ChainList:FC<Props> = ({children}) => {
       }
       
     }else{
-      const ChainInfo =  getChainInfo(1)
+      const ChainInfo =  getChainInfo(USECHAIN_IDS[0])
       if(ChainInfo?.label){
        setchianName(ChainInfo?.label)
        setchianLogo(ChainInfo.logoUrl)
@@ -87,7 +87,7 @@ const ChainList:FC<Props> = ({children}) => {
 
           </When>
           <When condition={unsupported!==true&&chainId===undefined}>
-              <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-yellow-300 font-thin text-sm">Support Network</div>
+              <div className="px-3 py-1 mx-1 font-semibold  rounded  bg-yellow-300 font-thin text-sm">{chianName}</div>
               <div>
                 <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
               </div>
