@@ -22,6 +22,7 @@ const ScanUrl: FC<Prop> = ({ addr,chainId }) => {
       rel="noreferrer"
       target={'_blank'}
       href={`${ChainInfo?.explorer}tx/${data}`}
+      className=' outline-none'
     >
       <ArrowTopRightOnSquareIcon className=" h-4 w-4 text-blue-500 "></ArrowTopRightOnSquareIcon>
     </a>
