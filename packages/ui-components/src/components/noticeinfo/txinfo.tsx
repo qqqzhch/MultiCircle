@@ -70,7 +70,7 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
                  
             </dt>
             <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400  inline-flex items-center space-x-3">
-                Tx Hash: <ScanUrl addr={Item.txhash}></ScanUrl>   <CopyAddressBtn addr={Item.txhash}></CopyAddressBtn>
+                Tx Hash: <ScanUrl addr={Item.txhash} chainId={Item.fromChainID}></ScanUrl>   <CopyAddressBtn addr={Item.txhash}></CopyAddressBtn>
             </dt>
         </div>
     );

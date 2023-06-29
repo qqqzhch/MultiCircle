@@ -3,25 +3,27 @@ import { FC } from 'react'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid'
 import { useWeb3React } from '@web3-react/core'
 import { getChainInfo } from '../../constants/chainInfo'
+import { SupportedChainId } from '../../constants/chains'
 
 type Prop = {
   addr?: string
+  chainId:SupportedChainId
 }
-const ScanUrl: FC<Prop> = ({ addr }) => {
-  const { address } = useParams<{ address: string; chainType: string }>()
-  const { chainId } = useWeb3React()
+const ScanUrl: FC<Prop> = ({ addr,chainId }) => {
+
+  
   const ChainInfo = getChainInfo(chainId)
 
-  const data = addr || address || ''
+  const data = addr
   return (
     <a
       data-tooltip-id="tooltip"
       data-tooltip-content={`View on ${ChainInfo?.label} Blockchain Explorer`}
       rel="noreferrer"
       target={'_blank'}
-      href={`${ChainInfo?.explorer}address/${data}`}
+      href={`${ChainInfo?.explorer}tx/${data}`}
     >
-      <ArrowTopRightOnSquareIcon className=" h-4 w-4 "></ArrowTopRightOnSquareIcon>
+      <ArrowTopRightOnSquareIcon className=" h-4 w-4 text-blue-500 "></ArrowTopRightOnSquareIcon>
     </a>
   )
 }
