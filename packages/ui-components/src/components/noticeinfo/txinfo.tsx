@@ -1,10 +1,13 @@
 import React,{FC, useMemo} from 'react';
 import {txItem} from '../../state/index'
 import { getChainInfo } from '../../constants/chainInfo';
-import { formatUnitsErc20,formatUnits } from '../../utils';
+import { formatUnitsErc20,formatUnits, cutOut } from '../../utils';
 import dayjs from '../../utils/dayjs'
 import useTxStatus from '../../hooks/useTxStatus';
 import { Else, If, Then, When } from 'react-if';
+import ScanUrl from '../linkAndCopy/ScanUrl';
+import CopyAddressBtn from '../linkAndCopy/CopyAddressBtn';
+
 
 //txItem
 const Txinfo:FC<{Item:txItem}> = ({Item}) => {
@@ -15,7 +18,7 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
     //{"code":0,"data":{"attest":"done","mint":"done","scan":"done"}}
     const statusMint= useMemo(()=>{
         const statusText={
-            text:"",
+            text:"Waiting for scan",
             step:0
         }
         if(status&&status.data&&status.data.data){
@@ -31,8 +34,6 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
                 statusText.text="Success"
                 statusText.step=3
             }
-        }else{
-            statusText.text="Waiting for scan "
         }
         return statusText
 
@@ -67,6 +68,9 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
                 </If>
                 
                  
+            </dt>
+            <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400  inline-flex items-center space-x-3">
+                Tx Hash: <ScanUrl addr={Item.txhash} chainId={Item.fromChainID}></ScanUrl>   <CopyAddressBtn addr={Item.txhash}></CopyAddressBtn>
             </dt>
         </div>
     );
