@@ -1,49 +1,59 @@
 import { useWeb3React } from '@web3-react/core'
 import { useCallback, useEffect, useState } from 'react'
-import { BigNumber, Contract } from 'ethers'
+import { BigNumber, Contract, providers } from 'ethers'
 import { useAppStore } from '../state';
 
 import erc20ABI from './../constants/ABI/ERC20.json'
+import { RPC_URLS } from '../constants/networks';
+import useUSDCAddress from './useUsdc'
 
-export default function useErc20Balance(mpcAddress: string | undefined|null, contractAddress: string | undefined) {
-    const { library,chainId } = useWeb3React()
+
+export default function useErc20Balance() {
+    const { library,account } = useWeb3React()
     const fromChainID = useAppStore((state)=>state.fromChainID)
     //   const mpcinfo = useAppStore(state => state.getWalletAccount(account, mpcAddress))
   
     const [balance, setBalance] = useState<string>()
-    const run = useCallback(async ()=>{
-      console.log('useErc20Balance')
-      if (mpcAddress && contractAddress && library != undefined&&chainId==fromChainID) {
-        const contract = new Contract(contractAddress, erc20ABI, library)
-        const result: BigNumber = await contract.balanceOf(mpcAddress)
-        setBalance(result.toString())
-        
-      }else{
-        setBalance('0')
-        
-      }
-    },[mpcAddress, library, contractAddress,chainId,fromChainID])
+    const contractAddress = useUSDCAddress(fromChainID)
+    const [isloading,setIsloading] = useState(false);
+    
 
     useEffect(() => {
-      
-      if(library){
-        library.on('block', () => {
-          console.log('block run 1')
-          run()
-        })
+    
+      const  run = async()=>{
+        console.log('run useErc20Balance')
+        if (account && contractAddress && fromChainID!==null) {
+          
+          const rpc= RPC_URLS[fromChainID][0]
+          const prcPro= new providers.JsonRpcProvider(rpc)
+          const contract = new Contract(contractAddress, erc20ABI, prcPro)
+          const result: BigNumber = await contract.balanceOf(account)
+          setBalance(result.toString())
+          
+        }else{
+          setBalance('0')
+          
+        }
+        setIsloading(false)
       }
       
+      if(library){
+        library.on('block', run)
+      }
       
+      setIsloading(true)
       run()
-  
+      
+
       return () => {
         if (library) {
           library.off('block',run)
         }
       }
-    }, [library,run])
+    }, [library,account,contractAddress,fromChainID,setIsloading])
   
     return {
-      balance
+      balance,
+      isloading
     }
   }

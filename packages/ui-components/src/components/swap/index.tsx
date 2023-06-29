@@ -1,6 +1,6 @@
 import React,{useCallback, useEffect, useMemo, useState, useTransition} from 'react'
 import SelectChainModal from '../selectChainModal'
-import { ArrowDownIcon } from '@heroicons/react/24/solid'
+import { ArrowDownIcon,ChevronDownIcon } from '@heroicons/react/24/solid'
 import { useAppStore } from '../../state'
 import useUSDCAddress from '../../hooks/useUsdc'
 import useErc20Balance from '../../hooks/useErc20Balance'
@@ -18,6 +18,7 @@ import useRelayerFee from '../../hooks/useRelayerFee'
 import EventBus from '../../EventEmitter/index'
 import usdclogo from '../../assets/icon/usdc.png'
 import { USECHAIN_IDS } from '../../constants/chains'
+import Skeleton from 'react-loading-skeleton'
 
 
 
@@ -38,7 +39,7 @@ const Swap = () => {
 
 
   const USDCAddress = useUSDCAddress()
-  const usdcBalance=  useErc20Balance(account,USDCAddress)
+  const usdcBalance=  useErc20Balance()
   const RelayerFee = useRelayerFee()
   const [isPending, startTransition] = useTransition();
   const [inputError,setinputError]=useState<string|undefined>()
@@ -138,7 +139,7 @@ const Swap = () => {
          </div> 
          <div className='peer-focus:font-medium  text-sm text-gray-800   inline-flex items-center' >
          {fromChainInfo?.label}  
-          <ArrowDownIcon  className="h-4 w-4 text-blue-500  "></ArrowDownIcon>
+          <ChevronDownIcon  className="h-4 w-4 text-blue-500  "></ChevronDownIcon>
  
          </div> 
           
@@ -156,7 +157,7 @@ const Swap = () => {
          </div> 
          <div className='peer-focus:font-medium  text-sm text-gray-800   inline-flex items-center' >
          {toChainInfo?.label}  
-          <ArrowDownIcon  className="h-4 w-4 text-blue-500  "></ArrowDownIcon>
+          <ChevronDownIcon  className="h-4 w-4 text-blue-500  "></ChevronDownIcon>
  
          </div> 
           
@@ -178,7 +179,15 @@ const Swap = () => {
           <div className=' flex   flex-row  text-gray-500 items-center justify-end'>
             <div className=' flex flex-col mr-2 text-sm   text-gray-400'>
             <div>Balance</div>
-            <div>{formatUnitsErc20(usdcBalance.balance,'',6)} </div>
+            <div>
+              <When condition={usdcBalance.isloading}>
+              <Skeleton /> 
+              </When>
+              <When condition={usdcBalance.isloading==false}>
+              {formatUnitsErc20(usdcBalance.balance,'',6)}
+              </When>
+               
+            </div>
             </div>
             
             <img className=' w-10 h-10' src={usdclogo}></img>

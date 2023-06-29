@@ -13,28 +13,28 @@ export default function useErcCheckAllowance(inputAmount:string) {
     const checkAddress = useRelayerAddress();
     const contractAddress =useUSDCAddress()
     const [allowance, setAllowance] = useState<boolean>(false)
-    const run = useCallback(async()=>{
-      console.log('--useCheckAllowance')
-      if (account && contractAddress && library != undefined) {
-        const contract = new Contract(contractAddress, erc20ABI, library)
-      //   const result: BigNumber = await contract.balanceOf(mpcAddress)
-        const allowance: BigNumber = await contract.allowance(account,checkAddress)
-        if(allowance.gte(BigNumber.from(inputAmount))){
-          setAllowance(false )
-        }else{
-          setAllowance(true)
-        }
-        
-        
-      }
-    },[account, library, contractAddress,inputAmount,checkAddress])
+
+
   
-    useEffect(() => { 
+    useEffect(() => {
+      const run = async()=>{
+        console.log('run CheckAllowance')
+        if (account && contractAddress && library != undefined) {
+          const contract = new Contract(contractAddress, erc20ABI, library)
+        //   const result: BigNumber = await contract.balanceOf(mpcAddress)
+          const allowance: BigNumber = await contract.allowance(account,checkAddress)
+          if(allowance.gte(BigNumber.from(inputAmount))){
+            setAllowance(false )
+          }else{
+            setAllowance(true)
+          }
+          
+          
+        }
+      }
+
       if(library){
-        library.on('block', () => {
-          console.log('block run 2')
-          run()
-        })
+        library.on('block', run)
       }
       
       run()
@@ -44,7 +44,7 @@ export default function useErcCheckAllowance(inputAmount:string) {
           library.off('block',run)
         }
       }
-    }, [library, run])
+    }, [account, library, contractAddress,inputAmount,checkAddress])
   
     return {
         allowance

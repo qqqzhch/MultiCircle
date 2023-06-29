@@ -3,10 +3,11 @@ import { USDC_IDS_TO_ADDR } from '../constants/usdc'
 import { SupportedChainId } from '../constants/chains'
 
 
-export default function useUSDCAddress():string|undefined{
+export default function useUSDCAddress(chainId_?:SupportedChainId|null):string|undefined{
     const { chainId } = useWeb3React()
-    if(chainId==undefined){
+    const id=chainId_||chainId
+    if(id==undefined){
         return 
     }
-    return  USDC_IDS_TO_ADDR[chainId as SupportedChainId]
+    return  USDC_IDS_TO_ADDR[id as SupportedChainId]
 }
