@@ -78,7 +78,7 @@ const ChainList:FC<Props> = ({children}) => {
           </When>
           <When condition={unsupported!==true&&chainId!=undefined}>
               <div className=" hidden md:block px-6 py-1 mx-2  rounded  bg-yellow-300 font-thin text-sm   overflow-hidden">{chianName}</div>
-              <div className="md:hidden px-6 py-1 mx-1 ">
+              <div className="md:hidden px-3 py-1 mx-1 ">
                 <img className=' w-6 h-6' src={chianLogo}></img>
                 </div>
               <div className="lg:flex">
