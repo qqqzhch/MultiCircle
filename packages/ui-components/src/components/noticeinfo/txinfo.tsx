@@ -1,10 +1,13 @@
 import React,{FC, useMemo} from 'react';
 import {txItem} from '../../state/index'
 import { getChainInfo } from '../../constants/chainInfo';
-import { formatUnitsErc20,formatUnits } from '../../utils';
+import { formatUnitsErc20,formatUnits, cutOut } from '../../utils';
 import dayjs from '../../utils/dayjs'
 import useTxStatus from '../../hooks/useTxStatus';
 import { Else, If, Then, When } from 'react-if';
+import ScanUrl from '../linkAndCopy/ScanUrl';
+import CopyAddressBtn from '../linkAndCopy/CopyAddressBtn';
+
 
 //txItem
 const Txinfo:FC<{Item:txItem}> = ({Item}) => {
@@ -65,6 +68,9 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
                 </If>
                 
                  
+            </dt>
+            <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400  inline-flex items-center space-x-3">
+                Tx Hash: <ScanUrl addr={Item.txhash}></ScanUrl>   <CopyAddressBtn addr={Item.txhash}></CopyAddressBtn>
             </dt>
         </div>
     );
