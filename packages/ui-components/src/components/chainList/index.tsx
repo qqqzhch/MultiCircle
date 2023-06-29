@@ -25,6 +25,7 @@ const ChainList:FC<Props> = ({children}) => {
   const [chianName,setchianName]=useState<string>("")
   const [unsupported,setUnsupported]=useState<boolean>(false)
   const {chainId,library } = useWeb3React()
+  const [chianLogo,setchianLogo]=useState<string>("")
   
   useEffect(()=>{
     const data = USECHAIN_IDS.map((item)=>{
@@ -40,12 +41,14 @@ const ChainList:FC<Props> = ({children}) => {
       const ChainInfo =  getChainInfo(chainId)
       if(ChainInfo?.label){
        setchianName(ChainInfo?.label)
+       setchianLogo(ChainInfo.logoUrl)
       }
       
     }else{
       const ChainInfo =  getChainInfo(1)
       if(ChainInfo?.label){
        setchianName(ChainInfo?.label)
+       setchianLogo(ChainInfo.logoUrl)
       }
 
     }
@@ -65,7 +68,7 @@ const ChainList:FC<Props> = ({children}) => {
  },[])
     
     return (
-     <Popover className="relative">
+     <Popover className=" relative">
         <Popover.Button className="flex flex-row items-center justify-center  focus:outline-none  ">
           <When condition={unsupported===true}>
               <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-red-600 font-thin">Error</div>
@@ -74,8 +77,11 @@ const ChainList:FC<Props> = ({children}) => {
               </div>
           </When>
           <When condition={unsupported!==true&&chainId!=undefined}>
-              <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-yellow-300 font-thin text-sm">{chianName}</div>
-              <div className="hidden lg:flex">
+              <div className=" hidden md:block px-6 py-1 mx-2  rounded  bg-yellow-300 font-thin text-sm   overflow-hidden">{chianName}</div>
+              <div className="md:hidden px-6 py-1 mx-1 ">
+                <img className=' w-6 h-6' src={chianLogo}></img>
+                </div>
+              <div className="lg:flex">
                 <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
               </div>
 
