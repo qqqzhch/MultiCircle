@@ -2,6 +2,7 @@ import React,{FC} from 'react';
 import { Web3ReactProvider } from "@web3-react/core";
 import {ethers} from 'ethers'
 import { ToastProvider,DefaultToast } from "react-toast-notifications";
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const getLibrary = (provider: any) => {
     const library = new ethers.providers.Web3Provider(provider);

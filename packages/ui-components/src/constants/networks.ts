@@ -104,7 +104,7 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
  */
 export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
   [SupportedChainId.MAINNET]: [
-    // `https://mainnet.infura.io/v3/${INFURA_KEY}`,
+    `https://mainnet.infura.io/v3/${INFURA_KEY}`,
     ...FALLBACK_URLS[SupportedChainId.MAINNET],
   ],
   [SupportedChainId.RINKEBY]: [
@@ -116,7 +116,7 @@ export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
     ...FALLBACK_URLS[SupportedChainId.ROPSTEN],
   ],
   [SupportedChainId.GOERLI]: [
-    // `https://goerli.infura.io/v3/${INFURA_KEY}`, 
+    `https://goerli.infura.io/v3/${INFURA_KEY}`, 
     ...FALLBACK_URLS[SupportedChainId.GOERLI]],
   [SupportedChainId.KOVAN]: [
     // `https://kovan.infura.io/v3/${INFURA_KEY}`, 
@@ -148,9 +148,9 @@ export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
   [SupportedChainId.CELO]: FALLBACK_URLS[SupportedChainId.CELO],
   [SupportedChainId.CELO_ALFAJORES]: FALLBACK_URLS[SupportedChainId.CELO_ALFAJORES],
   [SupportedChainId.AVALANCHE_FUJITEST]: [
-    // `https://rpc.ankr.com/avalanche_fuji`, 
+    `https://avalanche-fuji.infura.io/v3/${INFURA_KEY}`, 
   ...FALLBACK_URLS[SupportedChainId.AVALANCHE_FUJITEST]],
   [SupportedChainId.AVALANCHE_C_HAIN]: [
-    // `https://rpc.ankr.com/avalanche`, 
+    `https://avalanche-mainnet.infura.io/v3/${INFURA_KEY}`, 
   ...FALLBACK_URLS[SupportedChainId.AVALANCHE_C_HAIN]]
 }

@@ -77,7 +77,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       setIsTxLoading(false)
     },[closeModal,setTxHash])
 
-  console.log('- -')
+
 
     return (
     <div>
