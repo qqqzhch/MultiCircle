@@ -68,7 +68,7 @@ const {chainId, account } = useWeb3React()
         </When>
         <When condition={account===undefined}>
             
-            <button onClick={openModal} type="button" className="px-3 py-2  border rounded border-gray-800 text-gray-800 text-xs">Connect wallet</button>
+            <button onClick={openModal} type="button" className="px-3 py-2  border rounded border-gray-400 text-gray-800 text-xs">Connect wallet</button>
 
         </When>
         
