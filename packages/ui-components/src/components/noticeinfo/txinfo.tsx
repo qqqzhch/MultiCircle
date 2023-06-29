@@ -15,7 +15,7 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
     //{"code":0,"data":{"attest":"done","mint":"done","scan":"done"}}
     const statusMint= useMemo(()=>{
         const statusText={
-            text:"",
+            text:"Waiting for scan",
             step:0
         }
         if(status&&status.data&&status.data.data){
@@ -31,8 +31,6 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
                 statusText.text="Success"
                 statusText.step=3
             }
-        }else{
-            statusText.text="Waiting for scan "
         }
         return statusText
 
