@@ -6,11 +6,14 @@ const Home = () => {
   return (
     <div className="flex flex-col lg:flex-row gap-4">
       <div className="flex-1  bg-gradient-to-r from-cyan-100 to-blue-200">
-        <div className="flex flex-col text-left w-full mb-20   mt-10 lg:mt-10">
+        <div className="flex flex-col text-left w-full mb-20   mt-10 lg:mt-14">
           
-          {/* <p className=" mx-6 lg:mx-28 leading-relaxed text-base text-gray-900">
-         <img  className=" h-32" src={logo}></img>
-          </p> */}
+          <div className="   text-2xl text-gray-900 text-center  p-4 m-auto w-full xl:w-1/2 2xl:w-1/3  ">
+           <div className="mx-8 bg-gray-100 rounded-md py-4">
+           USDC Router
+           </div>
+           
+          </div>
         </div>
         <div className="flex       lg:mx-28  mb-20 ">
         <div className="p-4 m-auto w-full xl:w-1/2 2xl:w-1/3 ">

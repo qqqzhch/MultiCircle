@@ -131,7 +131,7 @@ const Swap = () => {
   return (
     <div className=" text-left">
       <div>
-        <div onClick={()=>{setIsFromOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group  p-2  cursor-pointer border   border-gray-300 rounded-md ">
+        <div onClick={()=>{setIsFromOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group  p-2  cursor-pointer border   border-gray-200 rounded-md shadow-md hover:shadow-lg ">
         <img className=' w-8 mr-2' src={fromChainInfo?.logoUrl}></img>
         <div>
         <div className='peer-focus:font-medium  text-sm text-gray-500  ' >
@@ -149,7 +149,7 @@ const Swap = () => {
           
         </div>
         <SwichNetwork></SwichNetwork>
-        <div onClick={()=>{setIsToOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group   p-2  cursor-pointer border   border-gray-300 rounded-md">
+        <div onClick={()=>{setIsToOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group   p-2  cursor-pointer border   border-gray-200 rounded-md shadow-md hover:shadow-lg ">
         <img className=' w-8 mr-2' src={toChainInfo?.logoUrl}></img>
         <div>
         <div className='peer-focus:font-medium  text-sm text-gray-500  ' >
