@@ -59,8 +59,14 @@ const Swap = () => {
 
   const ApproveUSDT = useErc20Approve()
  
-  const {allowance}= useErcCheckAllowance(inputAmountBigNum)
-  const switchingNetwork = useSwitchingNetwork()  
+  const checkAllowance= useErcCheckAllowance()
+
+  const allowance = useMemo(()=>{
+    return  checkAllowance(inputAmountBigNum)
+  },[checkAllowance,inputAmountBigNum])
+  
+  const switchingNetwork = useSwitchingNetwork()
+
  
   const { addToast } = useToasts()
 
@@ -217,7 +223,7 @@ const Swap = () => {
         <div className=' relative z-0 w-full mb-6 group flex mt-10'>
         
         <When condition={account!==undefined&&account!==null}>
-        <If condition={allowance&&fromChainID==chainId&&fromChainID!==toChainID}>
+        <If condition={allowance==false&&fromChainID==chainId&&fromChainID!==toChainID}>
          <Then>
           
           <When condition={ApproveUSDT.state.loading}>
