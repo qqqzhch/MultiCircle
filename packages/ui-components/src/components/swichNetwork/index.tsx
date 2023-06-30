@@ -22,7 +22,7 @@ const SwichNetwork = () => {
   
     return (
        <div className=' flex  w-full justify-center  mb-5'>
-        <div onClick={swichFN} className='  w-12 h-12 hover:bg-blue-300 cursor-pointer rounded-md flex'>
+        <div onClick={swichFN} className='  w-12 h-12 hover:bg-blue-200 cursor-pointer rounded-md flex'>
             <ArrowsUpDownIcon className="h-6 w-6 text-blue-500 m-auto"></ArrowsUpDownIcon>
         </div>
        </div>
