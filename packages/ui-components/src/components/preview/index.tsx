@@ -7,6 +7,9 @@ import useRelayCall from '../../hooks/useRelayCall'
 import { Else, If, Then, When } from 'react-if'
 import useTxStatus from '../../hooks/useTxStatus';
 import Loading from '../loading'
+import useAverageTime from '../../hooks/useAverageTime'
+import SetepLoading from './StepperLoading'
+
 
 
 interface componentprops {
@@ -26,29 +29,39 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const [txHash,setTxHash]= useState<string|null>(null)
     const status = useTxStatus(txHash)
     const [isTxLoading,setIsTxLoading]=useState(false)
-    const statusMint= useMemo(()=>{
-      const statusText={
-          text:"Waiting for scan",
-          step:0,
-          isloading:status.isLoading
-      }
-      if(status&&status.data&&status.data.data){
-          if(status.data.data.scan=="done"){
-              statusText.text="Waiting for attest"
-              statusText.step=1
-          }
-          if(status.data.data.attest=="done"){
-              statusText.text="Waiting for mint"
-              statusText.step=2
-          }
-          if(status.data.data.mint=="done"){
-              statusText.text="Success"
-              statusText.step=3
-          }
-      }
-      return statusText
+    const AverageTime = useAverageTime(fromChainID)
+    const [stepLoading,setStep]=useState(-1)
+    console.log('- -')
+    useEffect (()=>{
+      
+     
+      if(isTxLoading){
+        // statusText.step=0
+        // statusText.text='sending tx'
+        setStep(0)
+      }else if(status&&status.data&&status.data.data){
 
-  },[status])
+          if(status.data.data.scan==undefined){
+              // statusText.text="Waiting for scan"
+              // statusText.step=1
+              setStep(1)
+          }else if(status.data.data.attest==undefined){
+              // statusText.text="Waiting for attest"
+              // statusText.step=2
+              setStep(2)
+          }else if(status.data.data.mint==undefined){
+              // statusText.text="Waiting for mint"
+              // statusText.step=3
+              setStep(3)
+          }else if(status.data.data.mint=="done"){
+            // statusText.text="Success"
+            // statusText.step=4
+            setStep(4)
+        }
+      }
+      
+
+  },[status,isTxLoading])
 
 
 
@@ -56,25 +69,27 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     setIsTxLoading(true)
     try {
       const {hash} =  await RelayCall.doFetch()
-      setTxHash(hash)    
+      setTxHash(hash)
+     
     } catch (ex:any) {
       setTxHash(null)
-      setIsTxLoading(false)
+      
     }
+    setIsTxLoading(false)    
   
 
     },[RelayCall,setTxHash,setIsTxLoading])
 
-    useEffect(()=>{
-     if(statusMint.step==3){
-      setIsTxLoading(false)
-     }
-    },[statusMint,closeModal])
+    // useEffect(()=>{
+    //  if(statusMint.step==3){
+    //   setIsTxLoading(false)
+    //  }
+    // },[statusMint,closeModal])
 
     const closeModalFn= useCallback(()=>{
       setTxHash(null)
       closeModal()
-      setIsTxLoading(false)
+      setStep(-1)
     },[closeModal,setTxHash])
 
 
@@ -106,12 +121,12 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                   Preview
                   </Dialog.Title>
                   <div className="mt-2">
-                  <div className="w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+                  <div className="w-full  lg:py-6 mb-6 lg:mb-0">
      
      
      <div className="flex border-t border-gray-200 py-2">
@@ -130,36 +145,23 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
        <span className="text-gray-500 uppercase">You will receive</span>
        <span className="ml-auto text-gray-900">{formatUnitsErc20(input,'usdc',6)}</span>
      </div>
+     <div className="flex border-t border-gray-200 py-2">
+       <span className="text-gray-500">Average time</span>
+       <span className="ml-auto text-gray-900">{AverageTime}</span>
+     </div>
      <div className="flex border-t border-b mb-6 border-gray-200 py-2">
        <span className="text-gray-500">Protocol Fee</span>
        <span className="ml-auto text-gray-900">{formatUnitsErc20(fee ,fromChainInfo?.nativeCurrency.symbol||"",fromChainInfo?.nativeCurrency.decimals||18)}</span>
      </div>
+     
   
    
    </div>
                   </div>
 
                   <div className="mt-4 flex flex-col">
-                  <When condition={statusMint.step==3}>
-                    <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-                        <span className="font-medium">Success </span> 
-                    </div>
-                  </When>
-                  <When condition={statusMint.step!==3}>
-
-                    <If condition={isTxLoading}>
+                    <If condition={stepLoading==-1}>
                       <Then>
-                      <button
-                      type="button"
-                      className="inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium  text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                     
-                    >
-                     <Loading></Loading>
-                     Verfying...{statusMint.text}
-                    </button>
-
-                      </Then>
-                      <Else>
                       <button
                       type="button"
                       className="inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-700 px-4 py-2 text-sm font-medium  text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
@@ -168,11 +170,16 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                   
                      Submit
                     </button>
-                    
 
+                      </Then>
+                      <Else>
+                      <SetepLoading step={stepLoading}></SetepLoading>    
                       </Else>
+                   
                     </If>
-                  </When>
+                  
+                    
+                                    
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

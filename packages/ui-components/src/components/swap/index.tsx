@@ -59,8 +59,14 @@ const Swap = () => {
 
   const ApproveUSDT = useErc20Approve()
  
-  const {allowance}= useErcCheckAllowance(inputAmountBigNum)
-  const switchingNetwork = useSwitchingNetwork()  
+  const checkAllowance= useErcCheckAllowance()
+
+  const allowance = useMemo(()=>{
+    return  checkAllowance(inputAmountBigNum)
+  },[checkAllowance,inputAmountBigNum])
+  
+  const switchingNetwork = useSwitchingNetwork()
+
  
   const { addToast } = useToasts()
 
@@ -131,7 +137,7 @@ const Swap = () => {
   return (
     <div className=" text-left">
       <div>
-        <div onClick={()=>{setIsFromOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group  p-2  cursor-pointer border   border-gray-300 rounded-md ">
+        <div onClick={()=>{setIsFromOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group  p-2  cursor-pointer border   border-gray-200 rounded-md shadow-md hover:shadow-lg ">
         <img className=' w-8 mr-2' src={fromChainInfo?.logoUrl}></img>
         <div>
         <div className='peer-focus:font-medium  text-sm text-gray-500  ' >
@@ -149,7 +155,7 @@ const Swap = () => {
           
         </div>
         <SwichNetwork></SwichNetwork>
-        <div onClick={()=>{setIsToOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group   p-2  cursor-pointer border   border-gray-300 rounded-md">
+        <div onClick={()=>{setIsToOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group   p-2  cursor-pointer border   border-gray-200 rounded-md shadow-md hover:shadow-lg ">
         <img className=' w-8 mr-2' src={toChainInfo?.logoUrl}></img>
         <div>
         <div className='peer-focus:font-medium  text-sm text-gray-500  ' >
@@ -201,23 +207,36 @@ const Swap = () => {
         
         
        
-        <div className="relative z-0 w-full  group  mb-14">
+        <div className="relative z-0 w-full  group  mb-10">
           
           <label className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
           You will receive: {" "}  {inputAmount} USDC
           </label>
         </div>
-        <div className="relative z-0 w-full  group mb-20">
-          
-          <label className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          Protocol Fee: {" "} {fromChainID!==null&&formatUnits(fromChainID,RelayerFee,true) } 
-          </label>
+        <div className="relative z-0 w-full  group mb-14 flex flex-row text-sm text-gray-500">
+        <div>Protocol Fee:</div>  
+          <div className='  min-w-[50px]'>
+             
+          <If condition={RelayerFee.isloading}>
+            <Then>
+            <Skeleton /> 
+            </Then>
+            <Else>
+            {fromChainID!==null&&formatUnits(fromChainID,RelayerFee.fee,true)}
+           
+            </Else>
+          </If>
+          </div>   
+          <div className=" flex flex-row peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        
+       
+          </div>
         </div>
        
         <div className=' relative z-0 w-full mb-6 group flex mt-10'>
         
         <When condition={account!==undefined&&account!==null}>
-        <If condition={allowance&&fromChainID==chainId&&fromChainID!==toChainID}>
+        <If condition={allowance==false&&fromChainID==chainId&&fromChainID!==toChainID}>
          <Then>
           
           <When condition={ApproveUSDT.state.loading}>
