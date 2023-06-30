@@ -1,5 +1,8 @@
 
-
+import {getChainInfo} from '../constants/chainInfo'
+import { SupportedChainId } from '../constants/chains';
+import {FALLBACK_URLS} from '../constants/networks'
+//getChainInfo
 
 export default async function(chainId:number,chainName:string,rpcUrls:Array<string>,library:any,Unsupported:boolean){
      
@@ -10,6 +13,9 @@ export default async function(chainId:number,chainName:string,rpcUrls:Array<stri
       libraryprovider =window.ethereum 
     }
 
+    const  nativeCurrency=getChainInfo(chainId)?.nativeCurrency;
+    const  explorer=getChainInfo(chainId)?.explorer;
+    const rpclist = FALLBACK_URLS[chainId as SupportedChainId];
     const hexchainId = "0x"+chainId.toString(16);
     
     try {
@@ -32,7 +38,9 @@ export default async function(chainId:number,chainName:string,rpcUrls:Array<stri
                       {
                         chainId: hexchainId,
                         chainName: chainName,
-                        rpcUrls: rpcUrls /* ... */,
+                        rpcUrls: rpclist /* ... */,
+                        nativeCurrency:nativeCurrency,
+                        blockExplorerUrls:[explorer]
                       },
                     ],
                   });
