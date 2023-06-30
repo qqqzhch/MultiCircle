@@ -104,7 +104,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   {listIng.map((chainId,index)=>{
     const network =getChainInfo(chainId)
 
-    return (<li key={index} onClick={()=>{clickFn(network,chainId);}}  className="pb-3 pt-2 sm:pb-4 cursor-pointer">
+    return (<li key={index} onClick={()=>{clickFn(network,chainId);}}  className="pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
     <div className="flex items-center space-x-4 ">
        <div className="flex-shrink-0">
           <img className="w-8 h-8 rounded-full" src={network.logoUrl} >

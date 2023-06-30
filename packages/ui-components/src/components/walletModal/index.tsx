@@ -129,22 +129,22 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                     Select Wallet
                   </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500 flex flex-col items-center">
+                  <div className="mt-6">
+                    <div className="text-sm text-gray-500 flex flex-col ">
                       {walletsToDisplay.map(el => (
                        <div className="my-1 flex-1" key={el.id}>
                        <button
                          key={el.id}
                          onClick={el.fn}
                          type="button"
-                         className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2 min-w-full"
+                         className="text-gray-900 bg-white w-full hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2 min-w-full"
                        >
                          <img src={el.imgSrc} className="w-6 h-5 mr-2 -ml-1"></img>
                          {el.title}
                        </button>
                      </div>
                       ))}
-                    </p>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
