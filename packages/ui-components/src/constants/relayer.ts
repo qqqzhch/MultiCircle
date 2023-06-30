@@ -36,5 +36,23 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.OPTIMISM]: '',
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }
+  //Time needed to leave
+  export const LeaveTime_Chainid = {
+    [SupportedChainId.GOERLI]:13,
+    [SupportedChainId.AVALANCHE_FUJITEST]:3,
+    [SupportedChainId.AVALANCHE_C_HAIN]:3,
+    [SupportedChainId.MAINNET]: 13,
+    [SupportedChainId.ROPSTEN]: '',
+    [SupportedChainId.RINKEBY]: '',
+    [SupportedChainId.KOVAN]: '',
+    [SupportedChainId.POLYGON]: '',
+    [SupportedChainId.POLYGON_MUMBAI]: '',
+    [SupportedChainId.CELO]: '',
+    [SupportedChainId.CELO_ALFAJORES]: '',
+    [SupportedChainId.ARBITRUM_ONE]: 13,
+    [SupportedChainId.ARBITRUM_Goerli]: 13,
+    [SupportedChainId.OPTIMISM]: '',
+    [SupportedChainId.OPTIMISM_GOERLI]: '',
+  }
 
   export const BaseUrl="https://express-hello-world-p8m1l2gqb-qqqzhch.vercel.app/api"
