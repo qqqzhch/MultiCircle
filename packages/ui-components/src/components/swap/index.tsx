@@ -201,17 +201,30 @@ const Swap = () => {
         
         
        
-        <div className="relative z-0 w-full  group  mb-14">
+        <div className="relative z-0 w-full  group  mb-10">
           
           <label className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
           You will receive: {" "}  {inputAmount} USDC
           </label>
         </div>
-        <div className="relative z-0 w-full  group mb-20">
-          
-          <label className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          Protocol Fee: {" "} {fromChainID!==null&&formatUnits(fromChainID,RelayerFee,true) } 
-          </label>
+        <div className="relative z-0 w-full  group mb-14 flex flex-row text-sm text-gray-500">
+        <div>Protocol Fee:</div>  
+          <div className='  min-w-[50px]'>
+             
+          <If condition={RelayerFee.isloading}>
+            <Then>
+            <Skeleton /> 
+            </Then>
+            <Else>
+            {fromChainID!==null&&formatUnits(fromChainID,RelayerFee.fee,true)}
+           
+            </Else>
+          </If>
+          </div>   
+          <div className=" flex flex-row peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        
+       
+          </div>
         </div>
        
         <div className=' relative z-0 w-full mb-6 group flex mt-10'>
