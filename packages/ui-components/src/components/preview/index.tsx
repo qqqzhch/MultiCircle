@@ -76,6 +76,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       
     }
     setIsTxLoading(false)    
+    setStep(-1)
   
 
     },[RelayCall,setTxHash,setIsTxLoading])
