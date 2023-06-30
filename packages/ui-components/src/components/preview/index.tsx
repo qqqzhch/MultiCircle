@@ -7,6 +7,8 @@ import useRelayCall from '../../hooks/useRelayCall'
 import { Else, If, Then, When } from 'react-if'
 import useTxStatus from '../../hooks/useTxStatus';
 import Loading from '../loading'
+import useAverageTime from '../../hooks/useAverageTime'
+useAverageTime
 
 
 interface componentprops {
@@ -26,6 +28,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const [txHash,setTxHash]= useState<string|null>(null)
     const status = useTxStatus(txHash)
     const [isTxLoading,setIsTxLoading]=useState(false)
+    const AverageTime = useAverageTime(fromChainID)
     const statusMint= useMemo(()=>{
       const statusText={
           text:"Waiting for scan",
@@ -130,10 +133,15 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
        <span className="text-gray-500 uppercase">You will receive</span>
        <span className="ml-auto text-gray-900">{formatUnitsErc20(input,'usdc',6)}</span>
      </div>
+     <div className="flex border-t border-gray-200 py-2">
+       <span className="text-gray-500">Average time</span>
+       <span className="ml-auto text-gray-900">{AverageTime}</span>
+     </div>
      <div className="flex border-t border-b mb-6 border-gray-200 py-2">
        <span className="text-gray-500">Protocol Fee</span>
        <span className="ml-auto text-gray-900">{formatUnitsErc20(fee ,fromChainInfo?.nativeCurrency.symbol||"",fromChainInfo?.nativeCurrency.decimals||18)}</span>
      </div>
+     
   
    
    </div>

@@ -38,10 +38,15 @@ export const Relayer_IDS_TO_ADDR = {
   }
   //Time needed to leave
   export const LeaveTime_Chainid = {
-    [SupportedChainId.GOERLI]:13,
-    [SupportedChainId.AVALANCHE_FUJITEST]:3,
-    [SupportedChainId.AVALANCHE_C_HAIN]:3,
-    [SupportedChainId.MAINNET]: 13,
+    [SupportedChainId.GOERLI]:"1 minutes",
+    [SupportedChainId.MAINNET]: "13 minutes",
+
+    [SupportedChainId.AVALANCHE_FUJITEST]:"1 minutes",
+    [SupportedChainId.AVALANCHE_C_HAIN]:"3 minutes",
+   
+    [SupportedChainId.ARBITRUM_ONE]: "1 minutes",
+    [SupportedChainId.ARBITRUM_Goerli]: "13 minutes",
+
     [SupportedChainId.ROPSTEN]: '',
     [SupportedChainId.RINKEBY]: '',
     [SupportedChainId.KOVAN]: '',
@@ -49,8 +54,6 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.POLYGON_MUMBAI]: '',
     [SupportedChainId.CELO]: '',
     [SupportedChainId.CELO_ALFAJORES]: '',
-    [SupportedChainId.ARBITRUM_ONE]: 13,
-    [SupportedChainId.ARBITRUM_Goerli]: 13,
     [SupportedChainId.OPTIMISM]: '',
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }
