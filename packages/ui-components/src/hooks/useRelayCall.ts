@@ -49,8 +49,8 @@ export default function useRelayCall() {
             })
             addToast('Transactions have been sent', { appearance: 'success',autoDismissTimeout:1000*10 })
   
-            const txinfo = await result.wait([1])
-            console.log(txinfo)
+            // const txinfo = await result.wait([1])
+            // console.log(txinfo)
             return result
             
           } catch (error:any) {

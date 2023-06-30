@@ -6,6 +6,7 @@ import { BigNumber, Contract } from 'ethers'
 import erc20ABI from './../constants/ABI/ERC20.json'
 import useRelayerAddress from './useRelayer'
 import useUSDCAddress from './useUsdc'
+import EventEmitter from '../EventEmitter/index';
 
 
 export default function useErcCheckAllowance() {
@@ -32,12 +33,14 @@ export default function useErcCheckAllowance() {
       if(library){
         library.on('block', run)
       }
+      EventEmitter.on('checkallowance',run)
       
       run()
   
       return () => {
         if (library) {
           library.off('block',run)
+          EventEmitter.off('checkallowance',run)
         }
       }
     }, [account, library, contractAddress,checkAddress])

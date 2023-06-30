@@ -6,6 +6,7 @@ import erc20ABI from './../constants/ABI/ERC20.json'
 import useRelayerAddress from './useRelayer'
 import useUSDCAddress from './useUsdc'
 import { useToasts } from 'react-toast-notifications'
+import EventEmitter from '../EventEmitter/index';
 
 
 export default function useErc20Approve() {
@@ -24,7 +25,7 @@ export default function useErc20Approve() {
           try {
             const result = await contract.approve(checkAddress,ethers.constants.MaxUint256 )
             addToast('Approving', { appearance: 'success' })
-            await result.wait([2])
+            await result.wait([1])
             return result
             
           } catch (error:any) {
@@ -38,6 +39,7 @@ export default function useErc20Approve() {
             addToast(msg, { appearance: 'error',autoDismissTimeout:1000*5 })
             
           }
+          EventEmitter.emit('checkallowance')
          
         }
       
