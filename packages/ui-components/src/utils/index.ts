@@ -63,5 +63,10 @@ function numFormat(value: string | number, mantissa?: number) {
     }
   }
 
+
+  export function classNames(...classes: Array<string>) {
+    return classes.filter(Boolean).join(' ')
+  }
+
   
   
