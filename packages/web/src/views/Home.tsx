@@ -1,6 +1,6 @@
 import Swap from "@monorepo/ui-components/src/components/swap"
-import { Link } from "react-router-dom"
-import logo from '@monorepo/ui-components/src/assets/svgkogo/Blacklogo1.svg'
+// import { Link } from "react-router-dom"
+// import logo from '@monorepo/ui-components/src/assets/svgkogo/Blacklogo1.svg'
 
 const Home = () => {
   return (
@@ -9,7 +9,7 @@ const Home = () => {
         <div className="flex flex-col text-left w-full mb-20   mt-10 lg:mt-14">
           
           <div className="   text-2xl text-gray-900 text-center  p-4 m-auto w-full xl:w-1/2 2xl:w-1/3  ">
-           <div className="mx-8 bg-gray-100 rounded-md py-4">
+           <div className="mx-8 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-md py-4 font-semibold  font-serif text-blue-600 ">
            USDC Router
            </div>
            
