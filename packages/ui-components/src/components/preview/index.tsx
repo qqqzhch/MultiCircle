@@ -31,7 +31,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const [isTxLoading,setIsTxLoading]=useState(false)
     const AverageTime = useAverageTime(fromChainID)
     const [stepLoading,setStep]=useState(-1)
-    console.log('- -')
+ 
     useEffect (()=>{
       
      
