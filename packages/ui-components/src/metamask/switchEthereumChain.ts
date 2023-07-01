@@ -50,11 +50,11 @@ export default async function(chainId:number,chainName:string,rpcUrls:Array<stri
           } catch (addError) {
             // handle "add" error
           }
+        }else{
+          console.error(switchError)
         }
         // handle other "switch" errors
       }
-      if(Unsupported==true){
-        window.location.reload()
-      }
+     
       
 }
