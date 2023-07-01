@@ -76,7 +76,7 @@ export default function Noticeinfo() {
                    Historical records
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500">
                       
                         <dl className="max-w-md text-gray-900 divide-y  max-h-96 overflow-y-scroll divide-gray-200 dark:text-white dark:divide-gray-700">
                             {listOrder.map((item,key)=>{
@@ -90,7 +90,7 @@ export default function Noticeinfo() {
                         <When condition={listOrder.length==0}>
                         No data available
                         </When>
-                    </p>
+                    </div>
                   </div>
 
       
