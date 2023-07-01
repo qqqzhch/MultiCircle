@@ -44,8 +44,9 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.AVALANCHE_FUJITEST]:"1 minutes",
     [SupportedChainId.AVALANCHE_C_HAIN]:"3 minutes",
    
-    [SupportedChainId.ARBITRUM_ONE]: "1 minutes",
-    [SupportedChainId.ARBITRUM_Goerli]: "13 minutes",
+    [SupportedChainId.ARBITRUM_Goerli]: "1 minutes",
+    [SupportedChainId.ARBITRUM_ONE]: "13 minutes",
+    
 
     [SupportedChainId.ROPSTEN]: '',
     [SupportedChainId.RINKEBY]: '',
