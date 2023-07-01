@@ -19,7 +19,7 @@ export default function useErc20Balance() {
     
 
     useEffect(() => {
-    
+     
       const  run = async()=>{
         console.log('run useErc20Balance')
         if (account && contractAddress && fromChainID!==null) {
@@ -37,20 +37,26 @@ export default function useErc20Balance() {
         setIsloading(false)
       }
       
-      if(library){
-        library.on('block', run)
-      }
+      // if(library){
+        // library.on('block:latest', run)
+        
+      const IntervalId:number=window.setInterval(()=>{
+          run()
+        },1000*30)
+      // }
       
       setIsloading(true)
       run()
       
 
       return () => {
-        if (library) {
-          library.off('block',run)
+        if (IntervalId!==undefined) {
+          // library.off('block:latest',run)
+
+          clearInterval(IntervalId)
         }
       }
-    }, [library,account,contractAddress,fromChainID,setIsloading])
+    }, [account,contractAddress,fromChainID,setIsloading])
   
     return {
       balance,

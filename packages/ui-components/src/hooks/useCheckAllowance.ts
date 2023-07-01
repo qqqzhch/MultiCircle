@@ -29,17 +29,22 @@ export default function useErcCheckAllowance() {
           
         }
       }
-
+      let IntervalId:number;
       if(library){
-        library.on('block', run)
+        // library.on('block', run)
+        IntervalId=window.setInterval(()=>{
+          run()
+        },1000*30)
+        EventEmitter.on('checkallowance',run)
       }
-      EventEmitter.on('checkallowance',run)
+     
       
       run()
   
       return () => {
         if (library) {
-          library.off('block',run)
+          // library.off('block',run)
+          clearInterval(IntervalId)
           EventEmitter.off('checkallowance',run)
         }
       }

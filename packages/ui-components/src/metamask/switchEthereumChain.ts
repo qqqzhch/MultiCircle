@@ -52,6 +52,7 @@ export default async function(chainId:number,chainName:string,rpcUrls:Array<stri
           }
         }else{
           console.error(switchError)
+          // alert((switchError as Error).message)
         }
         // handle other "switch" errors
       }
