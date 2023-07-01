@@ -22,7 +22,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const toChainID = useAppStore((state)=>state.toChainID)
   const switchingNetwork = useSwitchingNetwork()
   const listIng = useMemo(()=>{
-    console.log('***')
+
     if(dataType==false){
       return  USECHAIN_IDS.filter((item)=>{return  item!==fromChainID})
     }
@@ -45,7 +45,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   },[fromChainID,toChainID,dataType,setFromOrTOChain])
 
   const clickFn = useCallback(async (network: L1ChainInfo | L2ChainInfo,chainId:SupportedChainId)=>{
-  console.log('- -')
+ 
     setFromOrTOChain(network,dataType,chainId);
     closeModal()
     setTimeout(()=>{

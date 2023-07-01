@@ -81,7 +81,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   // connect on load
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
-      
+      console.log('connectWalletOnPageLoad')
       if (localStorage.getItem('walletIsConnectedTo') === 'metamask') {
         await connectMetaMask()
       }
@@ -90,11 +90,11 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
         await connectWalletConnect()
       }
     }
-    if(active==false){
+    // if(active==false){
       connectWalletOnPageLoad()
-    }
+    // }
     
-  }, [connectMetaMask, connectWalletConnect,active])
+  }, [connectMetaMask, connectWalletConnect])
 
   
   
