@@ -21,6 +21,7 @@ import { USECHAIN_IDS } from '../../constants/chains'
 import Skeleton from 'react-loading-skeleton'
 import useRelayCallGasFee from '../../hooks/useRelayCallGasFee'
 import { useDebounce } from 'react-use'
+import SelectPanel from '../selectChainModal/SelectPanel'
 
 
 
@@ -155,39 +156,9 @@ const Swap = () => {
   return (
     <div className=" text-left">
       <div>
-        <div onClick={()=>{setIsFromOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group  p-2  cursor-pointer border   border-gray-200 rounded-md shadow-md hover:shadow-lg ">
-        <img className=' w-8 mr-2' src={fromChainInfo?.logoUrl}></img>
-        <div>
-        <div className='peer-focus:font-medium  text-sm text-gray-500  ' >
-          From 
-         </div> 
-         <div className='peer-focus:font-medium  text-sm text-gray-800   inline-flex items-center' >
-         {fromChainInfo?.label}  
-          <ChevronDownIcon  className="h-4 w-4 text-blue-500  "></ChevronDownIcon>
- 
-         </div> 
-          
-         
-        </div>
-        
-          
-        </div>
+      <SelectPanel dataType={true}></SelectPanel>
         <SwichNetwork></SwichNetwork>
-        <div onClick={()=>{setIsToOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group   p-2  cursor-pointer border   border-gray-200 rounded-md shadow-md hover:shadow-lg ">
-        <img className=' w-8 mr-2' src={toChainInfo?.logoUrl}></img>
-        <div>
-        <div className='peer-focus:font-medium  text-sm text-gray-500  ' >
-          To
-         </div> 
-         <div className='peer-focus:font-medium  text-sm text-gray-800   inline-flex items-center' >
-         {toChainInfo?.label}  
-          <ChevronDownIcon  className="h-4 w-4 text-blue-500  "></ChevronDownIcon>
- 
-         </div> 
-          
-         
-        </div>
-        </div>
+        <SelectPanel dataType={false}></SelectPanel>
         <div className="relative z-0 w-full mb-6 group  flex flex-row justify-between">
           <div className=' flex-1 '>
           <input
@@ -355,8 +326,7 @@ const Swap = () => {
 
         </div>
       </div>
-        <SelectChainModal isOpen={ isFromOpen} closeModal={()=>{setIsFromOpen (false)}}  dataType={true}   ></SelectChainModal>
-        <SelectChainModal isOpen={ isToOpen} closeModal={()=>{setIsToOpen(false)}} dataType={false} ></SelectChainModal>
+      
         <PreviewModal isOpen={isPreviewOpen} closeModal={closePreModel}></PreviewModal>
     </div>
   )
