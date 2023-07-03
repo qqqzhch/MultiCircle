@@ -239,7 +239,7 @@ const Swap = () => {
         <If condition={allowance==false&&fromChainID==chainId&&fromChainID!==toChainID}>
          <Then>
           
-          <When condition={ApproveUSDT.state.loading}>
+          <When condition={ApproveUSDT.state.loading&&inputAmountBigNum!=="0"}>
           <button
           className="text-white flex-1  bg-red-400 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  cursor-wait"
         >
@@ -247,7 +247,7 @@ const Swap = () => {
         </button>
 
           </When>
-          <When condition={ApproveUSDT.state.loading!==true}>
+          <When condition={ApproveUSDT.state.loading!==true&&inputAmountBigNum!=='0'}>
           <button
          onClick={ApproveUSDT.doFetch}
           className="text-white flex-1  bg-red-400 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
