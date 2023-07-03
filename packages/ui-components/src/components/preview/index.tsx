@@ -2,13 +2,14 @@ import React, { FC, useCallback,useEffect,useMemo } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { useAppStore } from '../../state'
-import { formatUnitsErc20 } from '../../utils'
+import { formatUnitsErc20,formatUnits} from '../../utils'
 import useRelayCall from '../../hooks/useRelayCall'
 import { Else, If, Then, When } from 'react-if'
 import useTxStatus from '../../hooks/useTxStatus';
 import Loading from '../loading'
 import useAverageTime from '../../hooks/useAverageTime'
 import SetepLoading from './StepperLoading'
+
 
 
 
@@ -23,7 +24,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const fromChainID = useAppStore((state)=>state.fromChainID)
     const toChainID = useAppStore((state)=>state.toChainID)
     const input = useAppStore((state)=>state.input)
-    const output = useAppStore((state)=>state.output)
+    const gasFee = useAppStore((state)=>state.gasFee)
     const fee = useAppStore((state)=>state.fee)
     const RelayCall =useRelayCall()
     const [txHash,setTxHash]= useState<string|null>(null)
@@ -150,10 +151,15 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
        <span className="text-gray-500">Average time</span>
        <span className="ml-auto text-gray-900">{AverageTime}</span>
      </div>
+     <div className="flex border-t border-gray-200 py-2">
+     <span className="text-gray-500">Gas Fee</span>
+       <span className="ml-auto text-gray-900">{fromChainID&&formatUnits(fromChainID,gasFee,true)}</span>
+     </div>
      <div className="flex border-t border-b mb-6 border-gray-200 py-2">
        <span className="text-gray-500">Protocol Fee</span>
        <span className="ml-auto text-gray-900">{formatUnitsErc20(fee ,fromChainInfo?.nativeCurrency.symbol||"",fromChainInfo?.nativeCurrency.decimals||18)}</span>
      </div>
+
      
   
    
