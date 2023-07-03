@@ -7,6 +7,7 @@ import useRelayerAddress from './useRelayer'
 import useUSDCAddress from './useUsdc'
 import { useToasts } from 'react-toast-notifications'
 import EventEmitter from '../EventEmitter/index';
+import { useAppStore } from '../state';
 
 
 export default function useErc20Approve() {
@@ -14,6 +15,7 @@ export default function useErc20Approve() {
     const checkAddress = useRelayerAddress();
     const contractAddress =useUSDCAddress()
     const { addToast } = useToasts()
+    const inputAmount = useAppStore((state)=>state.input)
   
 
   
@@ -23,9 +25,11 @@ export default function useErc20Approve() {
           const signer = library.getSigner()
           const contract = new Contract(contractAddress, erc20ABI, signer)
           try {
-            const result = await contract.approve(checkAddress,ethers.constants.MaxUint256 )
+            const result = await contract.approve(checkAddress,inputAmount )
             addToast('Approving', { appearance: 'success' })
             await result.wait([1])
+            console.log('checkallowance event')
+            EventEmitter.emit('checkallowance')
             return result
             
           } catch (error:any) {
@@ -39,12 +43,12 @@ export default function useErc20Approve() {
             addToast(msg, { appearance: 'error',autoDismissTimeout:1000*5 })
             
           }
-          EventEmitter.emit('checkallowance')
+        
          
         }
       
     
-    }, [account, library, contractAddress,checkAddress,addToast])
+    }, [account, library, contractAddress,checkAddress,addToast,inputAmount])
   
     return {
         state,
