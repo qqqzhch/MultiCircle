@@ -8,13 +8,12 @@ import { cutOut } from '../../utils'
 
 
 type Prop = {
-  addr?: string
+  addr?: string|null
 }
 const CopyAddressBtn: FC<Prop> = ({ addr }) => {
   const { addToast } = useToasts()
 
-  const { address } = useParams<{ address: string; chainType: string }>()
-  const showAddr = addr || address || ''
+  const showAddr = addr || ''
 
   const onCopy = useCallback(() => {
     if (showAddr == undefined) {

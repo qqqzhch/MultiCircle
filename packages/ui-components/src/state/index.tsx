@@ -15,7 +15,7 @@ export  interface txItem {
   txhash:string
   status?:string|undefined,
   creattime:number,
-  user:string
+  user:string 
 }
 
 interface AppState {
@@ -29,6 +29,7 @@ interface AppState {
   output:string
   fee:string
   history:Array<txItem>
+  gasFee:string
   setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean,chainID:SupportedChainId )=>void
   getFromChain:()=>L1ChainInfo|L2ChainInfo|null
   getToChain:()=>L1ChainInfo|L2ChainInfo|null
@@ -40,6 +41,8 @@ interface AppState {
   getFee:()=>string
   addToHistory:(tx:txItem)=>void
   getHistory:(account:string|undefined|null)=>Array<txItem>
+  setGasFee:(amount:string)=>void
+  
 
 }
 
@@ -52,6 +55,7 @@ const intialState = {
   input:"0",
   output:"0",
   fee:"0",
+  gasFee:"0",
   history:[]
 };
 
@@ -123,6 +127,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
       },
       getHistory:(account:string|undefined|null)=>{
         return  get().history.filter((item)=>{return item.user==account});
+      },
+      setGasFee:(amount:string)=>{
+        set((state)=>{
+          state.gasFee=amount;
+        })
       }
     }), { name: 'app-storage' })))
   );
