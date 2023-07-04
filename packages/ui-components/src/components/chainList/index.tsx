@@ -66,16 +66,14 @@ const ChainList:FC<Props> = ({children}) => {
   })
 
  },[])
+  if(chainId==undefined){
+    return 
+  }
     
     return (
      <Popover className=" relative">
-        <Popover.Button className="flex flex-row items-center justify-center  focus:outline-none  ">
-          <When condition={unsupported===true}>
-              <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-red-600 font-thin">Error</div>
-              <div>
-                <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
-              </div>
-          </When>
+        <Popover.Button className="flex flex-row items-center justify-center text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800 ">
+  
           <When condition={unsupported!==true&&chainId!=undefined}>
               <div className=" hidden md:block px-6 py-1 mx-2  rounded  bg-yellow-300 font-thin text-sm   overflow-hidden">{chianName}</div>
               <div className="md:hidden px-3 py-1 mx-1 ">
@@ -86,13 +84,7 @@ const ChainList:FC<Props> = ({children}) => {
               </div>
 
           </When>
-          <When condition={unsupported!==true&&chainId===undefined}>
-              <div className="px-3 py-1 mx-1 font-semibold  rounded  bg-yellow-300 font-thin text-sm">{chianName}</div>
-              <div>
-                <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
-              </div>
-
-          </When>
+   
         
         </Popover.Button>
   

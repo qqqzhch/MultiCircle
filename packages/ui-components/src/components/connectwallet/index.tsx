@@ -58,7 +58,7 @@ const {chainId, account } = useWeb3React()
               <img width={20} src={metamask}></img>
             </div>
             <div className="flex  flex-col  text-sm mx-4">
-              <div className="">{walletName}</div>
+              {/* <div className="">{walletName}</div> */}
               <div className="">{account?.substring(0,4)}...{account?.substring(38,42)}</div>
             </div>
             <div className="py-1">
@@ -68,7 +68,7 @@ const {chainId, account } = useWeb3React()
         </When>
         <When condition={account===undefined}>
             
-            <button onClick={openModal} type="button" className="px-3 py-2  border rounded border-gray-400 text-gray-800 text-xs">Connect wallet</button>
+            <button onClick={openModal} type="button" className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">Connect wallet</button>
 
         </When>
         

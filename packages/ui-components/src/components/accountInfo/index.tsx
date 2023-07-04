@@ -20,7 +20,7 @@ const ChainList:FC<Props> = ({children}) => {
 
     return (
      <Popover className="relative">
-        <Popover.Button className="flex flex-row items-center justify-center focus:outline-none   ">{children}</Popover.Button>
+        <Popover.Button className="flex flex-row items-center justify-center text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800   ">{children}</Popover.Button>
   
         <Popover.Panel className="absolute   left-2/3  md:left-1/2 z-10 mt-4    max-w-sm -translate-x-1/2 transform px-4     sm:px-0 lg:max-w-3xl">
                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
