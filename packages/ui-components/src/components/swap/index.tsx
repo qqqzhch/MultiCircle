@@ -21,6 +21,14 @@ import { USECHAIN_IDS } from '../../constants/chains'
 import Skeleton from 'react-loading-skeleton'
 import useRelayCallGasFee from '../../hooks/useRelayCallGasFee'
 import { useDebounce } from 'react-use'
+import Balance from '../balance'
+import ReceiveAmount from './ReceiveAmount'
+import ProtocolFee from './ProtocolFee'
+import GasFee from './GasFee'
+
+
+
+
 
 
 
@@ -198,28 +206,13 @@ const Swap = () => {
             name="input"
             className="bg-gray-50 border  outline-none  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="0.0"
-            required
+     
          
             onChange={(e)=>{inputAmountChange(e.currentTarget.value)}}
           />
          
           </div>
-          <div className=' flex   flex-row  text-gray-500 items-center justify-end'>
-            <div className=' flex flex-col mr-2 text-sm   text-gray-400'>
-            <div>Balance</div>
-            <div>
-              <When condition={usdcBalance.isloading}>
-              <Skeleton /> 
-              </When>
-              <When condition={usdcBalance.isloading==false}>
-              {formatUnitsErc20(usdcBalance.balance,'',6)}
-              </When>
-               
-            </div>
-            </div>
-            
-            <img className=' w-10 h-10' src={usdclogo}></img>
-          </div>
+          <Balance></Balance>
 
           </div>
           {/* <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
@@ -231,47 +224,10 @@ const Swap = () => {
         
         
 
-        <div className="flex items-center mb-2">
-          
-          <label className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-300">
-          You will receive: {" "}  {inputAmount} USDC
-          </label>
-        </div>
-        <div className="flex items-center mb-2">
-          <div className='ml-2 text-sm font-medium text-gray-500 dark:text-gray-300'>Protocol Fee:</div>  
-          <div className=' min-w-[50px] ml-2 text-sm font-medium text-gray-500 dark:text-gray-300'>
-             
-          <If condition={RelayerFee.isloading}>
-            <Then>
-            <Skeleton /> 
-            </Then>
-            <Else>
-            {fromChainID!==null&&formatUnits(fromChainID,RelayerFee.fee,true)}
-           
-            </Else>
-          </If>
-          </div>   
-   
-        </div>
-        <div className="flex items-center mb-2">
-        <div className='ml-2 text-sm font-medium text-gray-500 dark:text-gray-300'>Gas Fee:</div>  
-          <div className='  min-w-[50px] ml-2 text-sm font-medium text-gray-500 dark:text-gray-300'>
-             
-          <If condition={gasFeeLoading}>
-            <Then>
-            <Skeleton /> 
-            </Then>
-            <Else>
-            {fromChainID!==null&&formatUnits(fromChainID,gasFee,true)}
-           
-            </Else>
-          </If>
-          </div>   
-          <div className=" flex flex-row peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        <ReceiveAmount></ReceiveAmount>
+        <ProtocolFee></ProtocolFee>
+        <GasFee></GasFee>
         
-       
-          </div>
-        </div>
   
         
        
