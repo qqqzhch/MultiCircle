@@ -30,8 +30,8 @@ const ChainList:FC<Props> = ({children}) => {
                   <CopyAddressBtn addr={account}></CopyAddressBtn>
                     
                   </div>
-                  <div className=" break-words flex items-center justify-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-blue-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                  <PowerIcon onClick={ onLogout} className=' w-6 h-6 text-red-700 cursor-pointer '>
+                  <div onClick={ onLogout} className=" break-words flex items-center justify-center  cursor-pointer rounded-lg p-2 transition duration-150 ease-in-out hover:bg-blue-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                  <PowerIcon  className=' w-6 h-6 text-red-700  '>
 
                   </PowerIcon>
                   </div>

@@ -31,11 +31,14 @@ export default function Noticeinfo() {
       setIsOpen(true)
    } 
 },[account]) 
+if(account==undefined){
+  return 
+}
 
   return (
     <>
       
-       <div onClick={openModal} className="relative py-2   cursor-pointer mr-4">
+       <div onClick={openModal} className="relative    cursor-pointer text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-80 ">
               <FontAwesomeIcon icon={icon({ name: 'bell', style: 'solid' })} />
               <When condition={account&&list.length>0}>
               <span className="absolute  rounded-full bg-red-400 py-0 px-1.5 text-xs text-white">{list.length}</span>

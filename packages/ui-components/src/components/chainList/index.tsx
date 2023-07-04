@@ -76,7 +76,7 @@ const ChainList:FC<Props> = ({children}) => {
   
           <When condition={unsupported!==true&&chainId!=undefined}>
               <div className=" hidden md:block px-6 py-1 mx-2  rounded  bg-yellow-300 font-thin text-sm   overflow-hidden">{chianName}</div>
-              <div className="md:hidden px-3 py-1 mx-1 ">
+              <div className="md:hidden py-1 mx-1 mr-1 ">
                 <img className=' w-6 h-6' src={chianLogo}></img>
                 </div>
               <div className="lg:flex">
@@ -90,14 +90,14 @@ const ChainList:FC<Props> = ({children}) => {
   
         <Popover.Panel className="absolute left-1/3 z-10 mt-4   max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                  <div className="relative grid gap-4 bg-white p-6 flex flex-col">
+                  <div className="relative grid gap-4 bg-white p-6 ">
                     {chains?.map(({item,chainId})=>{
                      return(
                        
                        <a
                        key={item.label}
                        onClick={()=>{SwitchingNetwork(item,chainId)}}
-                       className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                       className="-m-3 cursor-pointer  flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                      >
                        <div className="flex h-10 w-10 shrink-0 items-center justify-center text-white sm:h-12 sm:w-12">
                           <img width={20} src={item.logoUrl}></img>

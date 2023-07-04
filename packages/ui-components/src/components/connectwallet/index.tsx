@@ -54,10 +54,10 @@ const {chainId, account } = useWeb3React()
         <>
         <When condition={account!==undefined}>
            <AccountInfo>
-            <div  className="py-1 text-xl ">
+            <div  className="hidden sm:block py-1 text-xl mr-1 ">
               <img width={20} src={metamask}></img>
             </div>
-            <div className="flex  flex-col  text-sm mx-4">
+            <div className="flex  flex-col  text-sm mr-1">
               {/* <div className="">{walletName}</div> */}
               <div className="">{account?.substring(0,4)}...{account?.substring(38,42)}</div>
             </div>
