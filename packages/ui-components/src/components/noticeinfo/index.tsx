@@ -32,7 +32,7 @@ export default function Noticeinfo() {
    } 
 },[account]) 
 if(account==undefined){
-  return 
+  return <></>
 }
 
   return (
