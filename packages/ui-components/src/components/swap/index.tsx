@@ -21,6 +21,10 @@ import { USECHAIN_IDS } from '../../constants/chains'
 import Skeleton from 'react-loading-skeleton'
 import useRelayCallGasFee from '../../hooks/useRelayCallGasFee'
 import { useDebounce } from 'react-use'
+import Balance from '../balance'
+import ReceiveAmount from './ReceiveAmount'
+import ProtocolFee from './ProtocolFee'
+import GasFee from './GasFee'
 import SelectPanel from '../selectChainModal/SelectPanel'
 
 
@@ -159,88 +163,36 @@ const Swap = () => {
       <SelectPanel dataType={true}></SelectPanel>
         <SwichNetwork></SwichNetwork>
         <SelectPanel dataType={false}></SelectPanel>
-        <div className="relative z-0 w-full mb-6 group  flex flex-row justify-between">
+        <div className="z-0 w-full mb-6  ">
+        <div className=' flex flex-row justify-between space-x-2'>
           <div className=' flex-1 '>
           <input
             type="text"
             name="input"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder="0"
-            required
+            className="bg-gray-50 border  outline-none  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="0.0"
+     
          
             onChange={(e)=>{inputAmountChange(e.currentTarget.value)}}
           />
-          <p className=' text-red-400'>{inputError}</p>
+         
           </div>
-          <div className=' flex   flex-row  text-gray-500 items-center justify-end'>
-            <div className=' flex flex-col mr-2 text-sm   text-gray-400'>
-            <div>Balance</div>
-            <div>
-              <When condition={usdcBalance.isloading}>
-              <Skeleton /> 
-              </When>
-              <When condition={usdcBalance.isloading==false}>
-              {formatUnitsErc20(usdcBalance.balance,'',6)}
-              </When>
-               
-            </div>
-            </div>
-            
-            <img className=' w-10 h-10' src={usdclogo}></img>
+          <Balance></Balance>
+
           </div>
-          
-          <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+          {/* <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
             input
-          </label>
+          </label> */}
+           <p className='mt-2 text-sm text-red-600 dark:text-red-500'>{inputError}</p>
         </div>
-        
-        
-        
        
-        <div className="relative z-0 w-full  group  mb-10">
-          
-          <label className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          You will receive: {" "}  {inputAmount} USDC
-          </label>
-        </div>
-        <div className="relative z-0 w-full  group mb-1 flex flex-row text-sm text-gray-500">
-        <div>Protocol Fee:</div>  
-          <div className='  min-w-[50px]'>
-             
-          <If condition={RelayerFee.isloading}>
-            <Then>
-            <Skeleton /> 
-            </Then>
-            <Else>
-            {fromChainID!==null&&formatUnits(fromChainID,RelayerFee.fee,true)}
-           
-            </Else>
-          </If>
-          </div>   
-          <div className=" flex flex-row peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
         
-       
-          </div>
-        </div>
-        <div className="relative z-0 w-full  group mb-14 flex flex-row text-sm text-gray-500">
-        <div>Gas Fee:</div>  
-          <div className='  min-w-[50px]'>
-             
-          <If condition={gasFeeLoading}>
-            <Then>
-            <Skeleton /> 
-            </Then>
-            <Else>
-            {fromChainID!==null&&formatUnits(fromChainID,gasFee,true)}
-           
-            </Else>
-          </If>
-          </div>   
-          <div className=" flex flex-row peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
         
-       
-          </div>
-        </div>
+
+        <ReceiveAmount></ReceiveAmount>
+        <ProtocolFee></ProtocolFee>
+        <GasFee></GasFee>
+        
   
         
        
