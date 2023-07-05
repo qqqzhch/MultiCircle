@@ -67,7 +67,7 @@ const ChainList:FC<Props> = ({children}) => {
 
  },[])
   if(chainId==undefined){
-    return 
+    return <></>
   }
     
     return (
