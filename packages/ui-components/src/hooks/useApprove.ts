@@ -20,7 +20,7 @@ export default function useErc20Approve() {
     const inputAmount = useAppStore((state)=>state.input)
     const CheckAllowance = useErcCheckAllowance()
   
-
+    
   
     const [state, doFetch]=useAsyncFn(async() => {
       console.log('useApprove')
@@ -34,7 +34,9 @@ export default function useErc20Approve() {
             await result.wait([1])
             // console.log('checkallowance event')
             // EventEmitter.emit('checkallowance')
-           await CheckAllowance.dofetch()
+            
+            
+
             return result
             
           } catch (error:any) {

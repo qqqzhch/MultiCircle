@@ -64,10 +64,41 @@ export default function useErcCheckAllowance() {
      return  result
       
     },[allowance])
+
+    const checkAmountAsync= useCallback(async(inputAmount:string)=>{
+       return new Promise((resolve, reject)=>{
+        const checkFn=()=>{
+          try {
+            const id = setTimeout(async ()=>{
+              const AmountAllowance= await dofetch()
+              if(AmountAllowance?.gte(BigNumber.from(inputAmount))){
+                clearTimeout(id)
+               
+                resolve(true)
+              }else{
+                checkFn()
+              }
+    
+            },500)  
+          } catch (error) {
+            reject(error)
+          }
+          
+
+        }
+        
+
+       })
+      
+
+    },[dofetch])
+
+    
   
     return {
       Validation:fnback,
       state,
-      dofetch
+      dofetch,
+      checkAmountAsync
     }
   }

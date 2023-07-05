@@ -1,4 +1,4 @@
-import React,{useCallback,useState} from 'react';
+import React,{useCallback,useMemo,useState} from 'react';
 import Balance from '../balance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 import { useAppStore } from '../../state'
@@ -8,19 +8,33 @@ import { useDebounce } from 'react-use'
 
 const InputAmountBlance = () => {
     const usdcBalance=  useErc20Balance()
-    const [inputValue,setInputValue]=useState("0")
+
     const [inputError,setinputError]=useState<string|undefined>()
     const setInput = useAppStore((state)=>state.setInput)
+    const input = useAppStore((state)=>state.input)
+
+    const inputAmount= useMemo(()=>{
+      const valueHaveUnits=ethers.utils.formatUnits(input,6).toString()
+      return valueHaveUnits
+
+    },[input])
+    const [inputValue,setInputValue]=useState(inputAmount)
 
     useDebounce(()=>{
+        
         const valueHaveUnits=ethers.utils.parseUnits(inputValue,6).toString()
-        setInput(valueHaveUnits)
-      },1000,[inputValue])
+        if(inputError==undefined){
+          setInput(valueHaveUnits)
+        }
+        
+
+      },1000,[inputValue,inputError])
 
     const inputAmountChange = useCallback((value:string)=>{
         console.log('inputAmountChange')
         // startTransition(()=>{
-   
+          setInputValue(value)
+
           const error=validateAmount(value)
           setinputError(undefined)
           if(error==undefined){
@@ -35,15 +49,12 @@ const InputAmountBlance = () => {
               if(inputAmount.gt(usdcBalanceamount)){ 
                 setinputError('The value entered is greater than the balance')
               }
+
             }
-            setInputValue(value)
-           
-    
             
           }else{
             setinputError(error)
-            setInput("0")
-            setInputValue("0")
+          
           }
         // })
         
@@ -61,8 +72,8 @@ const InputAmountBlance = () => {
             name="input"
             className="bg-gray-50 border  outline-none  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="0.0"
-     
-         
+       
+            value={inputValue}
             onChange={(e)=>{inputAmountChange(e.currentTarget.value)}}
           />
          

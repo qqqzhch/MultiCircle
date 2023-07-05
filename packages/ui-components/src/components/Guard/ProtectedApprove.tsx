@@ -12,15 +12,29 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
     const inputNumer = useAppStore((state)=>state.input)
     const [isLoading,setIsisLoading] = useState(false)
 
+    console.log('--ProtectedApprove')
     const allowance = useMemo(()=>{
-      return  checkAllowance.Validation(inputNumer)
+      const result =  checkAllowance.Validation(inputNumer)
+       
+      return result
     },[checkAllowance,inputNumer])
 
+    
+
     const Submit = useCallback(async()=>{
-      setIsisLoading(true)
-      await ApproveUSDT.doFetch()
+      try {
+        setIsisLoading(true)
+        await ApproveUSDT.doFetch()
+        await checkAllowance.checkAmountAsync(inputNumer)
+         
+      } catch (error) {
+        console.log(error)
+      }
       setIsisLoading(false)
-    },[ApproveUSDT,setIsisLoading])
+      
+
+    },[ApproveUSDT,setIsisLoading,checkAllowance,inputNumer])
+
 
     if(allowance==true){
         return children
@@ -39,10 +53,10 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
 
     if(isLoading){
         return (<button
-            className="px-6 py-3.5 text-white flex-1 flex    bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  cursor-wait"
+            className="px-6 py-3.5 text-white flex-1 flex  flex-row   bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  cursor-wait"
           >
             <Loading></Loading>
-           <div className=' text-center'>Approve loading</div>   
+           <div className=' flex-1 text-center'>Approve loading</div>   
           </button>)
     }
      
