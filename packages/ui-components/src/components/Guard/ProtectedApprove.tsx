@@ -22,14 +22,16 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
     
 
     const Submit = useCallback(async()=>{
-      try {
+      
         setIsisLoading(true)
-        await ApproveUSDT.doFetch()
+        const result = await ApproveUSDT.doFetch()
+      
+      if(result!==undefined){
         await checkAllowance.checkAmountAsync(inputNumer)
+      }   
+      
          
-      } catch (error) {
-        console.log(error)
-      }
+      
       setIsisLoading(false)
       
 

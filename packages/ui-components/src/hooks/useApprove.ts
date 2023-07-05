@@ -48,6 +48,7 @@ export default function useErc20Approve() {
             }
             
             addToast(msg, { appearance: 'error',autoDismissTimeout:1000*5 })
+           
             
           }
         
