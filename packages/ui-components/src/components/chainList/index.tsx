@@ -66,19 +66,17 @@ const ChainList:FC<Props> = ({children}) => {
   })
 
  },[])
+  if(chainId==undefined){
+    return <></>
+  }
     
     return (
-     <Popover className=" relative">
-        <Popover.Button className="flex flex-row items-center justify-center  focus:outline-none  ">
-          <When condition={unsupported===true}>
-              <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-red-600 font-thin">Error</div>
-              <div>
-                <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
-              </div>
-          </When>
+     <Popover className=" relative ">
+        <Popover.Button className="flex flex-row items-center    justify-center text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800 ">
+  
           <When condition={unsupported!==true&&chainId!=undefined}>
               <div className=" hidden md:block px-6 py-1 mx-2  rounded  bg-yellow-300 font-thin text-sm   overflow-hidden">{chianName}</div>
-              <div className="md:hidden px-3 py-1 mx-1 ">
+              <div className="md:hidden py-1 mx-1 mr-1 ">
                 <img className=' w-6 h-6' src={chianLogo}></img>
                 </div>
               <div className="lg:flex">
@@ -86,26 +84,20 @@ const ChainList:FC<Props> = ({children}) => {
               </div>
 
           </When>
-          <When condition={unsupported!==true&&chainId===undefined}>
-              <div className="px-3 py-1 mx-1 font-semibold  rounded  bg-yellow-300 font-thin text-sm">{chianName}</div>
-              <div>
-                <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
-              </div>
-
-          </When>
+   
         
         </Popover.Button>
   
         <Popover.Panel className="absolute left-1/3 z-10 mt-4   max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                  <div className="relative grid gap-4 bg-white p-6 flex flex-col">
+                  <div className="relative grid gap-4 bg-white p-6 ">
                     {chains?.map(({item,chainId})=>{
                      return(
                        
                        <a
                        key={item.label}
                        onClick={()=>{SwitchingNetwork(item,chainId)}}
-                       className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                       className="-m-3 cursor-pointer  flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                      >
                        <div className="flex h-10 w-10 shrink-0 items-center justify-center text-white sm:h-12 sm:w-12">
                           <img width={20} src={item.logoUrl}></img>
