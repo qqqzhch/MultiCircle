@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <Web3Provider>
         <Header></Header>
-        <section className="container mx-auto">
+        <section className="container mx-auto body-font">
         <Outlet />
         </section>
         <Footer></Footer>
