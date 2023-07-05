@@ -8,6 +8,8 @@ import useUSDCAddress from './useUsdc'
 import { useToasts } from 'react-toast-notifications'
 import EventEmitter from '../EventEmitter/index';
 import { useAppStore } from '../state';
+import useErcCheckAllowance from './useCheckAllowance';
+
 
 
 export default function useErc20Approve() {
@@ -16,6 +18,7 @@ export default function useErc20Approve() {
     const contractAddress =useUSDCAddress()
     const { addToast } = useToasts()
     const inputAmount = useAppStore((state)=>state.input)
+    const CheckAllowance = useErcCheckAllowance()
   
 
   
@@ -25,11 +28,13 @@ export default function useErc20Approve() {
           const signer = library.getSigner()
           const contract = new Contract(contractAddress, erc20ABI, signer)
           try {
+         
             const result = await contract.approve(checkAddress,inputAmount )
             addToast('Approving', { appearance: 'success' })
             await result.wait([1])
-            console.log('checkallowance event')
-            EventEmitter.emit('checkallowance')
+            // console.log('checkallowance event')
+            // EventEmitter.emit('checkallowance')
+           await CheckAllowance.dofetch()
             return result
             
           } catch (error:any) {
@@ -48,7 +53,7 @@ export default function useErc20Approve() {
         }
       
     
-    }, [account, library, contractAddress,checkAddress,addToast,inputAmount])
+    }, [account, library, contractAddress,checkAddress,addToast,inputAmount,CheckAllowance.dofetch])
   
     return {
         state,

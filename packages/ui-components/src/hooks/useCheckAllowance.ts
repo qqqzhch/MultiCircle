@@ -7,6 +7,7 @@ import erc20ABI from './../constants/ABI/ERC20.json'
 import useRelayerAddress from './useRelayer'
 import useUSDCAddress from './useUsdc'
 import EventEmitter from '../EventEmitter/index';
+import {useAsyncFn} from 'react-use';
 
 
 export default function useErcCheckAllowance() {
@@ -15,41 +16,46 @@ export default function useErcCheckAllowance() {
     const contractAddress =useUSDCAddress()
     const [allowance, setAllowance] = useState<BigNumber>()
 
-
-  
-    useEffect(() => {
-      const run = async()=>{
-        console.log('run CheckAllowance')
+    const [state,dofetch]= useAsyncFn(async()=>{
+      console.log('run CheckAllowance')
         if (account && contractAddress && library != undefined) {
           const contract = new Contract(contractAddress, erc20ABI, library)
         //   const result: BigNumber = await contract.balanceOf(mpcAddress)
           const allowance: BigNumber = await contract.allowance(account,checkAddress)
           setAllowance(allowance )
+          return allowance
           
           
         }
-      }
+
+    },[account, library, contractAddress,checkAddress])
+
+
+  
+    useEffect(() => {
+      
       let IntervalId:number;
       if(library){
         // library.on('block', run)
         IntervalId=window.setInterval(()=>{
-          run()
+          dofetch()
         },1000*30)
-        EventEmitter.on('checkallowance',run)
+        EventEmitter.on('checkallowance',dofetch)
       }
      
       
-      run()
+      dofetch()
   
       return () => {
         if (library) {
           // library.off('block',run)
           clearInterval(IntervalId)
-          EventEmitter.off('checkallowance',run)
+          EventEmitter.off('checkallowance',dofetch)
         }
       }
-    }, [account, library, contractAddress,checkAddress])
+    }, [account, library, dofetch])
 
+    
     const fnback =useCallback((inputAmount:string)=>{
       if(allowance==undefined){
         return false
@@ -59,5 +65,9 @@ export default function useErcCheckAllowance() {
       
     },[allowance])
   
-    return fnback
+    return {
+      Validation:fnback,
+      state,
+      dofetch
+    }
   }

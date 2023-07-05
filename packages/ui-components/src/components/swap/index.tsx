@@ -25,6 +25,12 @@ import Balance from '../balance'
 import ReceiveAmount from './ReceiveAmount'
 import ProtocolFee from './ProtocolFee'
 import GasFee from './GasFee'
+import InputAmountBlance from './InputAmountBlance'
+import { ProtectedConnectWallet } from '../Guard/ProtectedConnectWallet'
+import ProtectedApprove from '../Guard/ProtectedApprove'
+import ProtecteNetwork from '../Guard/ProtecteNetwork'
+
+
 
 
 
@@ -76,7 +82,7 @@ const Swap = () => {
   const checkAllowance= useErcCheckAllowance()
 
   const allowance = useMemo(()=>{
-    return  checkAllowance(inputNumer)
+    return  checkAllowance.Validation(inputNumer)
   },[checkAllowance,inputNumer])
   
   const switchingNetwork = useSwitchingNetwork()
@@ -196,30 +202,7 @@ const Swap = () => {
          
         </div>
         </div>
-        <div className="z-0 w-full mb-6  ">
-          <div className=' flex flex-row justify-between space-x-2'>
-
-          
-          <div className=' flex-1 '>
-          <input
-            type="text"
-            name="input"
-            className="bg-gray-50 border  outline-none  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="0.0"
-     
-         
-            onChange={(e)=>{inputAmountChange(e.currentTarget.value)}}
-          />
-         
-          </div>
-          <Balance></Balance>
-
-          </div>
-          {/* <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-            input
-          </label> */}
-           <p className='mt-2 text-sm text-red-600 dark:text-red-500'>{inputError}</p>
-        </div>
+        <InputAmountBlance></InputAmountBlance>
        
         
         
@@ -227,11 +210,27 @@ const Swap = () => {
         <ReceiveAmount></ReceiveAmount>
         <ProtocolFee></ProtocolFee>
         <GasFee></GasFee>
+        <div className='  flex'>
+        <ProtectedConnectWallet>
+          <ProtecteNetwork>
+              <ProtectedApprove>
+                <button
+                  onClick={()=>{ValidateAmountFN()}}
+                
+                className="text-white flex-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+              Review
+              </button>
+              </ProtectedApprove>
+          </ProtecteNetwork>
+          
+        </ProtectedConnectWallet>
+        </div>
         
   
         
        
-        <div className=' relative z-0 w-full mb-6 group flex mt-10'>
+        {/* <div className=' relative z-0 w-full mb-6 group flex mt-10'>
         
         <When condition={account!==undefined&&account!==null}>
         <If condition={allowance==false&&fromChainID==chainId&&fromChainID!==toChainID}>
@@ -311,7 +310,7 @@ const Swap = () => {
         
 
 
-        </div>
+        </div> */}
       </div>
         <SelectChainModal isOpen={ isFromOpen} closeModal={()=>{setIsFromOpen (false)}}  dataType={true}   ></SelectChainModal>
         <SelectChainModal isOpen={ isToOpen} closeModal={()=>{setIsToOpen(false)}} dataType={false} ></SelectChainModal>
