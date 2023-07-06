@@ -6,12 +6,14 @@ import { getChainInfo } from '../../constants/chainInfo'
 import { SupportedChainId } from '../../constants/chains'
 
 type Prop = {
-  addr?: string
-  chainId:SupportedChainId
+  addr?: string|null
+  chainId?:SupportedChainId|null
 }
 const ScanUrl: FC<Prop> = ({ addr,chainId }) => {
 
-  
+  if(addr==undefined||addr==null||chainId==undefined||chainId==null){
+    return <></>
+  }  
   const ChainInfo = getChainInfo(chainId)
 
   const data = addr
