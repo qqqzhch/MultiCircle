@@ -41,7 +41,7 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
     return (
         <div  className="flex flex-col pb-3">
             <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400 mt-2">
-                From: {fromChainInfo.label}, TO:{toChainInfo.label}  
+                From: {fromChainInfo.label}, To:{toChainInfo.label}  
             </dt>
             
             <dd className="text-md font-semibold">Amount:{formatUnitsErc20(Item.input,'usdc',6)}{" "}
