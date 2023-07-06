@@ -10,6 +10,7 @@ import { useWeb3React } from '@web3-react/core'
 import {  useEffect, useCallback } from 'react'
 import EventEmitter from '../../EventEmitter/index'
 import metamask from '../../assets/icon/metamask.svg'
+import { useCookie } from 'react-use'
 
 
 
@@ -22,6 +23,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   ////
   const { addToast } = useToasts()
   const {  activate,active} = useWeb3React()
+  const [walletIsConnectvalue, updateCookie] = useCookie("walletIsConnectedTo");
   
   // const [accountData, setAccountData] = useState<null | accountDataType>(null)
   // const noderef= useRef()
@@ -42,11 +44,12 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     })
     console.log('connectMetaMask')
     if (!status) {
-      addToast('Connected to MetaMask', { appearance: 'success' })
-      localStorage.setItem('walletIsConnectedTo', 'metamask')
+      // addToast('Connected to MetaMask', { appearance: 'success' })
+      // localStorage.setItem('walletIsConnectedTo', 'metamask')
+      updateCookie('metamask',{expires: 30, path: '/'})
       closeModal()
     }
-  }, [activate, addToast,closeModal])
+  }, [activate, addToast,closeModal,updateCookie])
 
   const connectWalletConnect = useCallback(async () => {
     let status = false
@@ -62,11 +65,12 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     })
 
     if (!status) {
-      localStorage.setItem('walletIsConnectedTo', 'walletConnect')
-      addToast('Connected to Wallet Connect', { appearance: 'success' })
+      // localStorage.setItem('walletIsConnectedTo', 'walletConnect')
+      updateCookie('walletConnect',{expires: 30, path: '/'})
+      // addToast('Connected to Wallet Connect', { appearance: 'success' })
       closeModal()
     }
-  }, [activate, addToast,closeModal])
+  }, [activate, addToast,closeModal,updateCookie])
   // const disConnect = async () => {
   //   deactivate()
 
@@ -82,11 +86,11 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
       console.log('connectWalletOnPageLoad')
-      if (localStorage.getItem('walletIsConnectedTo') === 'metamask') {
+      if (walletIsConnectvalue?.trim()=== 'metamask') {
         await connectMetaMask()
       }
 
-      if (localStorage.getItem('walletIsConnectedTo') === 'walletConnect') {
+      if (walletIsConnectvalue?.trim() === 'walletConnect') {
         await connectWalletConnect()
       }
     }
@@ -94,7 +98,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       connectWalletOnPageLoad()
     // }
     
-  }, [connectMetaMask, connectWalletConnect])
+  }, [connectMetaMask, connectWalletConnect,walletIsConnectvalue])
 
   
   
