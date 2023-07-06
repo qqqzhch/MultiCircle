@@ -8,7 +8,7 @@ import useUSDCAddress from './useUsdc'
 import { useToasts } from 'react-toast-notifications'
 import EventEmitter from '../EventEmitter/index';
 import { useAppStore } from '../state';
-import useErcCheckAllowance from './useCheckAllowance';
+
 
 
 
@@ -18,10 +18,8 @@ export default function useErc20Approve() {
     const contractAddress =useUSDCAddress()
     const { addToast } = useToasts()
     const inputAmount = useAppStore((state)=>state.input)
-    const CheckAllowance = useErcCheckAllowance()
-  
+
     
-  
     const [state, doFetch]=useAsyncFn(async() => {
       console.log('useApprove')
         if (account && contractAddress && library != undefined) {
@@ -56,7 +54,7 @@ export default function useErc20Approve() {
         }
       
     
-    }, [account, library, contractAddress,checkAddress,addToast,inputAmount,CheckAllowance.dofetch])
+    }, [account, library, contractAddress,checkAddress,addToast,inputAmount])
   
     return {
         state,
