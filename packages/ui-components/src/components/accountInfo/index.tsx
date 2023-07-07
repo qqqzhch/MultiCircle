@@ -4,6 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import { PowerIcon } from '@heroicons/react/24/solid'
 import CopyAddressBtn from '../linkAndCopy/CopyAddressBtn';
 import { cutOut } from '../../utils';
+import { useCookie } from 'react-use';
 
 
 type Props = {
@@ -11,12 +12,14 @@ type Props = {
   };
 const ChainList:FC<Props> = ({children}) => {
   const {account,deactivate } = useWeb3React()
+  const [, ,deleteCookie] = useCookie("walletIsConnectedTo");
 
   const onLogout = useCallback(() => {
-    localStorage.setItem('walletIsConnectedTo', '')
+    deleteCookie()
     deactivate()
    
-  }, [deactivate])
+   
+  }, [deactivate,deleteCookie])
 
     return (
      <Popover className="relative">
