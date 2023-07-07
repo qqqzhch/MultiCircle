@@ -39,13 +39,20 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
 
     },[status])
     return (
-        <div  className="flex flex-col pb-3">
-            <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400 mt-2">
-                From: {fromChainInfo.label}, To:{toChainInfo.label}  
+        <div  className="flex flex-col pb-3 mt-2 pt-2">
+            <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400  flex flex-row justify-between items-center">
+                <span> From: {fromChainInfo.label}</span>
+                <dt className=" w-1/2  text-gray-500 md:text-md dark:text-gray-400  inline-flex items-center space-x-3">
+                    Tx Hash:  {cutOut(Item.txhash,2,2)} <ScanUrl addr={Item.txhash} chainId={Item.fromChainID}></ScanUrl>   <CopyAddressBtn addr={Item.txhash}></CopyAddressBtn>
+                </dt>
+            </dt>
+            <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400 ">
+                To:{toChainInfo.label}  
             </dt>
             
-            <dd className="text-md font-semibold">Amount:{formatUnitsErc20(Item.input,'usdc',6)}{" "}
-            Fee:  {formatUnits(Item.fromChainID, Item.fee,true) }
+            <dd className="mb-1 text-md font-semibold flex flex-row justify-between items-center">
+           <span className='w-1/2'>Amount:{formatUnitsErc20(Item.input,'usdc',6)}{" "} </span> 
+           <span className='w-1/2'>Fee:  {formatUnits(Item.fromChainID, Item.fee,true) }</span> 
             </dd>
             <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400">
                 Time: {dayjs(Item.creattime).fromNow()}  
@@ -69,9 +76,7 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
                 
                  
             </dt>
-            <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400  inline-flex items-center space-x-3">
-                Tx Hash: <ScanUrl addr={Item.txhash} chainId={Item.fromChainID}></ScanUrl>   <CopyAddressBtn addr={Item.txhash}></CopyAddressBtn>
-            </dt>
+            
         </div>
     );
 };
