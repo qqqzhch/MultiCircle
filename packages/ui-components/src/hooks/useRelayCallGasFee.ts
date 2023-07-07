@@ -29,7 +29,7 @@ export default function useRelayCallGasFee() {
 
     const { data, error, isLoading }= useSWR([account, contractAddress,chainId,fromChainID,burnToken,RelayerFee,toChainID,inputAmount,'gasfee'],async()=>{
                                               console.log('useRelayCall GAS FEE')
-                                              if (account && contractAddress && library != undefined&&fromChainID!==null&&fromChainID==chainId&&toChainID!=null&&inputAmount!=="0") {
+                                              if (account && contractAddress && library != undefined&&fromChainID!==null&&fromChainID==chainId&&toChainID!=null&&inputAmount!=="0"&&RelayerFee!=="0") {
                                               const destinationDomain=Circle_Chainid[toChainID];
                                               const mintRecipient=account;
                                               const amount=inputAmount;

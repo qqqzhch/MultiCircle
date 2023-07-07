@@ -35,12 +35,12 @@ export default function useRelayerFee() {
                                                 const result: BigNumber = await contract.feeByDestinationDomain(CircleID)
                                                 if(result.eq(0)){
                                                   // setValue(ethers.utils.parseEther('0.0001').toString())
-                                                  // setFee(ethers.utils.parseEther('0.0001').toString())
+                                                  setFee(ethers.utils.parseEther('0.0001').toString())
                                                   return '0.0001'
                                                 }else{
                                                   
                                                   // setValue(result.toString())
-                                                  // setFee(result.toString())
+                                                  setFee(result.toString())
                                                   return result.toString()
                                                 }
 
