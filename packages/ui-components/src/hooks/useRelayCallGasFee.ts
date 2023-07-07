@@ -11,6 +11,7 @@ import { useToasts } from 'react-toast-notifications'
 import useErcCheckAllowance from './useCheckAllowance'
 
 import useSWR from 'swr'
+import EventEmitter from '../EventEmitter/index';
 
 export default function useRelayCallGasFee() {
     const { library,account,chainId } = useWeb3React()
@@ -30,19 +31,23 @@ export default function useRelayCallGasFee() {
 
     const [gasFeeLoading,setGasFeeLoading]=useState(false)
 
-    useEffect(()=>{
-      console.log('Allowance have change')
-      setFetchCheck((pre)=>{
-        return pre+1
-      })
-    },[allowanceValue])
-
-    const checkAmountAsync= useCallback(async()=>{
-      setFetchCheck((pre)=>{
-        return pre+1
-      })
+    useEffect (()=>{
+      console.log('emit')
+      const run=()=>{
+        setFetchCheck((pre)=>{
+          return pre+1
+        })
+      }
+      
+      EventEmitter.on('Refresh',run)
+      return ()=>{
+        EventEmitter.off('Refresh',run)
+      }
 
     },[setFetchCheck])
+
+    
+
     const isAllowance = useMemo(()=>{
       return Validation2(allowanceValue,inputAmount)
     },[Validation2,inputAmount,allowanceValue])
@@ -124,7 +129,6 @@ export default function useRelayCallGasFee() {
     return {
       gasFee:data,
       gasFeeLoading:isLoading,
-      checkAmountAsync,
       error
     }
   }

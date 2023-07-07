@@ -11,23 +11,33 @@ import {useAsyncFn} from 'react-use';
 import useSWR from 'swr'
 import { useAppStore } from '../state';
 
+
+
 export default function useErcCheckAllowance() {
     const { library,account,chainId } = useWeb3React()
     const checkAddress = useRelayerAddress();
     const contractAddress =useUSDCAddress()
-    // const [allowanceValue, setAllowanceValue] = useState<BigNumber>()
-    // const [fetchCheck, setFetchCheck] = useState<number>(0)
+    const [allowanceValue, setAllowanceValue] = useState<BigNumber>()
+    const [fetchCheck, setFetchCheck] = useState<number>(0)
+
     
-    const checkAmountAsync= useCallback(async()=>{
-      // console.log('emit')
-      // setFetchCheck((pre)=>{
-      //   return pre+1
-      // })
+    useEffect (()=>{
+      console.log('emit')
+      const run=()=>{
+        setFetchCheck((pre)=>{
+          return pre+1
+        })
+      }
+      
+      EventEmitter.on('Refresh',run)
+      return ()=>{
+        EventEmitter.off('Refresh',run)
+      }
 
-    },[])
+    },[setFetchCheck])
 
 
-    const { data,isLoading } = useSWR([account, chainId, contractAddress,checkAddress,'erc20allowance'],
+    const { data,isLoading } = useSWR([account, chainId, contractAddress,checkAddress,'erc20allowance',fetchCheck],
                             async([account, chainId, contractAddress,checkAddress])=>{
                             if (account && contractAddress && library != undefined) {
                               console.log('erc20allowance')
@@ -44,7 +54,7 @@ export default function useErcCheckAllowance() {
                             }
                           })
 
-    console.log('set allowance',data?.toString(),isLoading)
+    console.log('read allowance',data?.toString(),isLoading,fetchCheck)
   
 
 
@@ -73,7 +83,7 @@ export default function useErcCheckAllowance() {
       Validation2:fnback2,
       state:data,
       // dofetch,
-      checkAmountAsync,
+      // checkAmountAsync,
       allowanceValue:data,
       isLoading
     }

@@ -5,7 +5,7 @@ import { useAppStore } from '../../state'
 import Loading from '../loading';
 import useRelayCallGasFee from '../../hooks/useRelayCallGasFee';
 import { useToasts } from 'react-toast-notifications'
-
+import EventEmitter from '../../EventEmitter/index';
 
 
 const ProtectedApprove = ({ children, className }: { children: JSX.Element; className?: string }) => {
@@ -31,12 +31,11 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
         const result = await ApproveUSDT.doFetch()
       
       if(result!==undefined){
-        await checkAllowance.checkAmountAsync()
-        await RelayCallGasFee.checkAmountAsync()
+        EventEmitter.emit("Refresh")
       }   
     
 
-    },[ApproveUSDT,setIsisLoading,checkAllowance,RelayCallGasFee])
+    },[ApproveUSDT,setIsisLoading])
    
     useEffect(()=>{
       // console.log('ApproveUSDT.state.error',ApproveUSDT.state)
@@ -57,6 +56,15 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
     if(allowance==true){
         return children
     }
+    
+    // return (<button
+    //      onClick={()=>{
+    //       console.log('****')
+    //       EventEmitter.emit("Refresh")}}
+    //       className="px-6 py-3.5 text-white flex-1  bg-blue-600 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
+    //     >
+    //      test   
+    //     </button>)
 
     if(inputNumer=="0"){
       return (
