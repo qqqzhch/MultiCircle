@@ -25,7 +25,7 @@ export default function useErc20Approve() {
         if (account && contractAddress && library != undefined) {
           const signer = library.getSigner()
           const contract = new Contract(contractAddress, erc20ABI, signer)
-          try {
+          // try {
          
             const result = await contract.approve(checkAddress,inputAmount )
             addToast('Approving', { appearance: 'success' })
@@ -37,18 +37,18 @@ export default function useErc20Approve() {
 
             return result
             
-          } catch (error:any) {
-            let  msg
-            if(error.data){
-               msg =error.data.message
-            }else{
-               msg=error.message
-            }
+          // } catch (error:any) {
+          //   let  msg
+          //   if(error.data){
+          //      msg =error.data.message
+          //   }else{
+          //      msg=error.message
+          //   }
             
-            addToast(msg, { appearance: 'error',autoDismissTimeout:1000*5 })
+          //   addToast(msg, { appearance: 'error',autoDismissTimeout:1000*5 })
            
             
-          }
+          // }
         
          
         }

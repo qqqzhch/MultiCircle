@@ -21,8 +21,8 @@ export default function useRelayerFee() {
     const { data, error, isLoading } = useSWR([contractAddress,toChainID,fromChainID,'useRelayerFee'],
                                               async ([contractAddress,toChainID,fromChainID])=>{
                                                 console.log('useRelayerFee')
-                                              setValue('0')
-                                              setFee('0')
+                                              // setValue('0')
+                                              // setFee('0')
                                               if ( contractAddress&&toChainID!==null&&fromChainID!==null&&toChainID!==fromChainID) {
                                                 
 
@@ -45,6 +45,8 @@ export default function useRelayerFee() {
                                                 }
 
 
+                                              }else{
+                                                setValue('0')
                                               }
 
                                               })

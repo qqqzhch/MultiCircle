@@ -1,8 +1,10 @@
-import React,{useCallback, useMemo,useState} from 'react';
+import React,{useCallback, useEffect, useMemo,useState} from 'react';
 import useErc20Approve from '../../hooks/useApprove'
 import useErcCheckAllowance from '../../hooks/useCheckAllowance'
 import { useAppStore } from '../../state'
 import Loading from '../loading';
+import useRelayCallGasFee from '../../hooks/useRelayCallGasFee';
+import { useToasts } from 'react-toast-notifications'
 
 
 
@@ -11,6 +13,8 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
     const checkAllowance= useErcCheckAllowance()
     const inputNumer = useAppStore((state)=>state.input)
     const [isLoading,setIsisLoading] = useState(false)
+    const RelayCallGasFee=useRelayCallGasFee()
+    const { addToast } = useToasts()
 
     console.log('--ProtectedApprove')
     const allowance = useMemo(()=>{
@@ -27,15 +31,27 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
         const result = await ApproveUSDT.doFetch()
       
       if(result!==undefined){
-        await checkAllowance.checkAmountAsync(inputNumer)
+        await checkAllowance.checkAmountAsync()
+        await RelayCallGasFee.checkAmountAsync()
       }   
-      
-         
-      
-      setIsisLoading(false)
-      
+    
 
-    },[ApproveUSDT,setIsisLoading,checkAllowance,inputNumer])
+    },[ApproveUSDT,setIsisLoading,checkAllowance,RelayCallGasFee])
+   
+    useEffect(()=>{
+      // console.log('ApproveUSDT.state.error',ApproveUSDT.state)
+      if(ApproveUSDT.state.error!==undefined){
+        setIsisLoading(false)
+        addToast(ApproveUSDT.state.error.message, { appearance: 'error',autoDismissTimeout:1000*5 })  
+      }
+
+    },[ApproveUSDT.state.error,addToast])
+    
+    useEffect(()=>{
+      if(allowance){
+        setIsisLoading(false)  
+      }
+    },[allowance,setIsisLoading])
 
 
     if(allowance==true){
