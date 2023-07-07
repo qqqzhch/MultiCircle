@@ -59,3 +59,23 @@ export default async function(chainId:number,chainName:string,rpcUrls:Array<stri
      
       
 }
+
+/**
+ *   let account
+    try {
+      account = await (window.ethereum.send as Send)('eth_requestAccounts').then(
+        sendReturn => parseSendReturn(sendReturn)[0]
+      )
+    } catch (error) {
+      if ((error as any).code === 4001) {
+        throw new UserRejectedRequestError()
+      }
+      warning(false, 'eth_requestAccounts was unsuccessful, falling back to enable')
+    }
+
+    // if unsuccessful, try enable
+    if (!account) {
+      // if enable is successful but doesn't return accounts, fall back to getAccount (not happy i have to do this...)
+      account = await window.ethereum.enable().then(sendReturn => sendReturn && parseSendReturn(sendReturn)[0])
+    }
+*/
