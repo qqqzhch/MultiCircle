@@ -36,7 +36,7 @@ export default function useRelayerFee() {
                                                 if(result.eq(0)){
                                                   // setValue(ethers.utils.parseEther('0.0001').toString())
                                                   setFee(ethers.utils.parseEther('0.0001').toString())
-                                                  return '0.0001'
+                                                  return ethers.utils.parseEther('0.0001').toString()
                                                 }else{
                                                   
                                                   // setValue(result.toString())

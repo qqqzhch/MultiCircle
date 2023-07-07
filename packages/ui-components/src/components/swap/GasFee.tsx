@@ -15,7 +15,7 @@ const GasFee = () => {
         <div className='ml-2 text-sm font-medium text-gray-500 dark:text-gray-300'>Gas Fee:</div>  
           <div className='  min-w-[50px] ml-2 text-sm font-medium text-gray-500 dark:text-gray-300'>
              
-          <If condition={gasFeeLoading||gasFee==undefined}>
+          <If condition={gasFeeLoading}>
             <Then>
             <Skeleton /> 
             </Then>
