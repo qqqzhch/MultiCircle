@@ -3,6 +3,7 @@ import { Web3ReactProvider } from "@web3-react/core";
 import {ethers} from 'ethers'
 import { ToastProvider,DefaultToast } from "react-toast-notifications";
 import 'react-loading-skeleton/dist/skeleton.css'
+import useSWR, { SWRConfig } from "swr"
 
 const getLibrary = (provider: any) => {
     const library = new ethers.providers.Web3Provider(provider);
@@ -24,7 +25,14 @@ export  const Web3Provider:FC<Props> = ({children}) => {
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
         <ToastProvider components={{ Toast: MyCustomToast }} autoDismiss={true} autoDismissTimeout={2000}  placement={"top-center"}>
-          {children }
+          <SWRConfig 
+            value={{
+              refreshInterval: 1000*30,
+              
+            }}
+          >
+            {children }
+          </SWRConfig>
         </ToastProvider>
       </Web3ReactProvider>
     );

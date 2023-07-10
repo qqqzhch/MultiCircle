@@ -31,6 +31,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   
   const connectMetaMask = useCallback(async () => {
     let status = false
+    console.log('connectMetaMask')
     await activate(connectors.metamask, (err: Error) => {
       
       addToast(err.message, { appearance: 'error' })
@@ -42,7 +43,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       
       status = true
     })
-    console.log('connectMetaMask')
+    
     if (!status) {
       // addToast('Connected to MetaMask', { appearance: 'success' })
       // localStorage.setItem('walletIsConnectedTo', 'metamask')

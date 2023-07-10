@@ -8,97 +8,83 @@ import useRelayerAddress from './useRelayer'
 import useUSDCAddress from './useUsdc'
 import EventEmitter from '../EventEmitter/index';
 import {useAsyncFn} from 'react-use';
+import useSWR from 'swr'
+import { useAppStore } from '../state';
+
 
 
 export default function useErcCheckAllowance() {
-    const { library,account } = useWeb3React()
+    const { library,account,chainId } = useWeb3React()
     const checkAddress = useRelayerAddress();
     const contractAddress =useUSDCAddress()
-    const [allowance, setAllowance] = useState<BigNumber>()
+    const [allowanceValue, setAllowanceValue] = useState<BigNumber>()
+    const [fetchCheck, setFetchCheck] = useState<number>(0)
 
-    const [state,dofetch]= useAsyncFn(async()=>{
-      console.log('run CheckAllowance')
-        if (account && contractAddress && library != undefined) {
-          const contract = new Contract(contractAddress, erc20ABI, library)
-        //   const result: BigNumber = await contract.balanceOf(mpcAddress)
-          const allowance: BigNumber = await contract.allowance(account,checkAddress)
-          setAllowance(allowance )
-          return allowance
-          
-          
-        }
-
-    },[account, library, contractAddress,checkAddress])
-
-
-  
-    useEffect(() => {
-      
-      let IntervalId:number;
-      if(library){
-        // library.on('block', run)
-        IntervalId=window.setInterval(()=>{
-          dofetch()
-        },1000*30)
-        EventEmitter.on('checkallowance',dofetch)
+    
+    useEffect (()=>{
+      console.log('emit')
+      const run=()=>{
+        setFetchCheck((pre)=>{
+          return pre+1
+        })
       }
-     
       
-      dofetch()
-  
-      return () => {
-        if (library) {
-          // library.off('block',run)
-          clearInterval(IntervalId)
-          EventEmitter.off('checkallowance',dofetch)
-        }
+      EventEmitter.on('Refresh',run)
+      return ()=>{
+        EventEmitter.off('Refresh',run)
       }
-    }, [account, library, dofetch])
+
+    },[setFetchCheck])
+
+
+    const { data,isLoading } = useSWR([account, chainId, contractAddress,checkAddress,'erc20allowance',fetchCheck],
+                            async([account, chainId, contractAddress,checkAddress])=>{
+                            if (account && contractAddress && library != undefined) {
+                              console.log('erc20allowance')
+                              const contract = new Contract(contractAddress, erc20ABI, library)
+                            //   const result: BigNumber = await contract.balanceOf(mpcAddress)
+                              const allowance: BigNumber = await contract.allowance(account,checkAddress)
+                              // setAllowance(allowance )
+                        
+                              return allowance
+                              
+                              
+                            }else{
+                              console.log('erc20allowance ***')
+                            }
+                          })
+
+    console.log('read allowance',data?.toString(),isLoading,fetchCheck)
+  
+
 
     
     const fnback =useCallback((inputAmount:string)=>{
-      if(allowance==undefined){
+      if(data==undefined){
         return false
       }
-      const result =allowance.gte(BigNumber.from(inputAmount))
+      const result =data.gte(BigNumber.from(inputAmount))
      return  result
       
-    },[allowance])
+    },[data])
 
-    const checkAmountAsync= useCallback(async(inputAmount:string)=>{
-       return new Promise((resolve, reject)=>{
-        const checkFn=()=>{
-          try {
-            const id = setTimeout(async ()=>{
-              const AmountAllowance= await dofetch()
-              if(AmountAllowance?.gte(BigNumber.from(inputAmount))){
-                clearTimeout(id)
-               
-                resolve(true)
-              }else{
-                checkFn()
-              }
-    
-            },500)  
-          } catch (error) {
-            reject(error)
-          }
-          
-
-        }
-        
-
-       })
+    const fnback2 =useCallback((allowanceAmount:BigNumber|undefined,inputAmount:string)=>{
+      if(allowanceAmount==undefined){
+        return false
+      }
+      const result =allowanceAmount.gte(BigNumber.from(inputAmount))
+     return  result
       
+    },[])
 
-    },[dofetch])
-
-    
-  
+ 
     return {
       Validation:fnback,
-      state,
-      dofetch,
-      checkAmountAsync
+      Validation2:fnback2,
+      state:data,
+      // dofetch,
+      // checkAmountAsync,
+      allowanceValue:data,
+      isLoading
     }
   }
