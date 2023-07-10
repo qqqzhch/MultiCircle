@@ -1,6 +1,6 @@
 import { SupportedChainId } from "../constants/chains";
 import useSWR from 'swr'
-import { TokenList_Chainid } from "../constants/relayer";
+import { TokenList_Chainid,TokenList_Balance } from "../constants/relayer";
 import api from "../api/fetch";
 import { useWeb3React } from '@web3-react/core'
 
@@ -9,7 +9,7 @@ import { getAddressBalances } from 'eth-balance-checker/lib/ethers';
 import { RPC_URLS } from '../constants/networks';
 import { BigNumber, providers } from 'ethers'
 import { useMemo } from "react";
-import Item from "../components/selectnode/item";
+
 
 
 export default function useTokenList(chainid:SupportedChainId|null){
@@ -37,11 +37,14 @@ export default function useTokenList(chainid:SupportedChainId|null){
             return item.address
         })
         // const tokanAddress=['0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48']
-       const resultbalance = await getAddressBalances(prcPro, account, tokanAddressList)
+       const contractAddress=TokenList_Balance[chainid]
+       const resultbalance = await getAddressBalances(prcPro, account, tokanAddressList, {
+        contractAddress: contractAddress
+      })
        return resultbalance
 
     })
-    const list = useMemo(()=>{
+    useMemo(()=>{
         if(data==undefined||balanceList==undefined){
             return undefined
         }
@@ -66,11 +69,11 @@ export default function useTokenList(chainid:SupportedChainId|null){
         return data
 
     },[data,balanceList])
-    console.log('balanceList',balanceList)
+
 
 
     return {
-        data:list, 
+        data:data, 
         error, 
         isLoading,
         balanceList,

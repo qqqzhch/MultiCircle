@@ -143,7 +143,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
 
 </ul>
 <div>
-<If condition={tokenList==undefined}>
+<If condition={tokenisLoading}>
  <Then>
  <Skeleton count={10} /> 
  </Then>
@@ -166,10 +166,23 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
           {TokenItem.symbol}
           </p>
        </div>
-       <div className=" min-w-0 pr-2">
-          <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-          {TokenItem.balance}
-          </p>
+       <div className="  min-w-[50px]  pr-2">
+          <div className="text-sm font-medium text-gray-900 truncate dark:text-white">
+            <If condition={TokenItem.balance==undefined}>
+              <Then>
+                <div className=' w-full'>
+                <Skeleton count={1}  className=' w-10 h-4' /> 
+               
+                </div>
+              
+              </Then>
+              <Else>
+                {TokenItem.balance}
+              </Else>
+            </If>
+      
+          
+          </div>
           {/* <p className="text-sm text-gray-500 truncate dark:text-gray-400">
           333
           </p> */}

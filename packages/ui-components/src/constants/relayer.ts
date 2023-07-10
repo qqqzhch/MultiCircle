@@ -82,4 +82,27 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }
 
+  //TokenList
+  export const TokenList_Balance = {
+    [SupportedChainId.GOERLI]:"",
+    [SupportedChainId.MAINNET]: "0xb1f8e55c7f64d203c1400b9d8555d050f94adf39",
+
+    [SupportedChainId.AVALANCHE_FUJITEST]:"",
+    [SupportedChainId.AVALANCHE_C_HAIN]:"0xD023D153a0DFa485130ECFdE2FAA7e612EF94818",
+   
+    [SupportedChainId.ARBITRUM_Goerli]: "",
+    [SupportedChainId.ARBITRUM_ONE]: "0x151E24A486D7258dd7C33Fb67E4bB01919B7B32c",
+    
+
+    [SupportedChainId.ROPSTEN]: '',
+    [SupportedChainId.RINKEBY]: '',
+    [SupportedChainId.KOVAN]: '',
+    [SupportedChainId.POLYGON]: '',
+    [SupportedChainId.POLYGON_MUMBAI]: '',
+    [SupportedChainId.CELO]: '',
+    [SupportedChainId.CELO_ALFAJORES]: '',
+    [SupportedChainId.OPTIMISM]: '',
+    [SupportedChainId.OPTIMISM_GOERLI]: '',
+  }
+
   export const BaseUrl="https://express-hello-world-p8m1l2gqb-qqqzhch.vercel.app/api"
