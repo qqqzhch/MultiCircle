@@ -59,4 +59,27 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }
 
+  //TokenList
+  export const TokenList_Chainid = {
+    [SupportedChainId.GOERLI]:"",
+    [SupportedChainId.MAINNET]: "https://tokens.coingecko.com/ethereum/all.json",
+
+    [SupportedChainId.AVALANCHE_FUJITEST]:"",
+    [SupportedChainId.AVALANCHE_C_HAIN]:"https://tokens.coingecko.com/avalanche/all.json",
+   
+    [SupportedChainId.ARBITRUM_Goerli]: "",
+    [SupportedChainId.ARBITRUM_ONE]: "https://tokens.coingecko.com/arbitrum-one/all.json",
+    
+
+    [SupportedChainId.ROPSTEN]: '',
+    [SupportedChainId.RINKEBY]: '',
+    [SupportedChainId.KOVAN]: '',
+    [SupportedChainId.POLYGON]: '',
+    [SupportedChainId.POLYGON_MUMBAI]: '',
+    [SupportedChainId.CELO]: '',
+    [SupportedChainId.CELO_ALFAJORES]: '',
+    [SupportedChainId.OPTIMISM]: '',
+    [SupportedChainId.OPTIMISM_GOERLI]: '',
+  }
+
   export const BaseUrl="https://express-hello-world-p8m1l2gqb-qqqzhch.vercel.app/api"

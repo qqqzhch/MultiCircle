@@ -9405,6 +9405,11 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
+eth-balance-checker@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npmmirror.com/eth-balance-checker/-/eth-balance-checker-0.2.0.tgz#e8b971a42010eec2287295d54a1533dfe1a0587c"
+  integrity sha512-gWD9lsQSN7Xup2+zsahGKZ1fAhoxs7vwMohCZYMzkr0YjIo6jcRiofptryiqfJGPYI2jE/C+9hMUz8sK/yf3PQ==
+
 eth-block-tracker@4.4.3:
   version "4.4.3"
   resolved "https://registry.npmmirror.com/eth-block-tracker/-/eth-block-tracker-4.4.3.tgz#766a0a0eb4a52c867a28328e9ae21353812cf626"

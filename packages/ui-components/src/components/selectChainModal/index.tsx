@@ -6,6 +6,9 @@ import { SupportedChainId, TESTNET_CHAIN_IDS,USECHAIN_IDS } from '../../constant
 import { L1ChainInfo, L2ChainInfo, getChainInfo } from '../../constants/chainInfo';
 import { useAppStore } from '../../state';
 import useSwitchingNetwork from '../../hooks/useSwitchingNetwork';
+import useTokenList from '../../hooks/useTokenList';
+import Skeleton from 'react-loading-skeleton'
+
 
 
 
@@ -15,6 +18,8 @@ interface componentprops {
     closeModal: () => void,
     dataType:boolean
   }
+
+
 
 const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const setFromOrTOChain = useAppStore((state)=>state.setFromOrTOChain)
@@ -28,7 +33,13 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
     }
     return USECHAIN_IDS
   },[dataType,fromChainID])
-
+  const {
+        data:tokenList  ,
+        error:tokenError ,
+        isLoading:tokenisLoading,
+        balanceList  
+      }= useTokenList(fromChainID)
+     
   useEffect(()=>{
     const need=fromChainID==null||toChainID==null||USECHAIN_IDS.includes(fromChainID)==false||USECHAIN_IDS.includes(toChainID)==false
     //set default
@@ -47,12 +58,12 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const clickFn = useCallback(async (network: L1ChainInfo | L2ChainInfo,chainId:SupportedChainId)=>{
  
     setFromOrTOChain(network,dataType,chainId);
-    closeModal()
-    setTimeout(()=>{
-      if(dataType){
-         switchingNetwork.doSwitch(chainId)
-       }
-    },0) 
+    // closeModal()
+    // setTimeout(()=>{
+    //   if(dataType){
+    //      switchingNetwork.doSwitch(chainId)
+    //    }
+    // },0) 
     
     
   },[switchingNetwork,dataType,setFromOrTOChain,closeModal])
@@ -100,12 +111,15 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
                 </Dialog.Title>
                 <div className="mt-2">
                  
-<ul className="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
+<ul className="max-w-md divide-x divide-gray-200 dark:divide-gray-700 flex flex-row  ">
   {listIng.map((chainId,index)=>{
     const network =getChainInfo(chainId)
 
-    return (<li key={index} onClick={()=>{clickFn(network,chainId);}}  className="pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
-    <div className="flex items-center space-x-4 ">
+    return (
+  
+    
+    <li key={index} onClick={()=>{clickFn(network,chainId);}}  className="  w-32 pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
+    <div className="flex flex-col items-center space-y-4  ">
        <div className="flex-shrink-0">
           <img className="w-8 h-8 rounded-full" src={network.logoUrl} >
           </img>
@@ -114,9 +128,51 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
           <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
           {network.label}
           </p>
-          <p className="text-sm text-gray-500 truncate dark:text-gray-400">
+          {/* <p className="text-sm text-gray-500 truncate dark:text-gray-400">
           {network.nativeCurrency.name}
+          </p> */}
+       </div>
+    
+    </div>
+  </li>
+
+
+ )
+  })}
+   
+
+</ul>
+<div>
+<If condition={tokenList==undefined}>
+ <Then>
+ <Skeleton count={10} /> 
+ </Then>
+ <Else>
+ <ul className="max-w-md divide-y divide-gray-200 dark:divide-gray-700 max-h-96 overflow-y-scroll">
+  {tokenList&&tokenList.map((TokenItem,index)=>{
+ 
+
+    return (<li key={index}   className="pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
+    <div className="flex items-center space-x-4 ">
+       <div className="flex-shrink-0">
+          <img className="w-8 h-8 rounded-full" src={TokenItem.logoURI} >
+          </img>
+       </div>
+       <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
+          {TokenItem.name}
           </p>
+          <p className="text-sm text-gray-500 truncate dark:text-gray-400">
+          {TokenItem.symbol}
+          </p>
+       </div>
+       <div className=" min-w-0 pr-2">
+          <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
+          {TokenItem.balance}
+          </p>
+          {/* <p className="text-sm text-gray-500 truncate dark:text-gray-400">
+          333
+          </p> */}
        </div>
     
     </div>
@@ -125,6 +181,12 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
    
 
 </ul>
+ </Else>
+</If>
+
+
+
+</div>
 
                 </div>
 
