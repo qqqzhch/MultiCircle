@@ -1,13 +1,14 @@
 import React, { useMemo ,useEffect, useCallback} from 'react';
 import { Dialog,Transition  } from '@headlessui/react'
 import { Fragment, FC  } from 'react'
-import { Else, If, Then } from 'react-if';
+import { Else, If, Then, When } from 'react-if';
 import { SupportedChainId, TESTNET_CHAIN_IDS,USECHAIN_IDS } from '../../constants/chains';
 import { L1ChainInfo, L2ChainInfo, getChainInfo } from '../../constants/chainInfo';
 import { useAppStore } from '../../state';
 import useSwitchingNetwork from '../../hooks/useSwitchingNetwork';
 import useTokenList from '../../hooks/useTokenList';
 import Skeleton from 'react-loading-skeleton'
+import { Token } from '../../types/token';
 
 
 
@@ -25,14 +26,17 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const setFromOrTOChain = useAppStore((state)=>state.setFromOrTOChain)
   const fromChainID = useAppStore((state)=>state.fromChainID)
   const toChainID = useAppStore((state)=>state.toChainID)
+  const setToken = useAppStore((state)=>state.setToken)
+
+
   const switchingNetwork = useSwitchingNetwork()
   const listIng = useMemo(()=>{
 
-    if(dataType==false){
-      return  USECHAIN_IDS.filter((item)=>{return  item!==fromChainID})
-    }
+    // if(dataType==false){
+    //   return  USECHAIN_IDS.filter((item)=>{return  item!==fromChainID})
+    // }
     return USECHAIN_IDS
-  },[dataType,fromChainID])
+  },[])
   const {
         data:tokenList  ,
         error:tokenError ,
@@ -67,6 +71,12 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
     
     
   },[switchingNetwork,dataType,setFromOrTOChain,closeModal])
+
+  const selectToken= useCallback((data:Token)=>{
+    setToken(dataType,data)
+    closeModal()
+
+  },[setToken,closeModal,dataType])
   
 
   return (
@@ -123,6 +133,8 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
        <div className="flex-shrink-0">
           <img className="w-8 h-8 rounded-full" src={network.logoUrl} >
           </img>
+         
+        
        </div>
        <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -152,7 +164,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   {tokenList&&tokenList.map((TokenItem,index)=>{
  
 
-    return (<li key={index}   className="pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
+    return (<li key={index} onClick={()=>{selectToken(TokenItem)}}   className="pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
     <div className="flex items-center space-x-4 ">
        <div className="flex-shrink-0">
           <img className="w-8 h-8 rounded-full" src={TokenItem.logoURI} >

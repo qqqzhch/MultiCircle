@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BigNumber, Contract, providers } from 'ethers'
 import { useAppStore } from '../state';
 
@@ -11,22 +11,33 @@ import useSWR from 'swr'
 export default function useErc20Balance() {
     const { library,account } = useWeb3React()
     const fromChainID = useAppStore((state)=>state.fromChainID)
+    const fromToken = useAppStore((state)=>state.fromToken)
     //   const mpcinfo = useAppStore(state => state.getWalletAccount(account, mpcAddress))
   
     const [balance, setBalance] = useState<string>()
     const contractAddress = useUSDCAddress(fromChainID)
     const [isloading,setIsloading] = useState(false);
+    const selectcontract=useMemo(()=>{
+      if(fromToken!==null){
+        return fromToken.address
+      }
+      return contractAddress 
 
-    const { data, error, isLoading } = useSWR(['balanceOf',account,contractAddress,fromChainID],
+    },[contractAddress,fromToken])
+
+    const { data, error, isLoading } = useSWR(['erc20balanceOf',account,selectcontract,fromChainID],
                                               async ([key,account,contractAddress,fromChainID])=>{
-
+                                                console.log('run useErc20Balance')
                                               if (account && contractAddress && fromChainID!==null) {
                                                 const rpc= RPC_URLS[fromChainID][0]
                                                 const prcPro= new providers.JsonRpcProvider(rpc)
                                                 const contract = new Contract(contractAddress, erc20ABI, prcPro)
+                                                
                                                 const result: BigNumber = await contract.balanceOf(account)
-                                                // setBalance(result.toString())
-                                                return result.toString()
+                                                  // setBalance(result.toString())
+                                                return result.toString()  
+                                                
+                                                
                                                 
                                               }else{
                                                 // setBalance('0')

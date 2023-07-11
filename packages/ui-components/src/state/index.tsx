@@ -4,6 +4,7 @@ import { immer } from "zustand/middleware/immer";
 import React, { createContext, FC, useContext } from "react";
 import { L1ChainInfo,L2ChainInfo } from '../constants/chainInfo';
 import { SupportedChainId } from '../constants/chains';
+import {Token} from '../types/token'
 //SupportedChainId
 
 
@@ -29,7 +30,9 @@ interface AppState {
   output:string
   fee:string
   history:Array<txItem>
-  gasFee:string
+  gasFee:string,
+  fromToken:Token|null,
+  toToken:Token|null,
   setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean,chainID:SupportedChainId )=>void
   getFromChain:()=>L1ChainInfo|L2ChainInfo|null
   getToChain:()=>L1ChainInfo|L2ChainInfo|null
@@ -42,6 +45,7 @@ interface AppState {
   addToHistory:(tx:txItem)=>void
   getHistory:(account:string|undefined|null)=>Array<txItem>
   setGasFee:(amount:string)=>void
+  setToken:(dataType:boolean,data:Token)=>void
   
 
 }
@@ -56,7 +60,9 @@ const intialState = {
   output:"0",
   fee:"0",
   gasFee:"0",
-  history:[]
+  history:[],
+  fromToken:null,
+  toToken:null
 };
 
 
@@ -131,6 +137,15 @@ const createMyStore = (state: typeof intialState = intialState) => {
       setGasFee:(amount:string)=>{
         set((state)=>{
           state.gasFee=amount;
+        })
+      },
+      setToken:(dataType:boolean,data:Token)=>{
+        set((state)=>{
+          if(dataType){
+            state.fromToken=data;
+          }else{
+            state.toToken=data;
+          }
         })
       }
     }), { name: 'app-storage' })))
