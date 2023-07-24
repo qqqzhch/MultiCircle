@@ -17,7 +17,7 @@ const SelectPanel:FC<{dataType:boolean}> = ({dataType}) => {
       }
   
     },[fromToken,toToken,dataType])
-    const [isFromOpen, setIsFromOpen] = useState(false)
+    const [isFromOpen, setIsFromOpen] = useState<boolean>(false)
     const showInfo =dataType?fromChainInfo:toChainInfo;
 
 

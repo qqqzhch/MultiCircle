@@ -43,6 +43,24 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
         isLoading:tokenisLoading,
         // balanceList  
       }= useTokenList(fromChainID)
+
+  const tokenListEth= useMemo(()=>{
+
+ if(fromChainID==null||tokenList==undefined) return []
+
+  const chainInfo =  getChainInfo(fromChainID)
+  const item:Token=  {
+    "chainId": fromChainID,
+    "address": '',
+    "name": chainInfo.nativeCurrency.name,
+    "symbol": chainInfo.nativeCurrency.symbol,
+    "decimals": chainInfo.nativeCurrency.decimals,
+    "logoURI": chainInfo.logoUrl
+} 
+  return [item,...tokenList.slice(0,10)]
+    
+
+  },[tokenList,fromChainID])
      
   useEffect(()=>{
     const need=fromChainID==null||toChainID==null||USECHAIN_IDS.includes(fromChainID)==false||USECHAIN_IDS.includes(toChainID)==false
@@ -161,7 +179,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
  </Then>
  <Else>
  <ul className="max-w-md divide-y divide-gray-200 dark:divide-gray-700 max-h-96 overflow-y-scroll">
-  {tokenList&&tokenList.map((TokenItem,index)=>{
+  {tokenListEth&&tokenListEth.map((TokenItem,index)=>{
  
 
     return (<li key={index} onClick={()=>{selectToken(TokenItem)}}   className="pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
