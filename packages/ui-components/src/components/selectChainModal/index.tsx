@@ -57,7 +57,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
     "decimals": chainInfo.nativeCurrency.decimals,
     "logoURI": chainInfo.logoUrl
 } 
-  return [item,...tokenList.slice(0,10)]
+  return [item,...tokenList.slice(0,10),...tokenList.filter((value)=>value.symbol.toLowerCase().indexOf("usdc")>-1 )]
     
 
   },[tokenList,fromChainID])

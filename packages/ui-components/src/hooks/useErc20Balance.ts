@@ -8,14 +8,14 @@ import { RPC_URLS } from '../constants/networks';
 import useUSDCAddress from './useUsdc'
 import useSWR from 'swr'
 
-export default function useErc20Balance() {
+export default function useErc20Balance(address:string|undefined) {
     const { library,account } = useWeb3React()
     const fromChainID = useAppStore((state)=>state.fromChainID)
     const fromToken = useAppStore((state)=>state.fromToken)
     //   const mpcinfo = useAppStore(state => state.getWalletAccount(account, mpcAddress))
   
     const [balance, setBalance] = useState<string>()
-    const contractAddress = useUSDCAddress(fromChainID)
+    const contractAddress = address
     const [isloading,setIsloading] = useState(false);
     const selectcontract=useMemo(()=>{
       if(fromToken!==null){
@@ -24,11 +24,12 @@ export default function useErc20Balance() {
       return contractAddress 
 
     },[contractAddress,fromToken])
+   
 
     const { data, error, isLoading } = useSWR(['erc20balanceOf',account,selectcontract,fromChainID],
                                               async ([key,account,contractAddress,fromChainID])=>{
                                                 console.log('run useErc20Balance')
-                                              if (account && contractAddress && fromChainID!==null) {
+                                              if (account && contractAddress && fromChainID!==null&&contractAddress!=="") {
                                                 const rpc= RPC_URLS[fromChainID][0]
                                                 const prcPro= new providers.JsonRpcProvider(rpc)
                                                 const contract = new Contract(contractAddress, erc20ABI, prcPro)
