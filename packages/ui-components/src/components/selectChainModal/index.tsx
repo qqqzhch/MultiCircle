@@ -39,9 +39,9 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   },[])
   const {
         data:tokenList  ,
-        error:tokenError ,
+        // error:tokenError ,
         isLoading:tokenisLoading,
-        balanceList  
+        // balanceList  
       }= useTokenList(fromChainID)
      
   useEffect(()=>{
@@ -179,7 +179,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
           </p>
        </div>
        <div className="  min-w-[50px]  pr-2">
-          <div className="text-sm font-medium text-gray-900 truncate dark:text-white">
+          {/* <div className="text-sm font-medium text-gray-900 truncate dark:text-white">
             <If condition={TokenItem.balance==undefined}>
               <Then>
                 <div className=' w-full'>
@@ -194,7 +194,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
             </If>
       
           
-          </div>
+          </div> */}
           {/* <p className="text-sm text-gray-500 truncate dark:text-gray-400">
           333
           </p> */}
