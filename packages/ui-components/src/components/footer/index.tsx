@@ -1,4 +1,4 @@
-import logo from '../../assets/svgkogo/Colorlogo2.svg'
+import logo from '../../assets/ValueRouter.png'
 import facebook from '../../assets/icon/facebook.svg'
 import twitter from '../../assets/icon/twitter.svg'
 import discord from '../../assets/icon/discord.svg'
