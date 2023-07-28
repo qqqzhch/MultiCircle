@@ -16,7 +16,7 @@ import { useAppStore } from '../state';
 export default function useErcCheckAllowance() {
     const { library,account,chainId } = useWeb3React()
     const checkAddress = useRelayerAddress();
-    const contractAddress =useUSDCAddress()
+    const contractAddress =useAppStore((state)=>state.fromToken?.address)
     const [allowanceValue, setAllowanceValue] = useState<BigNumber>()
     const [fetchCheck, setFetchCheck] = useState<number>(0)
 

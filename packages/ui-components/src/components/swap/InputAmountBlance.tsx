@@ -5,30 +5,35 @@ import { useAppStore } from '../../state'
 import { formatUnitsErc20, validateAmount,formatUnits } from '../../utils'
 import { BigNumber, ethers } from 'ethers'
 import { useDebounce } from 'react-use'
+import useEthBalance from '../../hooks/useEthBalance';
+
 
 const InputAmountBlance = () => {
-    const usdcBalance=  useErc20Balance()
+    const fromToken = useAppStore((state)=>state.fromToken)
+    const usdcBalance=  useErc20Balance(fromToken?.address)
+    const ethBalance = useEthBalance()
 
     const [inputError,setinputError]=useState<string|undefined>()
     const setInput = useAppStore((state)=>state.setInput)
     const input = useAppStore((state)=>state.input)
 
     const inputAmount= useMemo(()=>{
-      const valueHaveUnits=ethers.utils.formatUnits(input,6).toString()
+      const valueHaveUnits=ethers.utils.formatUnits(input,fromToken?.decimals).toString()
       return valueHaveUnits
 
-    },[input])
+    },[input,fromToken])
+
     const [inputValue,setInputValue]=useState(inputAmount)
 
     useDebounce(()=>{
         
-        const valueHaveUnits=ethers.utils.parseUnits(inputValue,6).toString()
+        const valueHaveUnits=ethers.utils.parseUnits(inputValue,fromToken?.decimals).toString()
         if(inputError==undefined){
           setInput(valueHaveUnits)
         }
         
 
-      },1000,[inputValue,inputError])
+      },1000,[inputValue,inputError,fromToken])
 
     const inputAmountChange = useCallback((value:string)=>{
         console.log('inputAmountChange')
@@ -41,8 +46,8 @@ const InputAmountBlance = () => {
           
           
     
-            const valueHaveUnits=ethers.utils.parseUnits(value,6).toString()
-            if(usdcBalance.balance!=undefined){
+            const valueHaveUnits=ethers.utils.parseUnits(value,fromToken?.decimals).toString()
+            if(usdcBalance.balance!=undefined&&fromToken?.address!==""){
               const inputAmount= BigNumber.from(valueHaveUnits);
               const usdcBalanceamount= BigNumber.from(usdcBalance.balance);
     
@@ -50,6 +55,13 @@ const InputAmountBlance = () => {
                 setinputError('The value entered is greater than the balance')
               }
 
+            }else if(ethBalance.balance!==undefined&&fromToken?.address==""){
+              const inputAmount= BigNumber.from(valueHaveUnits);
+              const ethBalanceamount= BigNumber.from(ethBalance.balance);
+    
+              if(inputAmount.gt(ethBalanceamount)){ 
+                setinputError('The value entered is greater than the balance')
+              }
             }
             
           }else{
@@ -58,7 +70,7 @@ const InputAmountBlance = () => {
           }
         // })
         
-      },[setInput,setinputError,usdcBalance,setInputValue])
+      },[fromToken,setinputError,usdcBalance,setInputValue,ethBalance])
 
 
     return (

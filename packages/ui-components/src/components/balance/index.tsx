@@ -12,9 +12,8 @@ import Erc20Balance from './Erc20Balance'
 const Balance = () => {
    
     const fromToken = useAppStore((state)=>state.fromToken)
-    const usdcBalance=  useErc20Balance(fromToken?.address)
-    const { library}= useWeb3React()
-
+   
+   
 
 
     return (

@@ -8,6 +8,7 @@ import { useToasts } from 'react-toast-notifications'
 import EventEmitter from '../../EventEmitter/index';
 
 
+
 const ProtectedApprove = ({ children, className }: { children: JSX.Element; className?: string }) => {
     const ApproveUSDT = useErc20Approve()
     const checkAllowance= useErcCheckAllowance()
@@ -15,6 +16,7 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
     const [isLoading,setIsisLoading] = useState(false)
     const RelayCallGasFee=useRelayCallGasFee()
     const { addToast } = useToasts()
+    const fromToken = useAppStore((state)=>state.fromToken)
 
     console.log('--ProtectedApprove')
     const allowance = useMemo(()=>{
@@ -53,7 +55,7 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
     },[allowance,setIsisLoading])
 
 
-    if(allowance==true){
+    if(allowance==true||fromToken?.address==""){
         return children
     }
     

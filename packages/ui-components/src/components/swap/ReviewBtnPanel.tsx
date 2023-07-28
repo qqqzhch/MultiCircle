@@ -1,10 +1,13 @@
-import React,{useCallback,useMemo,useState} from 'react';
+import React,{useCallback,useEffect,useMemo,useState} from 'react';
 import { useAppStore } from '../../state'
 import { useToasts } from 'react-toast-notifications'
 import { BigNumber } from 'ethers';
 import useErc20Balance from '../../hooks/useErc20Balance'
 import PreviewModal from '../preview'
 import { USECHAIN_IDS } from '../../constants/chains'
+import useEthBalance from '../../hooks/useEthBalance';
+import useQuote from '../../hooks/useQuote';
+
 
 
 
@@ -15,11 +18,30 @@ const ReviewBtnPanel = () => {
     const toChainID = useAppStore((state)=>state.toChainID)
     const setInput = useAppStore((state)=>state.setInput)
     const inputNumer = useAppStore((state)=>state.input)
+    const fromToken = useAppStore((state)=>state.fromToken)
     const { addToast } = useToasts()
-    const usdcBalance=  useErc20Balance()
+    const usdcBalance=  useErc20Balance(fromToken?.address)
+    const ethBalance = useEthBalance()
+    const quoteData = useQuote()
 
     const [isPreviewOpen, setPreviewOpen] = useState(false)
 
+    useEffect(()=>{
+      console.log('quoteData',quoteData)
+      if(quoteData.data==undefined) return 
+
+      const { value, from, gasPrice, buyTokenAddress, sellTokenAddress, buyAmount ,sellAmount,allowanceTarget,to,data} = quoteData.data
+     
+      const anycallstep1log=await UsdcRelayerContract.swapAndBridge(sellAmount,
+        sellTokenAddress,
+        buyTokenAddress,
+        allowanceTarget,
+        to,
+        data,destDomain,testnetdeployer,usdcaddress,{value:(parseInt(value)).toString(),
+        gasPrice:gasPrice,
+        gasLimit:1000000})
+
+    },[quoteData])
 
 
 
@@ -31,11 +53,18 @@ const ReviewBtnPanel = () => {
           return false
         }
         const  num =BigNumber.from(inputNumer)
-        if(usdcBalance.balance==undefined){
+        let tempbalance
+        if(fromToken?.address!==""){
+          tempbalance=usdcBalance;
+        }else{
+          tempbalance=ethBalance;
+
+        }
+        if(tempbalance.balance==undefined){
           addToast("Please check the balance", { appearance: 'error' })
           return false
         }
-        if(num.gt(0)&&num.lte(usdcBalance.balance)){
+        if(num.gt(0)&&num.lte(tempbalance.balance)){
           setPreviewOpen(true)
           return true
         }else{
@@ -43,7 +72,7 @@ const ReviewBtnPanel = () => {
           return false
         }
     
-      },[inputNumer,usdcBalance,addToast,fromChainID,toChainID])
+      },[inputNumer,usdcBalance,addToast,fromChainID,toChainID,ethBalance,fromToken])
 
     
       
