@@ -2,7 +2,7 @@ import { SupportedChainId } from "./chains"
 
 
 export const Relayer_IDS_TO_ADDR = {
-    [SupportedChainId.GOERLI]: '0x3b632adcF6C44715DF5bDA353F8332cd33C749E8',
+    [SupportedChainId.GOERLI]: '0x86BD43AE87ad6bD18bb26E6631ae44f0c507D5cA',
     [SupportedChainId.AVALANCHE_FUJITEST]: '0xDe58B4282BF2308F51e7c4cbAF0B62b06C2d74a0',
     [SupportedChainId.AVALANCHE_C_HAIN]:'0x589c770e6DB222bEd273332c6E7267d3DF1C0036',
     [SupportedChainId.MAINNET]: '0x589c770e6DB222bEd273332c6E7267d3DF1C0036',

@@ -234,5 +234,58 @@
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "sellToken",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "buyToken",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "internalType": "address payable",
+                "name": "swapTarget",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes",
+                "name": "swapCallData",
+                "type": "bytes"
+            },
+            {
+                "internalType": "uint32",
+                "name": "_destinationDomain",
+                "type": "uint32"
+            },
+            {
+                "internalType": "address",
+                "name": "_mintRecipient",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_burnToken",
+                "type": "address"
+            }
+        ],
+        "name": "swapAndBridge",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
     }
 ]

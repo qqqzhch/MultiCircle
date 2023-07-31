@@ -32,14 +32,14 @@ const ReviewBtnPanel = () => {
 
       const { value, from, gasPrice, buyTokenAddress, sellTokenAddress, buyAmount ,sellAmount,allowanceTarget,to,data} = quoteData.data
      
-      const anycallstep1log=await UsdcRelayerContract.swapAndBridge(sellAmount,
-        sellTokenAddress,
-        buyTokenAddress,
-        allowanceTarget,
-        to,
-        data,destDomain,testnetdeployer,usdcaddress,{value:(parseInt(value)).toString(),
-        gasPrice:gasPrice,
-        gasLimit:1000000})
+      // const anycallstep1log=await UsdcRelayerContract.swapAndBridge(sellAmount,
+      //   sellTokenAddress,
+      //   buyTokenAddress,
+      //   allowanceTarget,
+      //   to,
+      //   data,destDomain,testnetdeployer,usdcaddress,{value:(parseInt(value)).toString(),
+      //   gasPrice:gasPrice,
+      //   gasLimit:1000000})
 
     },[quoteData])
 

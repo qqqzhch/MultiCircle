@@ -9,20 +9,34 @@ import { getAddressBalances } from 'eth-balance-checker/lib/ethers';
 import { RPC_URLS } from '../constants/networks';
 import { BigNumber, providers } from 'ethers'
 import { useMemo } from "react";
+import useUSDCAddress from './useUsdc'
+import { useAppStore } from '../state/index';
 
 
 
-export default function useTokenList(chainid:SupportedChainId|null){
+export default function useTokenList(dataType:boolean){
+
     const { library,account } = useWeb3React()   
+
+    const fromChainID = useAppStore((state)=>state.fromChainID)
+    const toChainID = useAppStore((state)=>state.toChainID)
+    const chainid = dataType?fromChainID:toChainID
     console.log('=== useTokenList')
-    
-    const { data, error, isLoading } = useSWR(chainid!==null?[chainid,'tokenList']:null,async([chainid])=>{
+    const USDCAddress = useUSDCAddress(chainid)
+    const { data, error, isLoading } = useSWR(chainid!==null?[chainid,USDCAddress,'tokenList']:null,async([chainid,USDCAddress])=>{
         const tokenUrl = TokenList_Chainid[chainid]
         if(tokenUrl!==""){
             const res = await  api.get<RootTokenList>(tokenUrl)
             return res.tokens
         }else{
-            return new Array<Token>()
+            return [{
+                "chainId":chainid,
+                "address": USDCAddress,
+                "name": 'usdc',
+                "symbol": 'usdc',
+                "decimals": 6,
+                "logoURI": ''
+            }] as Array<Token>
         }
         
 
