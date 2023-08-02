@@ -9,6 +9,8 @@ import useSwitchingNetwork from '../../hooks/useSwitchingNetwork';
 import useTokenList from '../../hooks/useTokenList';
 import Skeleton from 'react-loading-skeleton'
 import { Token } from '../../types/token';
+import { CheckIcon } from '@heroicons/react/24/solid';
+
 
 
 
@@ -27,6 +29,8 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const fromChainID = useAppStore((state)=>state.fromChainID)
   const toChainID = useAppStore((state)=>state.toChainID)
   const setToken = useAppStore((state)=>state.setToken)
+  const fromToken = useAppStore((state)=>state.fromToken)
+  const toToken = useAppStore((state)=>state.toToken)
 
 
   const switchingNetwork = useSwitchingNetwork()
@@ -37,6 +41,20 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
     // }
     return USECHAIN_IDS
   },[])
+  const currChainID= useMemo(()=>{
+     if(dataType)
+     return fromChainID
+     else
+     return toChainID
+  },[dataType,fromChainID,toChainID])
+
+  const currToken= useMemo(()=>{
+    if(dataType)
+    return fromToken
+    else
+    return toToken
+ },[dataType,fromToken,toToken])
+
   const {
         data:tokenList  ,
         // error:tokenError ,
@@ -147,7 +165,12 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   
     
     <li key={index} onClick={()=>{clickFn(network,chainId);}}  className="  w-32 pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
-    <div className="flex flex-col items-center space-y-4  ">
+    <div className="flex flex-col items-center space-y-4   relative">
+      <div className=' absolute   right-2'>
+        <When condition={currChainID==chainId}>
+            <CheckIcon className=' w-6 h-6  text-green-600'></CheckIcon>
+        </When>
+      </div>
        <div className="flex-shrink-0">
           <img className="w-8 h-8 rounded-full" src={network.logoUrl} >
           </img>
@@ -213,9 +236,11 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
       
           
           </div> */}
-          {/* <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-          333
-          </p> */}
+          <p className="text-sm text-gray-500 truncate dark:text-gray-400">
+          <When condition={currToken?.address==TokenItem.address}>
+          <CheckIcon className=' w-6 h-6  text-green-600'></CheckIcon>
+          </When>
+          </p>
        </div>
     
     </div>

@@ -68,9 +68,9 @@ export default function useRelayCallGasFee() {
 
   const { data, error, isLoading } = useSWR(
     isAllowance||fromToken?.address==""
-      ? [account, contractAddress, chainId, fromChainID, burnToken, RelayerFee, toChainID, inputAmount, quoteData, getToken,toToken, 'gasfee', fetchCheck]
+      ? [account, contractAddress,toChainID, fromChainID,inputAmount, fromToken?.address,toToken?.address, 'gasfee', fetchCheck]
       : null,
-    async ([account, contractAddress, chainId, fromChainID, burnToken, RelayerFee, toChainID, inputAmount, quoteData,getToken,toToken]) => {
+    async () => {
       if (
         account &&
         contractAddress &&
