@@ -25,7 +25,7 @@ export default function useQuote() {
   const [isloading, setIsloading] = useState(false)
 
   const { data, error, isLoading } = useSWR(['BaseQuote', account, fromChainID,fromToken?.address,inputAmount], async ([key, account, fromChainID,fromTokenAddress,inputAmount]) => {
-    console.log('run EthBalance')
+    console.log('run useQuote')
     if (account && fromChainID !== null&&fromTokenAddress!==undefined) {
       const buyToken=USDC_IDS_TO_ADDR[fromChainID];
       const sellToken=fromTokenAddress==""?"0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE":fromTokenAddress
@@ -34,6 +34,7 @@ export default function useQuote() {
 
       const url =`${BaseQuote}?buyToken=${buyToken}&sellToken=${sellToken}&sellAmount=${sellAmount}&chainid=${chainid}`
       const  data = await api.get<Quote>(url)
+      console.log('run useQuote',data)
       return data
     }
 

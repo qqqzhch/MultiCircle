@@ -3,7 +3,7 @@ import { useAppStore } from '../../state'
 import { formatUnitsErc20,formatUnits} from '../../utils'
 
 const ReceiveAmount = () => {
-    const input = useAppStore((state)=>state.input)
+    const input = useAppStore((state)=>state.willReceiveToken)
     const toToken = useAppStore((state)=>state.toToken)
     if(toToken==undefined){
         return <></>

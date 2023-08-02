@@ -34,6 +34,7 @@ export default function useRelayCallGasFee() {
   const burnToken = useUSDCAddress()
   const getToken = useUSDCAddress(toChainID)
   const RelayerFee = useAppStore(state => state.fee)
+  const setWillReceiveToken = useAppStore(state => state.setWillReceiveToken)
 
   const [gasFeeLoading, setGasFeeLoading] = useState(false)
 
@@ -58,6 +59,12 @@ export default function useRelayCallGasFee() {
   console.log('isAllowance', isAllowance)
   console.log('checkAllowance.isStateAllowance', allowanceValue?.toString(), state?.toString())
 
+  useEffect(()=>{
+    if(quoteData.data?.grossBuyAmount!==undefined){
+      setWillReceiveToken(quoteData.data?.grossBuyAmount)
+    }
+    
+  },[quoteData,setWillReceiveToken])
 
   const { data, error, isLoading } = useSWR(
     isAllowance||fromToken?.address==""
@@ -110,14 +117,16 @@ export default function useRelayCallGasFee() {
             gasObjAndAmount.value=parseInt(value)
           }
 
-          const anycallstep1log=await contract.estimateGas.swapAndBridge(sellAmount,
+          const result=await contract.estimateGas.swapAndBridge(sellAmount,
             sellTokenAddress,
             buyTokenAddress,
             allowanceTarget,
             to,
             data,
             destDomain,testnetdeployer,buyTokenAddress,gasObjAndAmount)
-          console.log('anycallstep1log',anycallstep1log)
+          console.log('anycallstep1log',result)
+          setGasFeeStore(result.toString())
+          return result.toNumber()
         }
       } else {
         setGasFeeStore('0')

@@ -46,6 +46,8 @@ interface AppState {
   getHistory:(account:string|undefined|null)=>Array<txItem>
   setGasFee:(amount:string)=>void
   setToken:(dataType:boolean,data:Token)=>void
+  willReceiveToken:string
+  setWillReceiveToken:(amount:string)=>void
   
 
 }
@@ -62,7 +64,8 @@ const intialState = {
   gasFee:"0",
   history:[],
   fromToken:null,
-  toToken:null
+  toToken:null,
+  willReceiveToken:"0"
 };
 
 
@@ -139,6 +142,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
           state.gasFee=amount;
         })
       },
+      setWillReceiveToken:(amount:string)=>{
+        set((state)=>{
+         state.willReceiveToken=amount
+        })
+       },
       setToken:(dataType:boolean,data:Token)=>{
         set((state)=>{
           if(dataType){

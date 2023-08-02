@@ -27,6 +27,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const fromChainID = useAppStore((state)=>state.fromChainID)
     const toChainID = useAppStore((state)=>state.toChainID)
     const input = useAppStore((state)=>state.input)
+    const output = useAppStore((state)=>state.willReceiveToken)
     const gasFee = useAppStore((state)=>state.gasFee)
     const fee = useAppStore((state)=>state.fee)
     const RelayCall =useRelayCall()
@@ -35,6 +36,10 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const [isTxLoading,setIsTxLoading]=useState(false)
     const AverageTime = useAverageTime(fromChainID)
     const [stepLoading,setStep]=useState(-1)
+
+    const fromToken = useAppStore((state)=>state.fromToken)
+    const toToken = useAppStore((state)=>state.toToken)
+
  
     useEffect (()=>{
       
@@ -72,8 +77,14 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const SubmitFN = useCallback(async ()=>{
     setIsTxLoading(true)
     try {
-      const {hash} =  await RelayCall.doFetch()
-      setTxHash(hash)
+      if(RelayCall.checkIsSwap()){
+        const {hash} =  await RelayCall.doSwapFetch()
+        setTxHash(hash)
+      }else{
+        const {hash} =  await RelayCall.doFetch()
+        setTxHash(hash)
+      }
+      
      
     } catch (ex:any) {
       setTxHash(null)
@@ -97,7 +108,9 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       setStep(-1)
     },[closeModal,setTxHash])
 
-
+   if(fromToken==null||toToken==null){
+    return<></>
+   }
 
     return (
     <div>
@@ -153,11 +166,11 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
      </div>
      <div className="flex border-t border-gray-200 py-2">
        <span className="text-gray-500">AMOUNT</span>
-       <span className="ml-auto text-gray-900">{formatUnitsErc20(input,'usdc',6)}</span>
+       <span className="ml-auto text-gray-900">{formatUnitsErc20(input,fromToken.name,fromToken.decimals)}</span>
      </div>
      <div className="flex border-t border-gray-200 py-2">
        <span className="text-gray-500 uppercase">You will receive</span>
-       <span className="ml-auto text-gray-900">{formatUnitsErc20(input,'usdc',6)}</span>
+       <span className="ml-auto text-gray-900">{formatUnitsErc20(output,toToken.name,toToken.decimals)}</span>
      </div>
      <div className="flex border-t border-gray-200 py-2">
        <span className="text-gray-500">Average time</span>
