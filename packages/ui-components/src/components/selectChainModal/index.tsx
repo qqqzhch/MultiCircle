@@ -1,4 +1,4 @@
-import React, { useMemo ,useEffect, useCallback} from 'react';
+import React, { useMemo ,useEffect, useCallback, useState} from 'react';
 import { Dialog,Transition  } from '@headlessui/react'
 import { Fragment, FC  } from 'react'
 import { Else, If, Then, When } from 'react-if';
@@ -10,7 +10,7 @@ import useTokenList from '../../hooks/useTokenList';
 import Skeleton from 'react-loading-skeleton'
 import { Token } from '../../types/token';
 import { CheckIcon } from '@heroicons/react/24/solid';
-
+import List from 'rc-virtual-list';
 
 
 
@@ -31,7 +31,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const setToken = useAppStore((state)=>state.setToken)
   const fromToken = useAppStore((state)=>state.fromToken)
   const toToken = useAppStore((state)=>state.toToken)
-
+  const [searchKey,setSearchKey]=useState("")
 
   const switchingNetwork = useSwitchingNetwork()
   const listIng = useMemo(()=>{
@@ -74,11 +74,20 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
     "symbol": chainInfo.nativeCurrency.symbol,
     "decimals": chainInfo.nativeCurrency.decimals,
     "logoURI": chainInfo.logoUrl
-} 
-  return [item,...tokenList.slice(0,10),...tokenList.filter((value)=>value.symbol.toLowerCase().indexOf("usdc")>-1 )]
+}
+const list = tokenList.filter((item)=>{
+  if(searchKey=='') return true
+  if(item.name.toLowerCase().includes(searchKey.toLowerCase())||item.symbol.toLowerCase().includes(searchKey.toLowerCase())){
+    return true
+  } else{
+    return false
+  }
+})
+  
+  return [item,...list]
     
 
-  },[tokenList,fromChainID])
+  },[tokenList,fromChainID,searchKey])
      
   useEffect(()=>{
     const need=fromChainID==null||toChainID==null||USECHAIN_IDS.includes(fromChainID)==false||USECHAIN_IDS.includes(toChainID)==false
@@ -156,7 +165,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
                   </If>
                 </Dialog.Title>
                 <div className="mt-2">
-                 
+              
 <ul className="max-w-md divide-x divide-gray-200 dark:divide-gray-700 flex flex-row  ">
   {listIng.map((chainId,index)=>{
     const network =getChainInfo(chainId)
@@ -195,20 +204,23 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
    
 
 </ul>
+        <div>
+      
+            <input onChange={(e)=>{setSearchKey(e.currentTarget.value)}} placeholder="search token" type="text"  className="bg-gray-50 border outline-none mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  >
+            </input>
+        </div>
 <div>
 <If condition={tokenisLoading}>
  <Then>
  <Skeleton count={10} /> 
  </Then>
  <Else>
- <ul className="max-w-md divide-y divide-gray-200 dark:divide-gray-700 max-h-96 overflow-y-scroll">
-  {tokenListEth&&tokenListEth.map((TokenItem,index)=>{
- 
-
-    return (<li key={index} onClick={()=>{selectToken(TokenItem)}}   className="pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
+ <ul className="max-w-md divide-y divide-gray-200 dark:divide-gray-700 max-h-[300px]">
+ <List data={tokenListEth} height={300} itemHeight={30} itemKey="id">
+  {TokenItem => <li key={TokenItem.address} onClick={()=>{selectToken(TokenItem)}}   className="pb-3 pt-2 sm:pb-4 cursor-pointer hover:bg-slate-50">
     <div className="flex items-center space-x-4 ">
        <div className="flex-shrink-0">
-          <img className="w-8 h-8 rounded-full" src={TokenItem.logoURI} >
+          <img className="w-6 h-6 rounded-full" src={TokenItem.logoURI} >
           </img>
        </div>
        <div className="flex-1 min-w-0">
@@ -244,8 +256,9 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
        </div>
     
     </div>
- </li>)
-  })}
+ </li>}
+</List>
+
    
 
 </ul>
