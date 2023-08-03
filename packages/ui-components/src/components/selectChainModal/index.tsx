@@ -64,32 +64,30 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
         // balanceList  
       }= useTokenList(dataType)
 
-  const tokenListEth= useMemo(()=>{
- console.log('- - tokenListEth')
- if(fromChainID==null||tokenList==undefined) return []
+  const tokenListEth = useMemo(() => {
+    console.log('- - tokenListEth')
+    if (currChainID == null || tokenList == undefined) return []
 
-  const chainInfo =  getChainInfo(fromChainID)
-  const item:Token=  {
-    "chainId": fromChainID,
-    "address": '',
-    "name": chainInfo.nativeCurrency.name,
-    "symbol": chainInfo.nativeCurrency.symbol,
-    "decimals": chainInfo.nativeCurrency.decimals,
-    "logoURI": chainInfo.logoUrl
-}
-const list = tokenList.filter((item)=>{
-  if(searchKey=='') return true
-  if(item.name.toLowerCase().includes(searchKey.toLowerCase())||item.symbol.toLowerCase().includes(searchKey.toLowerCase())){
-    return true
-  } else{
-    return false
-  }
-})
-  
-  return [item,...list]
-    
+    const chainInfo = getChainInfo(currChainID)
+    const item: Token = {
+      chainId: currChainID,
+      address: '',
+      name: chainInfo.nativeCurrency.name,
+      symbol: chainInfo.nativeCurrency.symbol,
+      decimals: chainInfo.nativeCurrency.decimals,
+      logoURI: chainInfo.logoUrl
+    }
+    const list = tokenList.filter(item => {
+      if (searchKey == '') return true
+      if (item.name.toLowerCase().includes(searchKey.toLowerCase()) || item.symbol.toLowerCase().includes(searchKey.toLowerCase())) {
+        return true
+      } else {
+        return false
+      }
+    })
 
-  },[tokenList,fromChainID,searchKey])
+    return [item, ...list]
+  }, [tokenList, currChainID, searchKey])
      
   useEffect(()=>{
     const need=fromChainID==null||toChainID==null||USECHAIN_IDS.includes(fromChainID)==false||USECHAIN_IDS.includes(toChainID)==false
@@ -159,10 +157,10 @@ const list = tokenList.filter((item)=>{
                 >
                   <If condition={dataType}>
                     <Then>
-                      From
+                    Select a token
                     </Then>
                     <Else>
-                      To
+                    Select a token
                     </Else>
                   </If>
                 </Dialog.Title>

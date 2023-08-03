@@ -18,3 +18,6 @@ export const USDC_IDS_TO_ADDR = {
     [SupportedChainId.OPTIMISM]: '',
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }
+
+
+  export  const NativeCoinAddress='0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'

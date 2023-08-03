@@ -36,7 +36,7 @@ const SelectPanel:FC<{dataType:boolean}> = ({dataType}) => {
  
          </div>  
         </div>
-        <div className="flex flex-row w-1/2" >
+        <div className="flex flex-row  w-1/2" >
           <When condition={showToken!==null}>
           <img className="w-8 h-8 mr-2" src={showToken?.logoURI}></img>
           </When>

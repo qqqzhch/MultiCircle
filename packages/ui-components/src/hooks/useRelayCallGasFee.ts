@@ -23,7 +23,7 @@ export default function useRelayCallGasFee() {
   const inputAmount = useAppStore(state => state.input)
   const toChainID = useAppStore(state => state.toChainID)
   const setGasFeeStore = useAppStore(state => state.setGasFee)
-  const [fetchCheck, setFetchCheck] = useState<number>(0)
+
   const { Validation2, allowanceValue, state } = useErcCheckAllowance()
   const quoteData = useQuote()
   const fromToken = useAppStore(state => state.fromToken)
@@ -31,26 +31,13 @@ export default function useRelayCallGasFee() {
 
   const { addToast } = useToasts()
 
-  const burnToken = useUSDCAddress()
+  const burnToken = useUSDCAddress(fromChainID)
   const getToken = useUSDCAddress(toChainID)
   const RelayerFee = useAppStore(state => state.fee)
   const setWillReceiveToken = useAppStore(state => state.setWillReceiveToken)
 
   const [gasFeeLoading, setGasFeeLoading] = useState(false)
 
-  useEffect(() => {
-    console.log('emit')
-    const run = () => {
-      setFetchCheck(pre => {
-        return pre + 1
-      })
-    }
-
-    EventEmitter.on('Refresh', run)
-    return () => {
-      EventEmitter.off('Refresh', run)
-    }
-  }, [setFetchCheck])
 
   const isAllowance = useMemo(() => {
     return Validation2(allowanceValue, inputAmount)
@@ -68,7 +55,7 @@ export default function useRelayCallGasFee() {
 
   const { data, error, isLoading } = useSWR(
     isAllowance||fromToken?.address==""
-      ? [account, contractAddress,toChainID, fromChainID,inputAmount, fromToken?.address,toToken?.address, 'gasfee', fetchCheck]
+      ? [account, contractAddress,toChainID, fromChainID,inputAmount, fromToken?.address,toToken?.address, 'gasfee']
       : null,
     async () => {
       if (

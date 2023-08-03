@@ -9,15 +9,22 @@ const SwichNetwork = () => {
     const toChainID = useAppStore((state)=>state.toChainID)
     const fromChainInfo= useAppStore((state)=>state.fromChain) 
     const toChainInfo = useAppStore((state)=>state.toChain)
+
+    const fromToken =  useAppStore((state)=>state.fromToken)
+    const toToken =  useAppStore((state)=>state.toToken)
+    const setToken =  useAppStore((state)=>state.setToken)
+
     const swichFN=useCallback(()=>{
         if(fromChainInfo&&toChainInfo&&fromChainID!==null&&toChainID!==null){
 
             setFromOrTOChain(fromChainInfo,false,fromChainID) //false to
             setFromOrTOChain(toChainInfo,true,toChainID)   //true from 
+            setToken(false,fromToken)
+            setToken(true,toToken)
         }
        
 
-    },[fromChainID,toChainID,fromChainInfo,toChainInfo,setFromOrTOChain])
+    },[fromChainID,toChainID,fromChainInfo,toChainInfo,setFromOrTOChain,fromToken,toToken,setToken])
 
   
     return (

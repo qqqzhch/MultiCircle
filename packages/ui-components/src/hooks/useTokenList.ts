@@ -22,24 +22,12 @@ export default function useTokenList(dataType:boolean){
     const toChainID = useAppStore((state)=>state.toChainID)
     const chainid = dataType?fromChainID:toChainID
     console.log('=== useTokenList')
-    const USDCAddress = useUSDCAddress(chainid)
-    const { data, error, isLoading } = useSWR(chainid!==null?[chainid,USDCAddress,'tokenList']:null,async([chainid,USDCAddress])=>{
+
+    const { data, error, isLoading } = useSWR(chainid!==null?[chainid,'tokenList']:null,async([chainid,USDCAddress])=>{
         // const tokenUrl = TokenList_Chainid[chainid]
         const tokenUrl = uniswapTokenList
-        if(tokenUrl!==""){
-            const res = await  api.get<RootTokenList>(tokenUrl)
-            return res.tokens.filter((item)=>item.chainId==chainid)
-        }else{
-            return [{
-                "chainId":chainid,
-                "address": USDCAddress,
-                "name": 'usdc',
-                "symbol": 'usdc',
-                "decimals": 6,
-                "logoURI": ''
-            }] as Array<Token>
-        }
-        
+        const res = await  api.get<RootTokenList>(tokenUrl)
+        return res.tokens.filter((item)=>item.chainId==chainid)
 
     })
     // const { data:balanceList, error:balanceError, isLoading:balanceisLoading } =useSWR(account?[account,chainid]:null,async([account,chainid])=>{
