@@ -22,7 +22,9 @@ interface componentprops {
     dataType:boolean
   }
 
-
+/**
+ * 切换网络，token也需要清空
+*/
 
 const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const setFromOrTOChain = useAppStore((state)=>state.setFromOrTOChain)
@@ -104,24 +106,24 @@ const list = tokenList.filter((item)=>{
 
   },[fromChainID,toChainID,dataType,setFromOrTOChain])
 
+  const selectToken= useCallback((data:Token|null)=>{
+    setToken(dataType,data)
+    if(data!==null){
+      closeModal()
+    }
+    
+
+  },[setToken,closeModal,dataType])
+
   const clickFn = useCallback(async (network: L1ChainInfo | L2ChainInfo,chainId:SupportedChainId)=>{
  
     setFromOrTOChain(network,dataType,chainId);
-    // closeModal()
-    // setTimeout(()=>{
-    //   if(dataType){
-    //      switchingNetwork.doSwitch(chainId)
-    //    }
-    // },0) 
-    
-    
-  },[switchingNetwork,dataType,setFromOrTOChain,closeModal])
+    selectToken(null)
 
-  const selectToken= useCallback((data:Token)=>{
-    setToken(dataType,data)
-    closeModal()
+  
+  },[dataType,setFromOrTOChain,selectToken])
 
-  },[setToken,closeModal,dataType])
+
   
 
   return (

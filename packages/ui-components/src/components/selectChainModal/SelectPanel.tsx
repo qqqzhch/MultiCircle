@@ -3,6 +3,7 @@ import { ArrowDownIcon,ChevronDownIcon } from '@heroicons/react/24/solid'
 
 import { useAppStore } from '../../state'
 import SelectChainModal from '../selectChainModal'
+import { When } from 'react-if';
 
 const SelectPanel:FC<{dataType:boolean}> = ({dataType}) => {
     const fromChainInfo= useAppStore((state)=>state.fromChain) 
@@ -36,7 +37,10 @@ const SelectPanel:FC<{dataType:boolean}> = ({dataType}) => {
          </div>  
         </div>
         <div className="flex flex-row w-1/2" >
-         <img className="w-8 h-8 mr-2" src={showToken?.logoURI}></img>
+          <When condition={showToken!==null}>
+          <img className="w-8 h-8 mr-2" src={showToken?.logoURI}></img>
+          </When>
+        
          <div className='flex flex-col'>
          <span className='peer-focus:font-medium  text-sm text-gray-500'>{showToken?.name}</span>
          <span className='peer-focus:font-medium  text-sm text-gray-500'>{showToken?.symbol}</span>

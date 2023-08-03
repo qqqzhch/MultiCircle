@@ -110,3 +110,5 @@ export const Relayer_IDS_TO_ADDR = {
   export const BaseQuote="https://express-hello-world-gamma.vercel.app/api/quote"
 
   //https://express-hello-world-gamma.vercel.app/api/quote?buyToken=DAI&sellToken=ETH&sellAmount=100000&chainid=1
+
+  export const uniswapTokenList='https://gateway.ipfs.io/ipns/tokens.uniswap.org'

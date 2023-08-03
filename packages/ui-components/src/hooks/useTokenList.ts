@@ -1,6 +1,6 @@
 import { SupportedChainId } from "../constants/chains";
 import useSWR from 'swr'
-import { TokenList_Chainid,TokenList_Balance } from "../constants/relayer";
+import { TokenList_Chainid,TokenList_Balance,uniswapTokenList } from "../constants/relayer";
 import api from "../api/fetch";
 import { useWeb3React } from '@web3-react/core'
 
@@ -24,10 +24,11 @@ export default function useTokenList(dataType:boolean){
     console.log('=== useTokenList')
     const USDCAddress = useUSDCAddress(chainid)
     const { data, error, isLoading } = useSWR(chainid!==null?[chainid,USDCAddress,'tokenList']:null,async([chainid,USDCAddress])=>{
-        const tokenUrl = TokenList_Chainid[chainid]
+        // const tokenUrl = TokenList_Chainid[chainid]
+        const tokenUrl = uniswapTokenList
         if(tokenUrl!==""){
             const res = await  api.get<RootTokenList>(tokenUrl)
-            return res.tokens
+            return res.tokens.filter((item)=>item.chainId==chainid)
         }else{
             return [{
                 "chainId":chainid,
