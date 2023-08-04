@@ -15,7 +15,7 @@ import { useAppStore } from '../state';
 
 export default function useErcCheckAllowance() {
     const { library,account,chainId } = useWeb3React()
-    const checkAddress = useRelayerAddress();
+    const RelayerAddress = useRelayerAddress();
     const contractAddress =useAppStore((state)=>state.fromToken?.address)
     const [allowanceValue, setAllowanceValue] = useState<BigNumber>()
     const [fetchCheck, setFetchCheck] = useState<number>(0)
@@ -37,13 +37,13 @@ export default function useErcCheckAllowance() {
     },[setFetchCheck])
 
 
-    const { data,isLoading } = useSWR([account, chainId, contractAddress,checkAddress,'erc20allowance',fetchCheck],
+    const { data,isLoading } = useSWR([account, chainId, contractAddress,RelayerAddress,'erc20allowance',fetchCheck],
                             async([account, chainId, contractAddress,checkAddress])=>{
                             if (account && contractAddress && library != undefined) {
                               console.log('erc20allowance')
                               const contract = new Contract(contractAddress, erc20ABI, library)
                             //   const result: BigNumber = await contract.balanceOf(mpcAddress)
-                              const allowance: BigNumber = await contract.allowance(account,checkAddress)
+                              const allowance: BigNumber = await contract.allowance(account,RelayerAddress)
                               // setAllowance(allowance )
                         
                               return allowance
