@@ -1,7 +1,7 @@
 import { useWeb3React } from '@web3-react/core'
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { BigNumber, Contract, ethers } from 'ethers'
-import { useAsyncFn } from 'react-use'
+import { useAsyncFn, useDebounce } from 'react-use'
 import UsdcRelayerABI from './../constants/ABI/UsdcRelayer.json'
 import useRelayerAddress from './useRelayer'
 import useUSDCAddress from './useUsdc'
@@ -10,10 +10,11 @@ import { useAppStore } from '../state'
 import { useToasts } from 'react-toast-notifications'
 import useErcCheckAllowance from './useCheckAllowance'
 
-import useSWR from 'swr'
-import EventEmitter from '../EventEmitter/index'
+
+
 
 import useQuote from './useQuote'
+import useSwapParameter from './useSwapParameter'
 
 export default function useRelayCallGasFee() {
   const { library, account, chainId } = useWeb3React()
@@ -25,105 +26,64 @@ export default function useRelayCallGasFee() {
   const setGasFeeStore = useAppStore(state => state.setGasFee)
 
   const { Validation2, allowanceValue, state } = useErcCheckAllowance()
-  const quoteData = useQuote()
+
   const fromToken = useAppStore(state => state.fromToken)
-  const toToken = useAppStore(state => state.toToken)
-
-  const { addToast } = useToasts()
-
-  const burnToken = useUSDCAddress(fromChainID)
-  const getToken = useUSDCAddress(toChainID)
-  const RelayerFee = useAppStore(state => state.fee)
-  const setWillReceiveToken = useAppStore(state => state.setWillReceiveToken)
+  const SwapParameter = useSwapParameter()
 
   const [gasFeeLoading, setGasFeeLoading] = useState(false)
 
 
   const isAllowance = useMemo(() => {
-    return Validation2(allowanceValue, inputAmount)
-  }, [Validation2, inputAmount, allowanceValue])
+    return Validation2(allowanceValue, inputAmount)||fromToken?.address==""
+  }, [Validation2, inputAmount, allowanceValue,fromToken])
 
-  console.log('isAllowance', isAllowance)
+  console.log('isAllowance', isAllowance,fromToken)
   console.log('checkAllowance.isStateAllowance', allowanceValue?.toString(), state?.toString())
 
-  useEffect(()=>{
-    if(quoteData.data?.grossBuyAmount!==undefined){
-      setWillReceiveToken(quoteData.data?.grossBuyAmount)
+  const getgas= useCallback( async ()=>{
+    if(contractAddress==undefined||toChainID==null||isAllowance==false||SwapParameter.sellArgs==null||SwapParameter.buyArgs==null||account==undefined||account==null){
+      return 
+    }
+    console.log('get gas')
+
+    const signer = library.getSigner()
+    const contract = new Contract(contractAddress, UsdcRelayerABI, signer)
+    const destDomain = Circle_Chainid[toChainID]
+    /**
+     *    function swapAndBridge(
+        SellArgs calldata sellArgs,
+        BuyArgs calldata buyArgs,
+        uint32 destDomain,
+        bytes32 recipient
+    ) public payable returns (uint64, uint64)
+    */
+    const sellArgs=SwapParameter.sellArgs;
+    const buyArgs=SwapParameter.buyArgs;
+    const value=fromToken?.address==""? inputAmount:"0"
+    try {
+      setGasFeeLoading(true)
+      const accounthex32 = ethers.utils.hexZeroPad(account,32)
+      const result=await contract.estimateGas.swapAndBridge(sellArgs,buyArgs,destDomain,accounthex32,{
+        value: value
+      })
+      setGasFeeStore(result.toString())
+      setGasFeeLoading(false)    
+    } catch (error) {
+      setGasFeeLoading(false)
     }
     
-  },[quoteData,setWillReceiveToken])
 
-  const { data, error, isLoading } = useSWR(
-    isAllowance||fromToken?.address==""
-      ? [account, contractAddress,toChainID, fromChainID,inputAmount, fromToken?.address,toToken?.address, 'gasfee']
-      : null,
-    async () => {
-      if (
-        account &&
-        contractAddress &&
-        library != undefined &&
-        fromChainID !== null &&
-        fromChainID == chainId &&
-        toChainID != null &&
-        inputAmount !== '0' &&
-        RelayerFee !== '0'
-      ) {
-        console.log('useRelayCall GAS FEE')
+  },[library,contractAddress,setGasFeeStore,toChainID,account,SwapParameter.buyArgs,SwapParameter.sellArgs,setGasFeeLoading,isAllowance,inputAmount,fromToken?.address])
 
-        if (burnToken == fromToken?.address && getToken == toToken?.address) {
-          const destinationDomain = Circle_Chainid[toChainID]
-          const mintRecipient = account
-          const amount = inputAmount
+  useDebounce(()=>{
+    getgas()
+  },1000,[getgas])
 
-          const signer = library.getSigner()
-          const contract = new Contract(contractAddress, UsdcRelayerABI, signer)
 
-          const result = await contract.estimateGas.callout(amount, destinationDomain, mintRecipient, burnToken, {
-            value: RelayerFee
-          })
 
-          setGasFeeStore(result.toString())
-          return result.toNumber()
-        } else {
-          if(quoteData.data==undefined){
-            setGasFeeStore('0')
-            return 
-          }
-          const { value, gasPrice, buyTokenAddress, sellTokenAddress ,sellAmount,allowanceTarget,to,data} = quoteData.data;
-          const signer = library.getSigner()
-          const contract = new Contract(contractAddress, UsdcRelayerABI, signer)
-          const destDomain = Circle_Chainid[toChainID]
-          const usdcaddress =toToken?.address
-          const gasObjAndAmount = {
-            gasPrice:gasPrice,
-            gasLimit:1000000,
-            value:0
-          }
-          const  testnetdeployer=account
-          if(fromToken?.address==""){
-            gasObjAndAmount.value=parseInt(value)
-          }
-
-          const result=await contract.estimateGas.swapAndBridge(sellAmount,
-            sellTokenAddress,
-            buyTokenAddress,
-            allowanceTarget,
-            to,
-            data,
-            destDomain,testnetdeployer,buyTokenAddress,gasObjAndAmount)
-          console.log('anycallstep1log',result)
-          setGasFeeStore(result.toString())
-          return result.toNumber()
-        }
-      } else {
-        setGasFeeStore('0')
-      }
-    }
-  )
 
   return {
-    gasFee: data,
-    gasFeeLoading: isLoading,
-    error
-  }
+   
+    gasFeeLoading: gasFeeLoading,
+     }
 }

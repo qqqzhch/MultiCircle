@@ -1,5 +1,5 @@
 import React from 'react';
-import useRelayCallGasFee from '../../hooks/useRelayCallGasFee'
+import useRelayCallSwapGasFee from '../../hooks/useRelayCallGasFee'
 import { Else, If, Then,When } from 'react-if'
 import Skeleton from 'react-loading-skeleton'
 import { useAppStore } from '../../state'
@@ -7,8 +7,9 @@ import { formatUnits} from '../../utils'
 
 
 const GasFee = () => {
-    const {gasFee,gasFeeLoading} = useRelayCallGasFee()
+    const {gasFeeLoading} = useRelayCallSwapGasFee()
     const fromChainID = useAppStore((state)=>state.fromChainID)
+    const gasFee = useAppStore((state)=>state.gasFee)
 
     return (
         <div className="flex items-center mb-2">

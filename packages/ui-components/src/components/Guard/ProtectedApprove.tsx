@@ -3,7 +3,7 @@ import useErc20Approve from '../../hooks/useApprove'
 import useErcCheckAllowance from '../../hooks/useCheckAllowance'
 import { useAppStore } from '../../state'
 import Loading from '../loading';
-import useRelayCallGasFee from '../../hooks/useRelayCallGasFee';
+
 import { useToasts } from 'react-toast-notifications'
 import EventEmitter from '../../EventEmitter/index';
 
@@ -14,7 +14,7 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
     const checkAllowance= useErcCheckAllowance()
     const inputNumer = useAppStore((state)=>state.input)
     const [isLoading,setIsisLoading] = useState(false)
-    const RelayCallGasFee=useRelayCallGasFee()
+
     const { addToast } = useToasts()
     const fromToken = useAppStore((state)=>state.fromToken)
 

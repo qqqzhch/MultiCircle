@@ -6,31 +6,41 @@ import { useAppStore } from '../state'
 import { RPC_URLS } from '../constants/networks'
 import useSWR from 'swr'
 import { BaseQuote } from '../constants/relayer'
-import { USDC_IDS_TO_ADDR } from '../constants/usdc'
+import { USDC_IDS_TO_ADDR,NativeCoinAddress } from '../constants/usdc'
 import api from '../api/fetch'
 import { Quote } from '../types/quote'
+import useUSDCAddress from './useUsdc'
 
 
 
-export default function useQuote() {
-  const { library, account } = useWeb3React()
+export default function useQuote(isneedSwap:boolean,isFrom:boolean,sellAmount?:string) {
+  const {  account } = useWeb3React()
+
   const fromChainID = useAppStore(state => state.fromChainID)
+  const toChainID = useAppStore(state => state.toChainID)
   const fromToken = useAppStore(state => state.fromToken)
+  const toToken = useAppStore(state => state.toToken)
+  
   const inputAmount = useAppStore(state => state.input)
-      
-  //   const mpcinfo = useAppStore(state => state.getWalletAccount(account, mpcAddress))
+  const ChainID=isFrom?fromChainID:toChainID
+  const amount= isFrom?inputAmount:sellAmount
 
-  const [balance, setBalance] = useState<string>()
+  const usdcAddress = useUSDCAddress(ChainID)
 
-  const [isloading, setIsloading] = useState(false)
+  const isSwap=fromToken!==null&&isneedSwap&&toToken!==null 
+  const tokenAddress= isFrom?fromToken?.address:toToken?.address   
 
-  const { data, error, isLoading } = useSWR(['BaseQuote', account, fromChainID,fromToken?.address,inputAmount], async ([key, account, fromChainID,fromTokenAddress,inputAmount]) => {
+
+
+  const { data, error, isLoading } = useSWR(isSwap ?['BaseQuote', account, ChainID,tokenAddress,amount,usdcAddress,isFrom]:null, 
+  async ([key, account, ChainID,tokenAddress,inputAmount,usdcAddress,isFrom]) => {
     console.log('run useQuote')
-    if (account && fromChainID !== null&&fromTokenAddress!==undefined) {
-      const buyToken=USDC_IDS_TO_ADDR[fromChainID];
-      const sellToken=fromTokenAddress==""?"0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE":fromTokenAddress
+    if (account && fromChainID !== null&&tokenAddress!==undefined) {
+      const buyToken=isFrom?usdcAddress:(tokenAddress==""?NativeCoinAddress:tokenAddress);
+      const sellToken=isFrom?(tokenAddress==""?NativeCoinAddress:tokenAddress):usdcAddress
+
       const sellAmount=inputAmount
-      const chainid=fromChainID
+      const chainid=ChainID
 
       const url =`${BaseQuote}?buyToken=${buyToken}&sellToken=${sellToken}&sellAmount=${sellAmount}&chainid=${chainid}`
       const  data = await api.get<Quote>(url)
