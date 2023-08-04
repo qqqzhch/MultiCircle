@@ -15,7 +15,7 @@ import { useAppStore } from '../state';
 export default function useErc20Approve() {
     const { library,account } = useWeb3React()
     const checkAddress = useRelayerAddress();
-    const contractAddress =useUSDCAddress()
+    const contractAddress =useAppStore((state)=>state.fromToken?.address)
     const { addToast } = useToasts()
     const inputAmount = useAppStore((state)=>state.input)
 

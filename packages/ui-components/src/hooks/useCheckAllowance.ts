@@ -42,7 +42,7 @@ export default function useErcCheckAllowance() {
                             if (account && contractAddress && library != undefined) {
                               console.log('erc20allowance')
                               const contract = new Contract(contractAddress, erc20ABI, library)
-                            //   const result: BigNumber = await contract.balanceOf(mpcAddress)
+                              const result: BigNumber = await contract.balanceOf(account)
                               const allowance: BigNumber = await contract.allowance(account,RelayerAddress)
                               // setAllowance(allowance )
                         
