@@ -16,7 +16,10 @@ export  interface txItem {
   txhash:string
   status?:string|undefined,
   creattime:number,
-  user:string 
+  user:string,
+  fromToken:Token,
+  toToken:Token, 
+  output:string
 }
 
 interface AppState {
@@ -156,7 +159,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
           }
         })
       }
-    }), { name: 'app-storage' })))
+    }), { name: 'app-storage-v0.1' })))
   );
 };
 

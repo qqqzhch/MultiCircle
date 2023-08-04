@@ -33,7 +33,7 @@ export default function useSwapParameter(){
     const quoteDataSell = useQuote(isFromNeedSwap,true)
     const quotebuyAmount=useMemo(()=>{
         if(isFromNeedSwap){
-            return  quoteDataSell.data?.buyAmount
+            return  quoteDataSell.data?.grossBuyAmount
         }else{
             return input
         }
@@ -96,7 +96,7 @@ export default function useSwapParameter(){
             return null
         }
         const buyToken=isToNeedSwap? (toToken.address==''?NativeCoinAddress:toToken.address):usdcTo 
-        const guaranteedBuyAmount=isToNeedSwap?quoteDataBuy.data?.buyAmount:quotebuyAmount
+        const guaranteedBuyAmount=isToNeedSwap?quoteDataBuy.data?.grossBuyAmount:quotebuyAmount
         const buycallgas=isToNeedSwap?quoteDataBuy.data?.gas:"0"
         const buycalldata=isToNeedSwap?quoteDataBuy.data?.data:"0x0000000000000000000000000000000000000000000000000000000000000000"
         if(buyToken==undefined){

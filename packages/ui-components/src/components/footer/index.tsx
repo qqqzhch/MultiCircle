@@ -11,7 +11,7 @@ export  const Footer = () => {
         <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
           <a className="flex title-font font-medium items-center md:justify-start justify-center ">
             
-              <img src={logo} className=" w-60"/>
+              {/* <img src={logo} className=" w-60"/> */}
             
             {/* <span className="ml-3 text-xl">MultiCircle</span> */}
           </a>

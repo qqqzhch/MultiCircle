@@ -43,6 +43,7 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
       // console.log('ApproveUSDT.state.error',ApproveUSDT.state)
       if(ApproveUSDT.state.error!==undefined){
         setIsisLoading(false)
+      
         addToast(ApproveUSDT.state.error.message, { appearance: 'error',autoDismissTimeout:1000*5 })  
       }
 

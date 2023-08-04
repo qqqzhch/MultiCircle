@@ -23,37 +23,42 @@ export default function useRelayCall() {
     const addToHistory = useAppStore((state)=>state.addToHistory)
     const fromToken = useAppStore((state)=>state.fromToken)
     const toToken = useAppStore((state)=>state.toToken)
+    const willReceiveToken = useAppStore((state)=>state.willReceiveToken)
   
     const { addToast } = useToasts()
 
-    const burnToken=useUSDCAddress();
     const RelayerFee =  useAppStore((state)=>state.fee)
    
-    const getToken=useUSDCAddress(toChainID);
     const {sendTx}= useRelayCallGasFee()
     
 
   
     const [swapState, doSwapFetch]=useAsyncFn(async() => {
       console.log('useRelayCall')
-        if (account && contractAddress && library != undefined&&fromChainID!==null&&fromChainID==chainId&&toChainID!=null) {
+        if (account && contractAddress && library != undefined&&fromChainID!==null&&fromChainID==chainId&&toChainID!=null&&fromToken!==null&&toToken!==null) {
       
 
           try {
              
             const result = await sendTx()
-            console.log(result)
+            
             addToHistory({
-              fromChainID:fromChainID, 
-              toChainID:toChainID, 
-              input:inputAmount, 
-              fee:RelayerFee,
-              txhash:result.hash,
-              creattime:Date.now(),
-              user:account
-            })
-            addToast('Transactions have been sent', { appearance: 'success',autoDismissTimeout:1000*10 })
-  
+                fromChainID:fromChainID, 
+                toChainID:toChainID, 
+                input:inputAmount, 
+                fee:RelayerFee,
+                txhash:result.hash,
+                creattime:Date.now(),
+                user:account,
+                fromToken,
+                toToken,
+                output:willReceiveToken
+
+              })
+              addToast('Transactions have been sent', { appearance: 'success',autoDismissTimeout:1000*10 })
+    
+            
+            
             // const txinfo = await result.wait([1])
             // console.log(txinfo)
             return result
@@ -62,7 +67,9 @@ export default function useRelayCall() {
             let  msg
             if(error.data){
                msg =error.data.message
-            }else{
+            }if(error.reason){
+              msg =error.reason
+            } else{
                msg=error.message
             }
             
@@ -73,7 +80,7 @@ export default function useRelayCall() {
         }
       
     
-    }, [account, library, contractAddress,chainId,fromChainID,burnToken,RelayerFee,toChainID,addToHistory,addToast,inputAmount,sendTx])
+    }, [account, library, contractAddress,chainId,fromChainID,RelayerFee,toChainID,addToHistory,addToast,inputAmount,sendTx,fromToken,toToken,willReceiveToken])
   
   
 

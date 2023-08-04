@@ -84,8 +84,10 @@ export default function useRelayCallGasFee() {
       }
       
       setGasFeeLoading(false)    
-    } catch (error) {
+    } catch (error:unknown) {
       setGasFeeLoading(false)
+      throw error as Error
+      
     }
     
 
