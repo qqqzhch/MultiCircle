@@ -77,13 +77,10 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const SubmitFN = useCallback(async ()=>{
     setIsTxLoading(true)
     try {
-      if(RelayCall.checkIsSwap()){
+     
         const {hash} =  await RelayCall.doSwapFetch()
         setTxHash(hash)
-      }else{
-        const {hash} =  await RelayCall.doFetch()
-        setTxHash(hash)
-      }
+   
       
      
     } catch (ex:any) {

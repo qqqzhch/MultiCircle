@@ -22,26 +22,11 @@ const ReviewBtnPanel = () => {
     const { addToast } = useToasts()
     const usdcBalance=  useErc20Balance(fromToken?.address)
     const ethBalance = useEthBalance()
-    const quoteData = useQuote()
+   
 
     const [isPreviewOpen, setPreviewOpen] = useState(false)
 
-    useEffect(()=>{
-      console.log('quoteData',quoteData)
-      if(quoteData.data==undefined) return 
 
-      const { value, from, gasPrice, buyTokenAddress, sellTokenAddress, buyAmount ,sellAmount,allowanceTarget,to,data} = quoteData.data
-     
-      // const anycallstep1log=await UsdcRelayerContract.swapAndBridge(sellAmount,
-      //   sellTokenAddress,
-      //   buyTokenAddress,
-      //   allowanceTarget,
-      //   to,
-      //   data,destDomain,testnetdeployer,usdcaddress,{value:(parseInt(value)).toString(),
-      //   gasPrice:gasPrice,
-      //   gasLimit:1000000})
-
-    },[quoteData])
 
 
 

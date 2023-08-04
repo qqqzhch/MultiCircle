@@ -9,6 +9,8 @@ import { Circle_Chainid } from '../constants/relayer';
 import { useAppStore } from '../state';
 import { useToasts } from 'react-toast-notifications'
 import useQuote from './useQuote'
+import useRelayCallGasFee from './useRelayCallGasFee';
+
 
 
 export default function useRelayCall() {
@@ -26,26 +28,20 @@ export default function useRelayCall() {
 
     const burnToken=useUSDCAddress();
     const RelayerFee =  useAppStore((state)=>state.fee)
-    const quoteData = useQuote()
+   
     const getToken=useUSDCAddress(toChainID);
+    const {sendTx}= useRelayCallGasFee()
     
 
   
-    const [state, doFetch]=useAsyncFn(async() => {
+    const [swapState, doSwapFetch]=useAsyncFn(async() => {
       console.log('useRelayCall')
         if (account && contractAddress && library != undefined&&fromChainID!==null&&fromChainID==chainId&&toChainID!=null) {
-         const destinationDomain=Circle_Chainid[toChainID];
-         const mintRecipient=account;
-         const amount=inputAmount;
-
-          const signer = library.getSigner()
-          const contract = new Contract(contractAddress, UsdcRelayerABI, signer)
+      
 
           try {
              
-            const result = await contract.callout(amount,destinationDomain,mintRecipient,burnToken,{
-              value:RelayerFee
-            })
+            const result = await sendTx()
             console.log(result)
             addToHistory({
               fromChainID:fromChainID, 
@@ -77,64 +73,13 @@ export default function useRelayCall() {
         }
       
     
-    }, [account, library, contractAddress,chainId,fromChainID,burnToken,RelayerFee,toChainID,addToHistory,addToast,inputAmount])
+    }, [account, library, contractAddress,chainId,fromChainID,burnToken,RelayerFee,toChainID,addToHistory,addToast,inputAmount,sendTx])
   
-    const [swapState,doSwapFetch]= useAsyncFn(async()=>{
-      if (account && contractAddress && library != undefined&&fromChainID!==null&&fromChainID==chainId&&toChainID!=null&&quoteData.data!==undefined
-        &&fromToken!==null&&toToken!==null) {
-    
-
-        const signer = library.getSigner()
-        const contract = new Contract(contractAddress, UsdcRelayerABI, signer)
-        const { value, gasPrice, buyTokenAddress, sellTokenAddress ,sellAmount,allowanceTarget,to,data} = quoteData.data;
-
-        const destDomain = Circle_Chainid[toChainID]
-
-        
-        const gasObjAndAmount = {
-          gasPrice:gasPrice,
-          gasLimit:1000000,
-          value:0
-        }
-        const  testnetdeployer=account
-        if(fromToken?.address==""){
-          gasObjAndAmount.value=parseInt(value)
-        }
-
-        const result=await contract.swapAndBridge(sellAmount,
-          sellTokenAddress,
-          buyTokenAddress,
-          allowanceTarget,
-          to,
-          data,
-          destDomain,testnetdeployer,buyTokenAddress,gasObjAndAmount)
-
-          return result
-       
-      }
-          
-
-    },[quoteData,account, library, contractAddress,chainId,fromChainID,burnToken,RelayerFee,toChainID,addToHistory,addToast,inputAmount,fromToken,toToken])
-   
-    const checkIsSwap=useCallback(()=>{
-      if((fromToken==null||toToken==null)||getToken!==toToken.address){
-        return false
-      }
-      if(fromChainID!==toChainID){
-        if(fromToken.address!==burnToken){
-          return true
-        }
-
-      }
-      return false 
-         
-    },[fromToken,toToken,fromChainID,toChainID,burnToken,getToken])
+  
 
     return {
-        state,
-        doFetch,
         swapState,
         doSwapFetch,
-        checkIsSwap
+       
     }
   }

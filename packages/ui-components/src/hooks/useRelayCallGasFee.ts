@@ -13,6 +13,7 @@ import useErcCheckAllowance from './useCheckAllowance'
 
 
 
+
 import useQuote from './useQuote'
 import useSwapParameter from './useSwapParameter'
 
@@ -24,6 +25,7 @@ export default function useRelayCallGasFee() {
   const inputAmount = useAppStore(state => state.input)
   const toChainID = useAppStore(state => state.toChainID)
   const setGasFeeStore = useAppStore(state => state.setGasFee)
+  
 
   const { Validation2, allowanceValue, state } = useErcCheckAllowance()
 
@@ -40,7 +42,7 @@ export default function useRelayCallGasFee() {
   console.log('isAllowance', isAllowance,fromToken)
   console.log('checkAllowance.isStateAllowance', allowanceValue?.toString(), state?.toString())
 
-  const getgas= useCallback( async ()=>{
+  const getgas= useCallback( async (isestimateGas:boolean)=>{
     if(contractAddress==undefined||toChainID==null||isAllowance==false||SwapParameter.sellArgs==null||SwapParameter.buyArgs==null||account==undefined||account==null){
       return 
     }
@@ -60,13 +62,27 @@ export default function useRelayCallGasFee() {
     const sellArgs=SwapParameter.sellArgs;
     const buyArgs=SwapParameter.buyArgs;
     const value=fromToken?.address==""? inputAmount:"0"
+    const accounthex32 = ethers.utils.hexZeroPad(account,32)
     try {
       setGasFeeLoading(true)
-      const accounthex32 = ethers.utils.hexZeroPad(account,32)
-      const result=await contract.estimateGas.swapAndBridge(sellArgs,buyArgs,destDomain,accounthex32,{
-        value: value
-      })
-      setGasFeeStore(result.toString())
+      
+      const gasAndValue:{value?:string,gaslimit?:number}={
+      
+      }
+      if(value!='0'){
+        gasAndValue.value=value
+      }
+      if(isestimateGas){
+        const result=await contract.estimateGas.swapAndBridge(sellArgs,buyArgs,destDomain,accounthex32,gasAndValue)
+        setGasFeeStore(result.toString())
+        
+      }else{
+        const result=await contract.swapAndBridge(sellArgs,buyArgs,destDomain,accounthex32,gasAndValue)
+        return result
+        
+        
+      }
+      
       setGasFeeLoading(false)    
     } catch (error) {
       setGasFeeLoading(false)
@@ -76,14 +92,15 @@ export default function useRelayCallGasFee() {
   },[library,contractAddress,setGasFeeStore,toChainID,account,SwapParameter.buyArgs,SwapParameter.sellArgs,setGasFeeLoading,isAllowance,inputAmount,fromToken?.address])
 
   useDebounce(()=>{
-    getgas()
+    getgas(true)
   },1000,[getgas])
-
-
-
+  const sendTx=useCallback(()=>{
+   return   getgas(false)
+  },[getgas])
 
   return {
    
     gasFeeLoading: gasFeeLoading,
+    sendTx
      }
 }
