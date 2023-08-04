@@ -5,16 +5,15 @@ import { useAppStore } from '../state';
 
 import erc20ABI from './../constants/ABI/ERC20.json'
 import { RPC_URLS } from '../constants/networks';
-import useUSDCAddress from './useUsdc'
 import useSWR from 'swr'
 
 export default function useErc20Balance(address:string|undefined) {
-    const { library,account } = useWeb3React()
+    const { account } = useWeb3React()
     const fromChainID = useAppStore((state)=>state.fromChainID)
     const fromToken = useAppStore((state)=>state.fromToken)
     //   const mpcinfo = useAppStore(state => state.getWalletAccount(account, mpcAddress))
   
-    const [balance, setBalance] = useState<string>()
+
     const contractAddress = address
     const [isloading,setIsloading] = useState(false);
     const selectcontract=useMemo(()=>{
@@ -31,7 +30,7 @@ export default function useErc20Balance(address:string|undefined) {
                                                 console.log('run useErc20Balance')
                                               if (account && contractAddress && fromChainID!==null&&contractAddress!=="") {
                                                 const rpc= RPC_URLS[fromChainID][0]
-                                                const prcPro= new providers.JsonRpcProvider(rpc)
+                                                const prcPro= new providers.StaticJsonRpcProvider(rpc)
                                                 const contract = new Contract(contractAddress, erc20ABI, prcPro)
                                                 
                                                 const result: BigNumber = await contract.balanceOf(account)

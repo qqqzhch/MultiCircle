@@ -35,7 +35,7 @@ export default function useQuote(isneedSwap:boolean,isFrom:boolean,sellAmount?:s
   const { data, error, isLoading } = useSWR(isSwap ?['BaseQuote', account, ChainID,tokenAddress,amount,usdcAddress,isFrom]:null, 
   async ([key, account, ChainID,tokenAddress,inputAmount,usdcAddress,isFrom]) => {
     console.log('run useQuote')
-    if (account && fromChainID !== null&&tokenAddress!==undefined) {
+    if (account && fromChainID !== null&&tokenAddress!==undefined&&inputAmount!==undefined) {
       const buyToken=isFrom?usdcAddress:(tokenAddress==""?NativeCoinAddress:tokenAddress);
       const sellToken=isFrom?(tokenAddress==""?NativeCoinAddress:tokenAddress):usdcAddress
 

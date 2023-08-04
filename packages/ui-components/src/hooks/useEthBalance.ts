@@ -24,7 +24,7 @@ export default function useEthBalance() {
                                                 console.log('run EthBalance')
                                               if (account &&  fromChainID!==null) {
                                                 const rpc= RPC_URLS[fromChainID][0]
-                                                const prcPro= new providers.JsonRpcProvider(rpc)
+                                                const prcPro= new providers.StaticJsonRpcProvider(rpc)
                                                 const result: BigNumber =await  prcPro.getBalance(account)
                                                   // setBalance(result.toString())
                                                 return result.toString()                                           

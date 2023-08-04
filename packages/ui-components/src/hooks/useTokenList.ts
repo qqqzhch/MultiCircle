@@ -1,5 +1,6 @@
 import { SupportedChainId } from "../constants/chains";
-import useSWR from 'swr'
+// import useSWR from 'swr'
+import useSWRImmutable from 'swr/immutable'
 import { TokenList_Chainid,TokenList_Balance,uniswapTokenList } from "../constants/relayer";
 import api from "../api/fetch";
 import { useWeb3React } from '@web3-react/core'
@@ -16,20 +17,23 @@ import { useAppStore } from '../state/index';
 
 export default function useTokenList(dataType:boolean){
 
-    const { library,account } = useWeb3React()   
+
 
     const fromChainID = useAppStore((state)=>state.fromChainID)
     const toChainID = useAppStore((state)=>state.toChainID)
     const chainid = dataType?fromChainID:toChainID
     console.log('=== useTokenList')
 
-    const { data, error, isLoading } = useSWR(chainid!==null?[chainid,'tokenList']:null,async([chainid,USDCAddress])=>{
+    const { data, error, isLoading } = useSWRImmutable(['tokenList'],async()=>{
         // const tokenUrl = TokenList_Chainid[chainid]
         const tokenUrl = uniswapTokenList
         const res = await  api.get<RootTokenList>(tokenUrl)
-        return res.tokens.filter((item)=>item.chainId==chainid)
+        return res.tokens
 
-    })
+    },{})
+    const tokenList=useMemo(()=>{
+       return  data?.filter(item=>item.chainId==chainid)
+    },[chainid,data])
     // const { data:balanceList, error:balanceError, isLoading:balanceisLoading } =useSWR(account?[account,chainid]:null,async([account,chainid])=>{
     //     if(chainid==null||data==undefined){
     //         return undefined
@@ -76,7 +80,7 @@ export default function useTokenList(dataType:boolean){
 
 
     return {
-        data:data, 
+        data:tokenList, 
         error, 
         isLoading,
         // balanceList,
