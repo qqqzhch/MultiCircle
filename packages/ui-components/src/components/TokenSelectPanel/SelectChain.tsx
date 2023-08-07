@@ -1,5 +1,6 @@
-import React,{FC,useState} from 'react'
+import React,{FC,useState,useMemo} from 'react'
 import SelectChainModal from './SelectChainModel'
+import { useAppStore } from '../../state'
 
 type proteType={
     isFrom:boolean
@@ -8,16 +9,32 @@ type proteType={
 const SelectChain:FC<proteType> = ({isFrom}) => {
   const [isFromOpen, setIsFromOpen] = useState<boolean>(false)
 
+  const fromChainInfo= useAppStore((state)=>state.fromChain) 
+  const toChainInfo = useAppStore((state)=>state.toChain)
+  const fromToken = useAppStore((state)=>state.fromToken)
+  const toToken = useAppStore((state)=>state.toToken)
+
+  const ChainInfo= useMemo(()=>{
+    if(isFrom){
+      return fromChainInfo 
+    }else{
+      return toChainInfo
+    }
+
+  },[fromChainInfo,toChainInfo,isFrom])
+
   return (
     <>
      <button onClick={()=>{setIsFromOpen(true)}} className="skt-w skt-w-input skt-w-button flex w-auto flex-shrink-0 items-center justify-start bg-transparent p-2 py-0 hover:bg-transparent sm:justify-between">
       <span className="flex items-center">
         <div className="relative flex h-fit w-fit">
           <div className="skt-w h-5 w-5 overflow-hidden rounded-full sm:h-6 sm:w-6">
-            <img src="https://movricons.s3.ap-south-1.amazonaws.com/Ether.svg" width="100%" height="100%" />
+            <img src={ChainInfo?.logoUrl} width="100%" height="100%" />
           </div>
         </div>
-        <span className="skt-w text-valuerouter-primary -mb-0.5 ml-1 font-medium sm:text-lg">Ethereum</span>
+        <span className="skt-w text-valuerouter-primary -mb-0.5 ml-1 font-medium sm:text-lg">
+          {ChainInfo?.label}
+        </span>
       </span>
       <div className="bg-valuerouter-layers-2 ml-2 mt-[3px] h-4 w-4 rounded-full sm:h-5 sm:w-5">
                       <svg

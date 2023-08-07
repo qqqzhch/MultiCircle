@@ -1,13 +1,20 @@
-import React from 'react';
-
+import React from 'react'
+import { ProtectedConnectWallet } from '../Guard/ProtectedConnectWallet'
+import ProtectedApprove from '../Guard/ProtectedApprove'
+import ProtecteNetwork from '../Guard/ProtecteNetwork'
+import ReviewBtnPanel from './ReviewBtnPanel'
 const SwapBtn = () => {
-    return (
-        <div>
-              <button className="bg-valuerouter-btn-primary hover:bg-valuerouter-btn-primary-hover text-valuerouter-btn-primary  disabled:bg-valuerouter-btn-disabled disabled:text-valuerouter-btn-disabled-text relative flex w-full items-center justify-center rounded px-4 py-[13px] font-semibold capitalize leading-[24px] transition-all sm:text-lg">
-                Connect Wallet
-              </button>
-            </div>
-    );
-};
+  return (
+    <div className='  flex'>
+      <ProtectedConnectWallet>
+        <ProtecteNetwork>
+          <ProtectedApprove>
+            <ReviewBtnPanel></ReviewBtnPanel>
+          </ProtectedApprove>
+        </ProtecteNetwork>
+      </ProtectedConnectWallet>
+    </div>
+  )
+}
 
-export default SwapBtn;
+export default SwapBtn

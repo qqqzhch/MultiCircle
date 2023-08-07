@@ -30,7 +30,7 @@ export default function useTokenList(dataType:boolean){
         const res = await  api.get<RootTokenList>(tokenUrl)
         return res.tokens
 
-    },{})
+    })
     const tokenList=useMemo(()=>{
        return  data?.filter(item=>item.chainId==chainid)
     },[chainid,data])

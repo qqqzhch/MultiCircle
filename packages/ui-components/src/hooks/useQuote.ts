@@ -4,7 +4,7 @@ import { BigNumber, Contract, providers } from 'ethers'
 import { useAppStore } from '../state'
 
 import { RPC_URLS } from '../constants/networks'
-import useSWR from 'swr'
+import useSWR from 'swr/immutable'
 import { BaseQuote } from '../constants/relayer'
 import { USDC_IDS_TO_ADDR,NativeCoinAddress } from '../constants/usdc'
 import api from '../api/fetch'
