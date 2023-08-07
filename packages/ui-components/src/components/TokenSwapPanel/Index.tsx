@@ -27,12 +27,12 @@ const Index = () => {
             </div>
   
             {/*part2*/}
-            <TokenSelectPanel></TokenSelectPanel>
+            <TokenSelectPanel isFrom={true}></TokenSelectPanel>
   
             {/*paprt3*/}
             <TokenSwichPanel></TokenSwichPanel>
             {/*part2*/}
-            <TokenSelectPanel></TokenSelectPanel>
+            <TokenSelectPanel isFrom={false}></TokenSelectPanel>
             {/*part3 */}
             <div className="mb-4" />
             <SwapBtn></SwapBtn>
