@@ -4,12 +4,14 @@ import App from './App'
 import ErrorPage from './views/errorpage'
 import Home from './views/Home'
 import NoMatch from './views/noMatch'
-
+import Swap from './views/Swap'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
      <Route path="/" element={<App />} errorElement={<ErrorPage />}   >
         <Route path="" element={<Home />} />
+        <Route path="swap" element={<Swap />} />
+        
         {/* <Route path="login" element={<Login />} />
         <Route path="account" element={<Account />} />
         <Route path="creatwallet" element={<CreatWallet />} />
