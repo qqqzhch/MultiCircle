@@ -4,7 +4,11 @@ import { useAppStore } from '../state'
 import {  useEffect, useMemo } from 'react'
 import { NativeCoinAddress  } from '../constants/usdc'
 import useQuote from './useQuote'
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
+import useRelayerFeeRate from './useRelayerFeeRate'
+import { perThousandRatioForFee } from '../utils'
+
+
 
 
 
@@ -17,6 +21,8 @@ export default function useSwapParameter(){
     const toToken = useAppStore(state => state.toToken)
     const input = useAppStore(state => state.input)
     const setWillReceiveToken = useAppStore(state => state.setWillReceiveToken)
+    const {data:dataFee}= useRelayerFeeRate();
+
     
     const usdcFrom = useUSDCAddress(fromChainID)
     const usdcTo = useUSDCAddress(toChainID)
@@ -32,13 +38,24 @@ export default function useSwapParameter(){
 
     const quoteDataSell = useQuote(isFromNeedSwap,true)
     const quotebuyAmount=useMemo(()=>{
-        if(isFromNeedSwap){
-            return  quoteDataSell.data?.grossBuyAmount
-        }else{
-            return input
-        }
+        let fromNum:string|undefined;
         
-    },[quoteDataSell.data,isFromNeedSwap,input])
+        if(isFromNeedSwap){
+            fromNum=  quoteDataSell.data?.grossBuyAmount
+        }else{
+            fromNum= input
+        }
+        if(fromNum==undefined||dataFee==undefined)
+        return undefined
+        
+        console.log('RelayerFeeRate.data',dataFee.toString())
+        const result = perThousandRatioForFee(BigNumber.from(fromNum),dataFee)
+        console.log('RelayerFeeRate.data',result)
+        return result?.toString();
+
+    
+        
+    },[quoteDataSell.data,isFromNeedSwap,input,dataFee])
 
 
 
