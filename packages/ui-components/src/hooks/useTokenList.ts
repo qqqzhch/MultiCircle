@@ -24,7 +24,7 @@ export default function useTokenList(dataType:boolean){
     const chainid = dataType?fromChainID:toChainID
     console.log('=== useTokenList')
 
-    const { data, error, isLoading } = useSWRImmutable(['tokenList'],async()=>{
+    const { data, error, isLoading } = useSWRImmutable('tokenList',async()=>{
         // const tokenUrl = TokenList_Chainid[chainid]
         const tokenUrl = uniswapTokenList
         const res = await  api.get<RootTokenList>(tokenUrl)

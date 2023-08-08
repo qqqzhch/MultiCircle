@@ -93,9 +93,11 @@ export default function useRelayCallGasFee() {
 
   },[library,contractAddress,setGasFeeStore,toChainID,account,SwapParameter.buyArgs,SwapParameter.sellArgs,setGasFeeLoading,isAllowance,inputAmount,fromToken?.address])
 
-  useDebounce(()=>{
+  useEffect (()=>{
+    console.log('get gas')
     getgas(true)
-  },1000,[getgas])
+  },[getgas])
+
   const sendTx=useCallback(()=>{
    return   getgas(false)
   },[getgas])
