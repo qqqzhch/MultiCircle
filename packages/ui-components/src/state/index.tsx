@@ -36,6 +36,7 @@ interface AppState {
   gasFee:string,
   fromToken:Token|null,
   toToken:Token|null,
+  CustomRecipientAddress:string|null
   setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean,chainID:SupportedChainId )=>void
   getFromChain:()=>L1ChainInfo|L2ChainInfo|null
   getToChain:()=>L1ChainInfo|L2ChainInfo|null
@@ -51,7 +52,8 @@ interface AppState {
   setToken:(dataType:boolean,data:Token|null)=>void
   willReceiveToken:string
   setWillReceiveToken:(amount:string)=>void
-  
+  setCustomRecipientAddress:(address:string)=>void
+  removeCustomRecipientAddress:()=>void
 
 }
 
@@ -68,7 +70,8 @@ const intialState = {
   history:[],
   fromToken:null,
   toToken:null,
-  willReceiveToken:"0"
+  willReceiveToken:"0",
+  CustomRecipientAddress:null
 };
 
 
@@ -150,7 +153,17 @@ const createMyStore = (state: typeof intialState = intialState) => {
          state.willReceiveToken=amount
         })
        },
-      setToken:(dataType:boolean,data:Token|null)=>{
+       setCustomRecipientAddress:(address:string)=>{
+        set((state)=>{
+          state.CustomRecipientAddress=address
+         })
+       },
+       removeCustomRecipientAddress:()=>{
+          set((state)=>{
+            state.CustomRecipientAddress=null
+           })
+        },
+        setToken:(dataType:boolean,data:Token|null)=>{
         set((state)=>{
           if(dataType){
             state.fromToken=data;

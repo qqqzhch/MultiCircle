@@ -1,8 +1,12 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useCallback, useState } from 'react'
+import { useAppStore } from '../../state'
 
 export default function RecipientModel() {
   const [isOpen, setIsOpen] = useState(false)
+  const CustomRecipientAddress = useAppStore(state => state.CustomRecipientAddress)
+  const [recipientAddress, setRecipientAddress] = useState<string>(CustomRecipientAddress || '')
+  const [selectCheck,setSelectCheck]=useState<boolean>(false)
 
   function closeModal() {
     setIsOpen(false)
@@ -12,22 +16,18 @@ export default function RecipientModel() {
     setIsOpen(true)
   }
 
+  
+
   return (
     <>
-   <div className="flex items-center font-medium">
+      <div className="flex items-center font-medium">
         <button onClick={openModal} className="text-valuerouter-theme-primary flex items-center font-semibold">
-          <svg
-            width={25}
-            height={25}
-            viewBox="0 0 25 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg width={25} height={25} viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M12.5 2.97162C6.977 2.97162 2.5 7.44862 2.5 12.9716C2.5 18.4946 6.977 22.9716 12.5 22.9716C18.023 22.9716 22.5 18.4946 22.5 12.9716C22.5 7.44862 18.023 2.97162 12.5 2.97162ZM15.5 13.9716H13.5V15.9716C13.5 16.5236 13.052 16.9716 12.5 16.9716C11.948 16.9716 11.5 16.5236 11.5 15.9716V13.9716H9.5C8.948 13.9716 8.5 13.5236 8.5 12.9716C8.5 12.4196 8.948 11.9716 9.5 11.9716H11.5V9.97162C11.5 9.41962 11.948 8.97162 12.5 8.97162C13.052 8.97162 13.5 9.41962 13.5 9.97162V11.9716H15.5C16.052 11.9716 16.5 12.4196 16.5 12.9716C16.5 13.5236 16.052 13.9716 15.5 13.9716Z"
               fill="#3838f0"
             />
-          </svg>{" "}
+          </svg>{' '}
           <span className="ml-1">Add Address</span>
         </button>
       </div>
@@ -58,30 +58,40 @@ export default function RecipientModel() {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
+                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                     Recipient Address
                   </Dialog.Title>
                   <div className="mt-2">
-                  <input type="text"  className="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Destination Address" ></input>
+                    <input
+                      onChange={e => {
+                        setRecipientAddress(e.currentTarget.value)
+                      }}
+                      type="text"
+                      className="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Destination Address"
+                    ></input>
                   </div>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500  bg-gray-50 rounded-md">
-                    <input checked  type="checkbox" value="" className="w-4 h-4 m-2 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" ></input>
-                    Please ensure that the address is correct and not an exchange wallet. Any tokens sent to the wrong address will be impossible to retrieve.
+                      <input
+                        checked={selectCheck}
+                        onChange={(e)=>{
+                          setSelectCheck(e.currentTarget.checked)}}
+                        type="checkbox"
+                        value={recipientAddress}
+                        className="w-4 h-4 m-2 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      ></input>
+                      Please ensure that the address is correct and not an exchange wallet. Any tokens sent to the wrong address will be impossible to retrieve.
                     </p>
                   </div>
 
                   <div className="mt-4 flex">
-                  <button
-                          type="button"
-                          className="px-6 py-3.5 inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-700  text-sm font-medium  text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                          
-                        >
-                          Confirm Recipient Addresss
-                        </button>
+                    <button
+                      type="button"
+                      className="px-6 py-3.5 inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-700  text-sm font-medium  text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    >
+                      Confirm Recipient Addresss
+                    </button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
