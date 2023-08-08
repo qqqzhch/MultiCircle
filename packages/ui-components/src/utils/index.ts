@@ -68,5 +68,21 @@ function numFormat(value: string | number, mantissa?: number) {
     return classes.filter(Boolean).join(' ')
   }
 
+
+  export function  perThousandRatioForFee(num:BigNumber,data:BigNumber){
+  
+      const result = num.mul((1000-data.toNumber())).div(1000).toString()
+
+       return result
+  }
+
+  /**
+ * Returns the gas value plus a margin for unexpected or variable gas costs
+ * @param value the gas value to pad
+ */
+export function calculateGasMargin(value: BigNumber): BigNumber {
+  return value.mul(120).div(100)
+}
+
   
   
