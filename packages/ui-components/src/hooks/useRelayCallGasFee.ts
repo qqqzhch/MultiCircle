@@ -39,8 +39,7 @@ export default function useRelayCallGasFee() {
     return Validation2(allowanceValue, inputAmount)||fromToken?.address==""
   }, [Validation2, inputAmount, allowanceValue,fromToken])
 
-  console.log('isAllowance', isAllowance,fromToken)
-  console.log('checkAllowance.isStateAllowance', allowanceValue?.toString(), state?.toString())
+
 
   const getgas= useCallback( async (isestimateGas:boolean)=>{
     if(contractAddress==undefined||toChainID==null||isAllowance==false||SwapParameter.sellArgs==null||SwapParameter.buyArgs==null||account==undefined||account==null){
@@ -93,10 +92,10 @@ export default function useRelayCallGasFee() {
 
   },[library,contractAddress,setGasFeeStore,toChainID,account,SwapParameter.buyArgs,SwapParameter.sellArgs,setGasFeeLoading,isAllowance,inputAmount,fromToken?.address])
 
-  useEffect (()=>{
+  useDebounce (()=>{
     console.log('get gas')
     getgas(true)
-  },[getgas])
+  },100,[getgas])
 
   const sendTx=useCallback(()=>{
    return   getgas(false)

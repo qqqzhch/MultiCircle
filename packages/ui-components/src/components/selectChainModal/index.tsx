@@ -65,7 +65,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
       }= useTokenList(dataType)
 
   const tokenListEth = useMemo(() => {
-    console.log('- - tokenListEth')
+  
     if (currChainID == null || tokenList == undefined) return []
 
     const chainInfo = getChainInfo(currChainID)

@@ -6,6 +6,8 @@ import { useAppStore } from '../state';
 import erc20ABI from '../constants/ABI/ERC20.json'
 import { RPC_URLS } from '../constants/networks';
 import useSWR from 'swr'
+import { useStaticJsonRpc } from './useStaticJsonRpc';
+
 
 
 export default function useEthBalance() {
@@ -17,24 +19,25 @@ export default function useEthBalance() {
     const [balance, setBalance] = useState<string>()
 
     const [isloading,setIsloading] = useState(false);
+    const StaticJsonRpcProvider = useStaticJsonRpc(fromChainID)
+
+    const fetchData= useCallback(async ()=>{
+     
+      if (account &&  StaticJsonRpcProvider!==undefined) {
+        console.log('run EthBalance')   
+        const result: BigNumber =await  StaticJsonRpcProvider.getBalance(account)
+          setBalance(result.toString())
+        return result.toString()                                           
+      }else{
+        // setBalance('0')
+        return '0'
+        
+      }
+
+    },[StaticJsonRpcProvider,account])
 
     
-    const { data, error, isLoading } = useSWR(['EthBalance',account,fromChainID],
-                                              async ([key,account,fromChainID])=>{
-                                                console.log('run EthBalance')
-                                              if (account &&  fromChainID!==null) {
-                                                const rpc= RPC_URLS[fromChainID][0]
-                                                const prcPro= new providers.StaticJsonRpcProvider(rpc)
-                                                const result: BigNumber =await  prcPro.getBalance(account)
-                                                  // setBalance(result.toString())
-                                                return result.toString()                                           
-                                              }else{
-                                                // setBalance('0')
-                                                return '0'
-                                                
-                                              }
-
-                                            })
+    const { data, error, isLoading } = useSWR(['EthBalance',account,fromChainID],fetchData)
 
    
   
