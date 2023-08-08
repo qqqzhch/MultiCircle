@@ -38,7 +38,7 @@ const Index = () => {
             <SwapBtn></SwapBtn>
             <div className="mb-4" />
             <div>
-            {/* <TokenSwapRecipient></TokenSwapRecipient> */}
+            <TokenSwapRecipient></TokenSwapRecipient>
             </div>
           </div>
         </div>

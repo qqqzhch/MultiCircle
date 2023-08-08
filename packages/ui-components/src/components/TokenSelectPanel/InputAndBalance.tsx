@@ -36,7 +36,7 @@ const InputAndBalance:FC<proteType> = ({isFrom}) => {
       }
       
 
-    },1000,[inputValue,inputError,fromToken])
+    },300,[inputValue,inputError,fromToken])
 
   const inputAmountChange = useCallback((value:string)=>{
       console.log('inputAmountChange')

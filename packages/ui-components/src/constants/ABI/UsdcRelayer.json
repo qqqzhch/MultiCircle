@@ -1,10 +1,31 @@
 [
   {
     "inputs": [
-      { "internalType": "address", "name": "_usdc", "type": "address" },
-      { "internalType": "address", "name": "_messageTransmtter", "type": "address" },
-      { "internalType": "address", "name": "_tokenMessenger", "type": "address" },
-      { "internalType": "address", "name": "_zeroEx", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_usdc",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_messageTransmtter",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_tokenMessenger",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_zeroEx",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "admin",
+        "type": "address"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -12,11 +33,74 @@
   {
     "anonymous": false,
     "inputs": [
-      { "indexed": false, "internalType": "address", "name": "buyToken", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "buyAmount", "type": "uint256" },
-      { "indexed": false, "internalType": "uint32", "name": "destDomain", "type": "uint32" },
-      { "indexed": false, "internalType": "address", "name": "recipient", "type": "address" },
-      { "indexed": false, "internalType": "uint64", "name": "swapMessageNonce", "type": "uint64" }
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_old",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_new",
+        "type": "address"
+      }
+    ],
+    "name": "ApplyAdmin",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_old",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_new",
+        "type": "address"
+      }
+    ],
+    "name": "ChangeAdmin",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "buyToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "buyAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "destDomain",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "swapMessageNonce",
+        "type": "uint64"
+      }
     ],
     "name": "ReplaceSwapMessage",
     "type": "event"
@@ -24,15 +108,60 @@
   {
     "anonymous": false,
     "inputs": [
-      { "indexed": false, "internalType": "address", "name": "sellToken", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "sellAmount", "type": "uint256" },
-      { "indexed": false, "internalType": "uint256", "name": "bridgeUSDCAmount", "type": "uint256" },
-      { "indexed": false, "internalType": "address", "name": "buyToken", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "buyAmount", "type": "uint256" },
-      { "indexed": false, "internalType": "uint32", "name": "destDomain", "type": "uint32" },
-      { "indexed": false, "internalType": "address", "name": "recipient", "type": "address" },
-      { "indexed": false, "internalType": "uint64", "name": "bridgeNonce", "type": "uint64" },
-      { "indexed": false, "internalType": "uint64", "name": "swapMessageNonce", "type": "uint64" }
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sellToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "sellAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "bridgeUSDCAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "buyToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "buyAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "destDomain",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "bridgeNonce",
+        "type": "uint64"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "swapMessageNonce",
+        "type": "uint64"
+      }
     ],
     "name": "SwapAndBridge",
     "type": "event"
@@ -40,28 +169,165 @@
   {
     "anonymous": false,
     "inputs": [
-      { "indexed": false, "internalType": "address", "name": "token", "type": "address" },
-      { "indexed": false, "internalType": "address", "name": "to", "type": "address" },
-      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
     ],
     "name": "TakeFee",
     "type": "event"
   },
   {
+    "anonymous": false,
     "inputs": [
-      { "internalType": "uint32", "name": "sourceDomain", "type": "uint32" },
-      { "internalType": "bytes32", "name": "sender", "type": "bytes32" },
-      { "internalType": "bytes", "name": "messageBody", "type": "bytes" }
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "feeRate",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateFeeRate",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "applyAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      }
+    ],
+    "name": "changeAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeDenominator",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeRate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "usdcBridgeAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "getFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "sourceDomain",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "sender",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "messageBody",
+        "type": "bytes"
+      }
     ],
     "name": "handleReceiveMessage",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "messageTransmitter",
-    "outputs": [{ "internalType": "contract IMessageTransmitter", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "contract IMessageTransmitter",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pendingAdmin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -69,8 +335,16 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "bytes", "name": "message", "type": "bytes" },
-          { "internalType": "bytes", "name": "attestation", "type": "bytes" }
+          {
+            "internalType": "bytes",
+            "name": "message",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "attestation",
+            "type": "bytes"
+          }
         ],
         "internalType": "struct ValueRouter.MessageWithAttestation",
         "name": "bridgeMessage",
@@ -78,8 +352,16 @@
       },
       {
         "components": [
-          { "internalType": "bytes", "name": "message", "type": "bytes" },
-          { "internalType": "bytes", "name": "attestation", "type": "bytes" }
+          {
+            "internalType": "bytes",
+            "name": "message",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "attestation",
+            "type": "bytes"
+          }
         ],
         "internalType": "struct ValueRouter.MessageWithAttestation",
         "name": "swapMessage",
@@ -92,37 +374,85 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
     "name": "remoteRouter",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint64", "name": "swapMessageNonce", "type": "uint64" },
+      {
+        "internalType": "uint64",
+        "name": "swapMessageNonce",
+        "type": "uint64"
+      },
       {
         "components": [
-          { "internalType": "bytes", "name": "message", "type": "bytes" },
-          { "internalType": "bytes", "name": "attestation", "type": "bytes" }
+          {
+            "internalType": "bytes",
+            "name": "message",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "attestation",
+            "type": "bytes"
+          }
         ],
         "internalType": "struct ValueRouter.MessageWithAttestation",
         "name": "originalMessage",
         "type": "tuple"
       },
-      { "internalType": "uint32", "name": "destDomain", "type": "uint32" },
+      {
+        "internalType": "uint32",
+        "name": "destDomain",
+        "type": "uint32"
+      },
       {
         "components": [
-          { "internalType": "bytes32", "name": "buyToken", "type": "bytes32" },
-          { "internalType": "uint256", "name": "guaranteedBuyAmount", "type": "uint256" },
-          { "internalType": "uint256", "name": "buycallgas", "type": "uint256" },
-          { "internalType": "bytes", "name": "buycalldata", "type": "bytes" }
+          {
+            "internalType": "bytes32",
+            "name": "buyToken",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "guaranteedBuyAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buycallgas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "buycalldata",
+            "type": "bytes"
+          }
         ],
         "internalType": "struct ValueRouter.BuyArgs",
         "name": "buyArgs",
         "type": "tuple"
       },
-      { "internalType": "address", "name": "recipient", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      }
     ],
     "name": "replaceSwapMessage",
     "outputs": [],
@@ -131,8 +461,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint32", "name": "remoteDomain", "type": "uint32" },
-      { "internalType": "address", "name": "router", "type": "address" }
+      {
+        "internalType": "uint32",
+        "name": "remoteDomain",
+        "type": "uint32"
+      },
+      {
+        "internalType": "address",
+        "name": "router",
+        "type": "address"
+      }
     ],
     "name": "setRemoteRouter",
     "outputs": [],
@@ -143,10 +481,26 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "address", "name": "sellToken", "type": "address" },
-          { "internalType": "uint256", "name": "sellAmount", "type": "uint256" },
-          { "internalType": "uint256", "name": "sellcallgas", "type": "uint256" },
-          { "internalType": "bytes", "name": "sellcalldata", "type": "bytes" }
+          {
+            "internalType": "address",
+            "name": "sellToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sellcallgas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "sellcalldata",
+            "type": "bytes"
+          }
         ],
         "internalType": "struct ValueRouter.SellArgs",
         "name": "sellArgs",
@@ -154,31 +508,70 @@
       },
       {
         "components": [
-          { "internalType": "bytes32", "name": "buyToken", "type": "bytes32" },
-          { "internalType": "uint256", "name": "guaranteedBuyAmount", "type": "uint256" },
-          { "internalType": "uint256", "name": "buycallgas", "type": "uint256" },
-          { "internalType": "bytes", "name": "buycalldata", "type": "bytes" }
+          {
+            "internalType": "bytes32",
+            "name": "buyToken",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "guaranteedBuyAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "buycallgas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "buycalldata",
+            "type": "bytes"
+          }
         ],
         "internalType": "struct ValueRouter.BuyArgs",
         "name": "buyArgs",
         "type": "tuple"
       },
-      { "internalType": "uint32", "name": "destDomain", "type": "uint32" },
-      { "internalType": "bytes32", "name": "recipient", "type": "bytes32" }
+      {
+        "internalType": "uint32",
+        "name": "destDomain",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "recipient",
+        "type": "bytes32"
+      }
     ],
     "name": "swapAndBridge",
     "outputs": [
-      { "internalType": "uint64", "name": "", "type": "uint64" },
-      { "internalType": "uint64", "name": "", "type": "uint64" }
+      {
+        "internalType": "uint64",
+        "name": "",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "",
+        "type": "uint64"
+      }
     ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "token", "type": "address" },
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
     ],
     "name": "takeFee",
     "outputs": [],
@@ -188,21 +581,103 @@
   {
     "inputs": [],
     "name": "tokenMessenger",
-    "outputs": [{ "internalType": "contract ITokenMessenger", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "contract ITokenMessenger",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
-  { "inputs": [], "name": "usdc", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" },
-  { "inputs": [], "name": "version", "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }], "stateMutability": "view", "type": "function" },
-  { "inputs": [], "name": "zeroEx", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" },
   {
     "inputs": [
-      { "internalType": "bytes", "name": "swapcalldata", "type": "bytes" },
-      { "internalType": "uint256", "name": "callgas", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_feeRate",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateFeeRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "usdc",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "version",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "zeroEx",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "swapcalldata",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "callgas",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "buyToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "guaranteedBuyAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      }
     ],
     "name": "zeroExSwap",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   }
 ]

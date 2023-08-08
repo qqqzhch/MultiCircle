@@ -4,7 +4,7 @@ import { SupportedChainId } from "./chains"
 export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.GOERLI]: '0x86BD43AE87ad6bD18bb26E6631ae44f0c507D5cA',
     [SupportedChainId.AVALANCHE_FUJITEST]: '0xDe58B4282BF2308F51e7c4cbAF0B62b06C2d74a0',
-    [SupportedChainId.AVALANCHE_C_HAIN]:'0x70181C8A4e8077d4fe2fdfF198093Cb062C6A4f2',
+    [SupportedChainId.AVALANCHE_C_HAIN]:'0x002c6C68A2E4a97Bd4E378bA5636deabe7625690',
     [SupportedChainId.MAINNET]: '0x589c770e6DB222bEd273332c6E7267d3DF1C0036',
     [SupportedChainId.ROPSTEN]: '',
     [SupportedChainId.RINKEBY]: '',
@@ -13,7 +13,7 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.POLYGON_MUMBAI]: '',
     [SupportedChainId.CELO]: '',
     [SupportedChainId.CELO_ALFAJORES]: '',
-    [SupportedChainId.ARBITRUM_ONE]: '0x70181C8A4e8077d4fe2fdfF198093Cb062C6A4f2',
+    [SupportedChainId.ARBITRUM_ONE]: '0x2B6C2d554Ac3Dfb03c912f02B3823Aa04d0Fc838',
     [SupportedChainId.ARBITRUM_Goerli]: '0xC1a66ff524ca631e8a887Da7Ee44e615Ef6313Dc',
     [SupportedChainId.OPTIMISM]: '',
     [SupportedChainId.OPTIMISM_GOERLI]: '',
