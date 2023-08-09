@@ -20,14 +20,14 @@ export default function useRelayerFee() {
 
     const { data, error, isLoading } = useSWR([contractAddress,toChainID,fromChainID,'useRelayerFee'],
                                               async ([contractAddress,toChainID,fromChainID])=>{
-                                                console.log('useRelayerFee')
+                                                
                                               // setValue('0')
                                               // setFee('0')
                                               if ( contractAddress&&toChainID!==null&&fromChainID!==null&&toChainID!==fromChainID) {
-                                                
+                                                console.log('run RelayerFee')
 
                                                 const rpc= RPC_URLS[fromChainID][0]
-                                                const prcPro= new providers.JsonRpcProvider(rpc)
+                                                const prcPro= new providers.StaticJsonRpcProvider(rpc)
 
                                                 const CircleID = Circle_Chainid[toChainID]
                                                 const contract = new Contract(contractAddress, UsdcRelayerABI, prcPro)

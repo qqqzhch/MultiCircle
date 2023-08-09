@@ -16,6 +16,7 @@ export default function useRelayerFeeRate(){
         if(contractAddress==undefined||StaticJsonRpcProvider==undefined){
             return 
         }
+        console.log('run fee rate')
         const contract = new Contract(contractAddress, UsdcRelayerABI, StaticJsonRpcProvider)
         const result: BigNumber = await contract.feeRate()
         return result

@@ -6,6 +6,7 @@ import { useAppStore } from '../state';
 import erc20ABI from './../constants/ABI/ERC20.json'
 import { RPC_URLS } from '../constants/networks';
 import useSWR from 'swr'
+import { useStaticJsonRpc } from './useStaticJsonRpc';
 
 export default function useErc20Balance(address:string|undefined) {
     const { account } = useWeb3React()
@@ -23,29 +24,30 @@ export default function useErc20Balance(address:string|undefined) {
       return contractAddress 
 
     },[contractAddress,fromToken])
+    const StaticJsonRpcProvider = useStaticJsonRpc(fromChainID)
+    const fetchData= useCallback(async ()=>{
+      
+      if (account && contractAddress && StaticJsonRpcProvider!==null&&contractAddress!=="") {
+        console.log('run useErc20Balance')  
+        const contract = new Contract(contractAddress, erc20ABI, StaticJsonRpcProvider)
+        
+        const result: BigNumber = await contract.balanceOf(account)
+          // setBalance(result.toString())
+        return result.toString()  
+        
+        
+        
+      }else{
+        // setBalance('0')
+        return '0'
+        
+      }
+
+    },[StaticJsonRpcProvider,account,contractAddress])
+
    
 
-    const { data, error, isLoading } = useSWR(['erc20balanceOf',account,selectcontract,fromChainID],
-                                              async ([key,account,contractAddress,fromChainID])=>{
-                                                console.log('run useErc20Balance')
-                                              if (account && contractAddress && fromChainID!==null&&contractAddress!=="") {
-                                                const rpc= RPC_URLS[fromChainID][0]
-                                                const prcPro= new providers.StaticJsonRpcProvider(rpc)
-                                                const contract = new Contract(contractAddress, erc20ABI, prcPro)
-                                                
-                                                const result: BigNumber = await contract.balanceOf(account)
-                                                  // setBalance(result.toString())
-                                                return result.toString()  
-                                                
-                                                
-                                                
-                                              }else{
-                                                // setBalance('0')
-                                                return '0'
-                                                
-                                              }
-
-                                            })
+    const { data, error, isLoading } = useSWR(['erc20balanceOf',account,selectcontract,fromChainID],fetchData)
 
     // useEffect(() => {
      
