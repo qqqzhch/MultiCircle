@@ -105,7 +105,7 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }
 
-  export const BaseUrl="https://express-hello-world-p8m1l2gqb-qqqzhch.vercel.app/api"
+  export const BaseUrl="https://express-hello-world-gamma.vercel.app/api"
 
   export const BaseQuote="https://express-hello-world-gamma.vercel.app/api/quote"
 
