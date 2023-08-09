@@ -1,4 +1,4 @@
-import React,{FC, useMemo} from 'react';
+import React,{FC, useEffect, useMemo} from 'react';
 import {txItem} from '../../state/index'
 import { getChainInfo } from '../../constants/chainInfo';
 import { formatUnitsErc20,formatUnits, cutOut } from '../../utils';
@@ -9,12 +9,15 @@ import ScanUrl from '../linkAndCopy/ScanUrl';
 import CopyAddressBtn from '../linkAndCopy/CopyAddressBtn';
 
 import TokenAndChainInfo from './TokenAndChainInfo'
+import { useAppStore } from '../../state'
 
 //txItem
 const Txinfo:FC<{Item:txItem}> = ({Item}) => {
     const fromChainInfo = getChainInfo(Item.fromChainID)
     const toChainInfo = getChainInfo(Item.toChainID)
     const status = useTxStatus(Item.txhash)
+    const updateHistoryBytxhash = useAppStore(state => state.updateHistoryBytxhash)
+
 
     //{"code":0,"data":{"attest":"done","mint":"done","scan":"done"}}
     const statusMint= useMemo(()=>{
@@ -39,12 +42,21 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
         return statusText
 
     },[status])
+
+    // useEffect(()=>{
+    //     if(statusMint.text=='Success'&&status.data?.data.to?.txhash){
+    //         updateHistoryBytxhash(Item.txhash,status.data?.data.to?.txhash)
+    //     }
+
+    // },[statusMint.text,updateHistoryBytxhash,Item.txhash,status.data?.data.to?.txhash])
+
+
     return (
         <div  className="flex flex-col pb-3 mt-2 pt-2">
-            <div className=' flex justify-around   items-stretch'>
+            <div className=' flex flex-col sm:flex-row justify-around   items-stretch'>
              <TokenAndChainInfo Tokeninfo={Item.fromToken} ChainID={Item.fromChainID} Amount={Item.input} isFrom={true} txhash={Item.txhash}  ></TokenAndChainInfo>
              <div className=' flex'>
-               <span className=' m-auto'>》</span> 
+               <span className=' m-auto'>{">"}</span> 
              </div>
              <TokenAndChainInfo Tokeninfo={Item.toToken} ChainID={Item.toChainID} Amount={Item.output}  isFrom={false} txhash={status.data?.data.to?.txhash} ></TokenAndChainInfo>
             </div>

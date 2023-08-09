@@ -20,6 +20,7 @@ export  interface txItem {
   fromToken:Token,
   toToken:Token, 
   output:string
+  toTxhash?:string
 }
 
 interface AppState {
@@ -53,7 +54,10 @@ interface AppState {
   willReceiveToken:string
   setWillReceiveToken:(amount:string)=>void
   setCustomRecipientAddress:(address:string)=>void
-  removeCustomRecipientAddress:()=>void
+  removeCustomRecipientAddress:()=>void,
+  updateHistoryBytxhash:(txhash:string,toTxhash:string)=>void
+  
+
 
 }
 
@@ -141,7 +145,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
 
       },
       getHistory:(account:string|undefined|null)=>{
-        return  get().history.filter((item)=>{return item.user==account});
+        return  get().history.filter((item)=>{return item.user==account&&item.status!=="success"});
       },
       setGasFee:(amount:string)=>{
         set((state)=>{
@@ -162,6 +166,16 @@ const createMyStore = (state: typeof intialState = intialState) => {
           set((state)=>{
             state.CustomRecipientAddress=null
            })
+        },
+        updateHistoryBytxhash:(txhash:string,toTxhash:string)=>{
+            //  get().history.filter((item)=>item.txhash==txhash)
+            set((state)=>{
+               const item =  state.history.find((item)=>item.txhash==txhash)
+               if(item){
+                item.toTxhash=toTxhash
+                item.status="success"
+               }
+            })
         },
         setToken:(dataType:boolean,data:Token|null)=>{
         set((state)=>{

@@ -24,7 +24,7 @@ export const Header:FC = () => {
                 <img src={mobilelogo} className="mr-3  h-12" alt="MultiCircle Logo" />
 
             </a>
-            <div className="flex items-center lg:order-2">
+            <div className="flex flex-1 items-center lg:order-2">
                 <Noticeinfo></Noticeinfo>
                  <ChainList></ChainList>
                  <Connectwallet></Connectwallet>
