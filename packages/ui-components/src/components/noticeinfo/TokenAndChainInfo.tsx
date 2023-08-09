@@ -25,7 +25,7 @@ const TokenAndChainInfo:FC<proteType> = ({Tokeninfo,ChainID,Amount, isFrom,txhas
  }
 
   return (
-    <div className=" bg-slate-50 flex rounded-md items-center space-x-1 p-4 flex-wrap w-1/2 ">
+    <div className=" bg-slate-50 flex rounded-md items-center space-x-1 p-4 flex-wrap w-full sm:w-1/2 ">
       <div className="flex -space-x-4  items-start">
         <img width={40} src={Tokeninfo.logoURI}></img>
         <img width={20} src={ChainInfo?.logoUrl}></img>
