@@ -5,22 +5,15 @@ import { useEffect, useState } from 'react'
 import { BaseUrl } from '../constants/relayer'
 import { Interface, fetchJson } from 'ethers/lib/utils'
 import api from '../api/fetch'
+import {SearchTxhash } from '../types/searchTxhash'
 
-interface statusType {
-  "code":number,
-  "data":{
-    "attest":string,
-    "mint":string,
-    "scan":string
-  }
-}
 
-async function fetcher(txhash: string|undefined|null ): Promise< statusType | undefined> {
+async function fetcher(txhash: string|undefined|null ): Promise< SearchTxhash | undefined> {
   if (txhash == null || txhash == undefined) {
     return
   }
   
-  const res:statusType = await api.get(BaseUrl+"/search/?txhash="+txhash)
+  const res = await api.get<SearchTxhash>(BaseUrl+"/search/?txhash="+txhash)
   if (res&&res.code==0) {
     return res
   } else {

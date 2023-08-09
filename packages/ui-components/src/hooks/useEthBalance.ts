@@ -25,6 +25,7 @@ export default function useEthBalance() {
      
       if (account &&  StaticJsonRpcProvider!==undefined) {
         console.log('run EthBalance')   
+       
         const result: BigNumber =await  StaticJsonRpcProvider.getBalance(account)
           setBalance(result.toString())
         return result.toString()                                           

@@ -8,6 +8,7 @@ import { Else, If, Then, When } from 'react-if';
 import ScanUrl from '../linkAndCopy/ScanUrl';
 import CopyAddressBtn from '../linkAndCopy/CopyAddressBtn';
 
+import TokenAndChainInfo from './TokenAndChainInfo'
 
 //txItem
 const Txinfo:FC<{Item:txItem}> = ({Item}) => {
@@ -40,20 +41,17 @@ const Txinfo:FC<{Item:txItem}> = ({Item}) => {
     },[status])
     return (
         <div  className="flex flex-col pb-3 mt-2 pt-2">
-            <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400  flex flex-row justify-between items-center">
-                <span> <span className=' inline-block w-12'>From:</span> {fromChainInfo.label}</span>
-                <dt className=" w-1/2  text-gray-500 md:text-md dark:text-gray-400  inline-flex items-center space-x-3">
-                    Tx Hash:  {cutOut(Item.txhash,2,2)} <ScanUrl addr={Item.txhash} chainId={Item.fromChainID}></ScanUrl>   <CopyAddressBtn addr={Item.txhash}></CopyAddressBtn>
-                </dt>
-            </dt>
-            <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400 ">
-            <span className=' inline-block w-12'>To:</span>{toChainInfo.label}  
-            </dt>
+            <div className=' flex justify-around   items-stretch'>
+             <TokenAndChainInfo Tokeninfo={Item.fromToken} ChainID={Item.fromChainID} Amount={Item.input} isFrom={true} txhash={Item.txhash}  ></TokenAndChainInfo>
+             <div className=' flex'>
+               <span className=' m-auto'>》</span> 
+             </div>
+             <TokenAndChainInfo Tokeninfo={Item.toToken} ChainID={Item.toChainID} Amount={Item.output}  isFrom={false} txhash={status.data?.data.to?.txhash} ></TokenAndChainInfo>
+            </div>
+         
+         
             
-            <dd className="mb-1 text-md font-semibold flex flex-row justify-between items-center">
-           <span className='w-1/2'>Input :{formatUnitsErc20(Item.input,Item.fromToken.symbol,Item.fromToken.decimals)}{" "} </span> 
-           <span className='w-1/2'>Output:  {formatUnitsErc20(Item.output,Item.toToken.symbol,Item.toToken.decimals)}</span> 
-            </dd>
+            
             <dt className="mb-1 text-gray-500 md:text-md dark:text-gray-400">
                 Time: {dayjs(Item.creattime).fromNow()}  
             </dt>
