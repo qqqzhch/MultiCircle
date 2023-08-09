@@ -20,8 +20,8 @@ async function fetcher(txhash: string|undefined|null ): Promise< statusType | un
     return
   }
   
-  const res:statusType = await api.get(BaseUrl+"?txhash="+txhash)
-  if (res) {
+  const res:statusType = await api.get(BaseUrl+"/search/?txhash="+txhash)
+  if (res&&res.code==0) {
     return res
   } else {
     throw new Error('get Accounts info error ')

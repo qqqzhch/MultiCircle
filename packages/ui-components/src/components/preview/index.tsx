@@ -12,6 +12,10 @@ import SetepLoading from './StepperLoading'
 import ScanUrl from '../linkAndCopy/ScanUrl'
 import CopyAddressBtn from '../linkAndCopy/CopyAddressBtn'
 import TokenAndChainInfo from './TokenAndChainInfo'
+import useCusRecipientAddress from '../../hooks/useCusRecipientAddress'
+import { useWeb3React } from '@web3-react/core'
+  
+
 
 
 interface componentprops {
@@ -37,6 +41,8 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
 
   const fromToken = useAppStore(state => state.fromToken)
   const toToken = useAppStore(state => state.toToken)
+  const CusRecipientAddress = useCusRecipientAddress()
+  const {account}= useWeb3React()
 
   useEffect(() => {
     if (isTxLoading) {
@@ -88,9 +94,15 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     setStep(-1)
   }, [closeModal, setTxHash])
 
+  const RecipientAddress=useMemo(()=>{
+    return CusRecipientAddress||account 
+  },[CusRecipientAddress,account])
+
   if (fromToken == null || toToken == null) {
     return <></>
   }
+
+
 
   return (
     <div>
@@ -141,12 +153,20 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                         <span className="text-gray-500">Gas Fee</span>
                         <span className="ml-auto text-gray-900">{fromChainID && formatUnits(fromChainID, gasFee, true)}</span>
                       </div>
+                      <div className="flex border-t border-gray-200 py-2">
+                        <span className="text-gray-500">Recipient Address</span>
+                        <span className="ml-auto text-gray-900">
+                          {RecipientAddress&&cutOut(RecipientAddress,6,6)}
+                        </span>
+                      </div>
                       <div className="flex border-t border-b mb-6 border-gray-200 py-2">
                         <span className="text-gray-500">Protocol Fee</span>
                         <span className="ml-auto text-gray-900">
                           {formatUnitsErc20(fee, fromChainInfo?.nativeCurrency.symbol || '', fromChainInfo?.nativeCurrency.decimals || 18)}
                         </span>
                       </div>
+                      
+                    
                     </div>
                   </div>
 

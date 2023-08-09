@@ -16,6 +16,8 @@ import useErcCheckAllowance from './useCheckAllowance'
 
 import useQuote from './useQuote'
 import useSwapParameter from './useSwapParameter'
+import useCusRecipientAddress from './useCusRecipientAddress'
+
 
 export default function useRelayCallGasFee() {
   const { library, account, chainId } = useWeb3React()
@@ -33,7 +35,7 @@ export default function useRelayCallGasFee() {
   const SwapParameter = useSwapParameter()
 
   const [gasFeeLoading, setGasFeeLoading] = useState(false)
-
+  const CusRecipientAddress = useCusRecipientAddress()
 
   const isAllowance = useMemo(() => {
     return Validation2(allowanceValue, inputAmount)||fromToken?.address==""
@@ -61,7 +63,7 @@ export default function useRelayCallGasFee() {
     const sellArgs=SwapParameter.sellArgs;
     const buyArgs=SwapParameter.buyArgs;
     const value=fromToken?.address==""? inputAmount:"0"
-    const accounthex32 = ethers.utils.hexZeroPad(account,32)
+    const accounthex32 = ethers.utils.hexZeroPad(CusRecipientAddress||account,32)
     try {
       setGasFeeLoading(true)
       
@@ -90,7 +92,7 @@ export default function useRelayCallGasFee() {
     }
     
 
-  },[library,contractAddress,setGasFeeStore,toChainID,account,SwapParameter.buyArgs,SwapParameter.sellArgs,setGasFeeLoading,isAllowance,inputAmount,fromToken?.address])
+  },[library,contractAddress,setGasFeeStore,toChainID,account,SwapParameter.buyArgs,SwapParameter.sellArgs,setGasFeeLoading,isAllowance,inputAmount,fromToken?.address,CusRecipientAddress])
 
   useDebounce (()=>{
     console.log('get gas')
