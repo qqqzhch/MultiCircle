@@ -9,8 +9,8 @@ import Swap from './views/Swap'
 const router = createBrowserRouter(
   createRoutesFromElements(
      <Route path="/" element={<App />} errorElement={<ErrorPage />}   >
-        <Route path="" element={<Home />} />
-        <Route path="swap" element={<Swap />} />
+        <Route path="swap" element={<Home />} />
+        <Route path="" element={<Swap />} />
         
         {/* <Route path="login" element={<Login />} />
         <Route path="account" element={<Account />} />
