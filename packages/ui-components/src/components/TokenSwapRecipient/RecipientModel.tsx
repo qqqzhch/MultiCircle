@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useCallback, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAppStore } from '../../state'
 import { ethers } from 'ethers'
 import { useToasts } from 'react-toast-notifications'
@@ -12,6 +12,7 @@ export default function RecipientModel() {
   const CustomRecipientAddress = useAppStore(state => state.CustomRecipientAddress)
   const setCustomRecipientAddress = useAppStore(state => state.setCustomRecipientAddress)
   const [recipientAddress, setRecipientAddress] = useState<string>(CustomRecipientAddress || '')
+  const removeCustomRecipientAddress = useAppStore(state => state.removeCustomRecipientAddress)
   const [selectCheck,setSelectCheck]=useState<boolean>(false)
   const {addToast} =  useToasts()
   function closeModal() {
@@ -24,6 +25,13 @@ export default function RecipientModel() {
   // useEffect(()=>{
   //   setRecipientAddress(CustomRecipientAddress||'')
   // },[CustomRecipientAddress,setRecipientAddress])
+  const issave= useMemo(()=>{
+    if(CustomRecipientAddress==null){
+      return false
+    }
+    const isok = ethers.utils.isAddress(CustomRecipientAddress)
+     return isok
+  },[CustomRecipientAddress])
 
   const  saveClick= useCallback(()=>{
     console.log('- -')
@@ -122,13 +130,29 @@ export default function RecipientModel() {
                   </div>
 
                   <div className="mt-4 flex">
-                    <button
+                    <If condition={issave}>
+                      <Then>
+                      <button
+                      type="button"
+                      onClick={()=>{removeCustomRecipientAddress()}}
+                      className="px-6 py-3.5 inline-flex flex-1 justify-center rounded-md border border-transparent bg-red-500  text-sm font-medium  text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    >
+                      Removing Recipient Addresss
+                    </button>
+
+                      </Then>
+                      <Else>
+                      <button
                       type="button"
                       onClick={saveClick}
                       className="px-6 py-3.5 inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-700  text-sm font-medium  text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >
                       Confirm Recipient Addresss
                     </button>
+
+                      </Else>
+                    </If>
+                   
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

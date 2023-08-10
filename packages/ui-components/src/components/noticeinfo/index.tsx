@@ -1,12 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { useAppStore } from '../../state'
 import Txinfo from './txinfo'
 import { useWeb3React } from '@web3-react/core'
 import { When } from 'react-if'
+import { QueueListIcon } from '@heroicons/react/24/solid'
 
 
 
@@ -39,7 +40,8 @@ if(account==undefined){
     <>
       
        <div onClick={openModal} className="relative    cursor-pointer text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-80 ">
-              <FontAwesomeIcon icon={icon({ name: 'bell', style: 'solid' })} />
+              {/* <FontAwesomeIcon icon={icon({ name: 'bell', style: 'solid' })} /> */}
+              <QueueListIcon className=' w-4 h-4'></QueueListIcon>
               <When condition={account&&list.length>0}>
               <span className="absolute  rounded-full bg-red-400 py-0 px-1.5 text-xs text-white">{list.length}</span>
               </When>
