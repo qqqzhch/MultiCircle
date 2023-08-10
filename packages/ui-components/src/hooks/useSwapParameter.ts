@@ -96,12 +96,17 @@ export default function useSwapParameter(){
         const sellAmount=input
         const sellcallgas=isFromNeedSwap?quoteDataSell.data?.gas:"0"
         const sellcalldata=isFromNeedSwap?quoteDataSell.data?.data:"0x0000000000000000000000000000000000000000000000000000000000000000"
+         
+        const grossBuyAmountSmall = BigNumber.from(quoteDataSell.data?.grossBuyAmount).sub(50)
 
+        const  guaranteedBuyAmount=isFromNeedSwap?grossBuyAmountSmall:"0"
+        
         return {
             sellToken,
             sellAmount,
             sellcallgas,
-            sellcalldata
+            sellcalldata,
+            guaranteedBuyAmount
         }
 
     },[isFromNeedSwap,fromToken,input, quoteDataSell.data,usdcFrom])
@@ -113,7 +118,8 @@ export default function useSwapParameter(){
             return null
         }
         const buyToken=isToNeedSwap? (toToken.address==''?NativeCoinAddress:toToken.address):usdcTo 
-        const guaranteedBuyAmount=isToNeedSwap?quoteDataBuy.data?.grossBuyAmount:quotebuyAmount
+        const grossBuyAmountSmall= BigNumber.from(quoteDataBuy.data?.grossBuyAmount).sub(50)
+        const guaranteedBuyAmount=isToNeedSwap?grossBuyAmountSmall:quotebuyAmount
         const buycallgas=isToNeedSwap?quoteDataBuy.data?.gas:"0"
         const buycalldata=isToNeedSwap?quoteDataBuy.data?.data:"0x0000000000000000000000000000000000000000000000000000000000000000"
         if(buyToken==undefined){
