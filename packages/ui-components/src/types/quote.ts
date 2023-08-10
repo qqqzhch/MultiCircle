@@ -26,6 +26,10 @@ export interface Quote {
   grossBuyAmount: string
   grossSellAmount: string
   expectedSlippage: string
+
+  code?: number
+  reason?: string
+  validationErrors?: ValidationError[]
 }
 
 export interface Source {
@@ -59,4 +63,11 @@ export interface Fill {
 export interface Fees {
   //eslint-disable-next-line  @typescript-eslint/no-explicit-any
   zeroExFee: any
+}
+
+export interface ValidationError {
+  field: string
+  code: number
+  reason: string
+  description: string
 }

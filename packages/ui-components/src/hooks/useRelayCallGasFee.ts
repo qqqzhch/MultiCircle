@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core'
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { Contract, ethers } from 'ethers'
 import { useDebounce } from 'react-use'
 import UsdcRelayerABI from './../constants/ABI/UsdcRelayer.json'
@@ -12,6 +12,7 @@ import useErcCheckAllowance from './useCheckAllowance'
 
 import useSwapParameter from './useSwapParameter'
 import useCusRecipientAddress from './useCusRecipientAddress'
+import { useToasts } from 'react-toast-notifications'
 
 export default function useRelayCallGasFee() {
   const { library, account } = useWeb3React()
@@ -29,10 +30,17 @@ export default function useRelayCallGasFee() {
 
   const [gasFeeLoading, setGasFeeLoading] = useState(false)
   const CusRecipientAddress = useCusRecipientAddress()
+  const { addToast } = useToasts()
 
   const isAllowance = useMemo(() => {
     return Validation2(allowanceValue, inputAmount) || fromToken?.address == ''
   }, [Validation2, inputAmount, allowanceValue, fromToken])
+
+  useEffect(() => {
+    if (SwapParameter.error) {
+      addToast(SwapParameter.error?.message)
+    }
+  }, [SwapParameter.error, addToast])
 
   const getgas = useCallback(
     async (isestimateGas: boolean) => {

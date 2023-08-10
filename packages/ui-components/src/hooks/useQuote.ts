@@ -38,8 +38,11 @@ export default function useQuote(isneedSwap: boolean, isFrom: boolean, sellAmoun
 
         const url = `${BaseQuote}?buyToken=${buyToken}&sellToken=${sellToken}&sellAmount=${sellAmount}&chainid=${chainid}`
         const data = await api.get<Quote>(url)
-
-        return data
+        if (data.code == undefined) {
+          return data
+        } else {
+          throw new Error(data.reason)
+        }
       }
     }
   )

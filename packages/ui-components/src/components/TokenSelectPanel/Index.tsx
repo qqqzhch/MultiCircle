@@ -15,12 +15,14 @@ const TokenSelectPanel: FC<proteType> = ({ isFrom }) => {
       <div className="border-b-valuerouter-primary/10 flex items-center justify-between border-b px-3 py-2.5 sm:p-3">
         <div className="flex items-center space-x-2">
           <p className="text-valuerouter-secondary text-sm font-medium sm:text-base ">{isFrom ? 'From' : 'To'}</p>
-          <div className="relative">
-            <SelectToken isFrom={isFrom}></SelectToken>
-          </div>
-          <p className="text-valuerouter-secondary text-sm font-medium sm:text-base">On</p>
-          <div className="relative">
-            <SelectChain isFrom={isFrom}></SelectChain>
+          <div className=" flex  border-gray-200  border p-1 rounded-md space-x-2">
+            <div className="relative">
+              <SelectToken isFrom={isFrom}></SelectToken>
+            </div>
+            <p className="text-valuerouter-secondary text-sm font-medium sm:text-base">On</p>
+            <div className="relative">
+              <SelectChain isFrom={isFrom}></SelectChain>
+            </div>
           </div>
         </div>
       </div>

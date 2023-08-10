@@ -29,6 +29,7 @@ export default function useSwapParameter() {
   }, [fromToken, usdcFrom])
 
   const quoteDataSell = useQuote(isFromNeedSwap, true)
+
   const quotebuyAmount = useMemo(() => {
     let fromNum: string | undefined
 
@@ -137,6 +138,7 @@ export default function useSwapParameter() {
     isFromNeedSwap,
     isToNeedSwap,
     sellArgs,
-    buyArgs
+    buyArgs,
+    error: quoteDataSell.error || quoteDataBuy.error
   }
 }
