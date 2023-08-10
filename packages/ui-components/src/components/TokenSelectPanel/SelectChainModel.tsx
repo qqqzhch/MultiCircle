@@ -11,6 +11,8 @@ import Skeleton from 'react-loading-skeleton'
 import { Token } from '../../types/token';
 import { CheckIcon } from '@heroicons/react/24/solid';
 import List from 'rc-virtual-list';
+import { cutOut } from '../../utils';
+
 
 
 
@@ -223,12 +225,15 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,isFrom}) => {
           <img className="w-6 h-6 rounded-full" src={TokenItem.logoURI} >
           </img>
        </div>
-       <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
+       <div className="flex-1 min-w-0 group">
+          <p className="font-medium text-md text-gray-900 truncate dark:text-white">
+          {TokenItem.symbol}
+          </p>
+          <p className="text-sm transition ease-in-out   block group-hover:hidden  text-gray-500 truncate dark:text-gray-400">
           {TokenItem.name}
           </p>
-          <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-          {TokenItem.symbol}
+          <p className="text-sm transition ease-in-out  hidden group-hover:block text-gray-500 truncate dark:text-gray-400">
+          {TokenItem.address==""?TokenItem.name: cutOut(TokenItem.address,8,8)}
           </p>
        </div>
        <div className="  min-w-[50px]  pr-2">
