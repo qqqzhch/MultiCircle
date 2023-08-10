@@ -1,14 +1,12 @@
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { ClipboardDocumentIcon } from '@heroicons/react/20/solid'
-import { useParams } from 'react-router-dom'
+
 import { FC, useCallback } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { cutOut } from '../../utils'
 
-
-
 type Prop = {
-  addr?: string|null
+  addr?: string | null
 }
 const CopyAddressBtn: FC<Prop> = ({ addr }) => {
   const { addToast } = useToasts()

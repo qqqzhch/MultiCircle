@@ -1,18 +1,14 @@
-
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, FC } from 'react'
-
 
 import connectors from '../../web3react/connectors'
 import { useToasts } from 'react-toast-notifications'
 import { useWeb3React } from '@web3-react/core'
 // import { accountDataType } from '../../web3react/types'
-import {  useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import EventEmitter from '../../EventEmitter/index'
 import metamask from '../../assets/icon/metamask.svg'
 import { useCookie } from 'react-use'
-
-
 
 interface componentprops {
   isOpen: boolean
@@ -22,56 +18,53 @@ interface componentprops {
 const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   ////
   const { addToast } = useToasts()
-  const {  activate,active} = useWeb3React()
-  const [walletIsConnectvalue, updateCookie] = useCookie("walletIsConnectedTo");
-  
+  const { activate } = useWeb3React()
+  const [walletIsConnectvalue, updateCookie] = useCookie('walletIsConnectedTo')
+
   // const [accountData, setAccountData] = useState<null | accountDataType>(null)
   // const noderef= useRef()
-  
-  
+
   const connectMetaMask = useCallback(async () => {
     let status = false
-    console.log('connectMetaMask')
+    console.info('connectMetaMask')
     await activate(connectors.metamask, (err: Error) => {
-      
       addToast(err.message, { appearance: 'error' })
-      if(err.message.indexOf("UnsupportedChainId")){
-        EventEmitter.emit("UnsupportedChainId",true)
-      }else{
-        EventEmitter.emit("UnsupportedChainId",false)
+      if (err.message.indexOf('UnsupportedChainId')) {
+        EventEmitter.emit('UnsupportedChainId', true)
+      } else {
+        EventEmitter.emit('UnsupportedChainId', false)
       }
-      
+
       status = true
     })
-    
+
     if (!status) {
       // addToast('Connected to MetaMask', { appearance: 'success' })
       // localStorage.setItem('walletIsConnectedTo', 'metamask')
-      updateCookie('metamask',{expires: 30, path: '/'})
+      updateCookie('metamask', { expires: 30, path: '/' })
       closeModal()
     }
-  }, [activate, addToast,closeModal,updateCookie])
+  }, [activate, addToast, closeModal, updateCookie])
 
   const connectWalletConnect = useCallback(async () => {
     let status = false
     await activate(connectors.walletConnect, (err: Error) => {
-      
       addToast(err.message, { appearance: 'error' })
-      if(err.message.indexOf("UnsupportedChainId")){
-        EventEmitter.emit("UnsupportedChainId",true)
-      }else{
-        EventEmitter.emit("UnsupportedChainId",false)
+      if (err.message.indexOf('UnsupportedChainId')) {
+        EventEmitter.emit('UnsupportedChainId', true)
+      } else {
+        EventEmitter.emit('UnsupportedChainId', false)
       }
       status = true
     })
 
     if (!status) {
       // localStorage.setItem('walletIsConnectedTo', 'walletConnect')
-      updateCookie('walletConnect',{expires: 30, path: '/'})
+      updateCookie('walletConnect', { expires: 30, path: '/' })
       // addToast('Connected to Wallet Connect', { appearance: 'success' })
       closeModal()
     }
-  }, [activate, addToast,closeModal,updateCookie])
+  }, [activate, addToast, closeModal, updateCookie])
   // const disConnect = async () => {
   //   deactivate()
 
@@ -80,14 +73,14 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   //   // setAccountData(null)
   // }
   const walletsToDisplay = [
-    { id: 1, title: 'MetaMask', imgSrc: metamask, fn: connectMetaMask },
+    { id: 1, title: 'MetaMask', imgSrc: metamask, fn: connectMetaMask }
     // { id: 3, title: 'WalletConnect', imgSrc: '', fn: connectWalletConnect }
   ]
   // connect on load
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
-      console.log('connectWalletOnPageLoad')
-      if (walletIsConnectvalue?.trim()=== 'metamask') {
+      console.info('connectWalletOnPageLoad')
+      if (walletIsConnectvalue?.trim() === 'metamask') {
         await connectMetaMask()
       }
 
@@ -96,13 +89,10 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       }
     }
     // if(active==false){
-      connectWalletOnPageLoad()
+    connectWalletOnPageLoad()
     // }
-    
-  }, [connectMetaMask, connectWalletConnect,walletIsConnectvalue])
+  }, [connectMetaMask, connectWalletConnect, walletIsConnectvalue])
 
-  
-  
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -137,17 +127,17 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                   <div className="mt-6">
                     <div className="text-sm text-gray-500 flex flex-col ">
                       {walletsToDisplay.map(el => (
-                       <div className="my-1 flex-1" key={el.id}>
-                       <button
-                         key={el.id}
-                         onClick={el.fn}
-                         type="button"
-                         className="text-gray-900 bg-white w-full hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2 min-w-full"
-                       >
-                         <img src={el.imgSrc} className="w-6 h-5 mr-2 -ml-1"></img>
-                         {el.title}
-                       </button>
-                     </div>
+                        <div className="my-1 flex-1" key={el.id}>
+                          <button
+                            key={el.id}
+                            onClick={el.fn}
+                            type="button"
+                            className="text-gray-900 bg-white w-full hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2 min-w-full"
+                          >
+                            <img src={el.imgSrc} className="w-6 h-5 mr-2 -ml-1"></img>
+                            {el.title}
+                          </button>
+                        </div>
                       ))}
                     </div>
                   </div>

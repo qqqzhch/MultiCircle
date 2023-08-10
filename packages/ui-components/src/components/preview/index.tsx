@@ -1,22 +1,18 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react'
+import { FC, useCallback, useEffect, useMemo } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { useAppStore } from '../../state'
 import { formatUnitsErc20, formatUnits, cutOut } from '../../utils'
 import useRelayCall from '../../hooks/useRelayCall'
-import { Else, If, Then, When } from 'react-if'
+import { Else, If, Then } from 'react-if'
 import useTxStatus from '../../hooks/useTxStatus'
-import Loading from '../loading'
+
 import useAverageTime from '../../hooks/useAverageTime'
 import SetepLoading from './StepperLoading'
-import ScanUrl from '../linkAndCopy/ScanUrl'
-import CopyAddressBtn from '../linkAndCopy/CopyAddressBtn'
+
 import TokenAndChainInfo from './TokenAndChainInfo'
 import useCusRecipientAddress from '../../hooks/useCusRecipientAddress'
 import { useWeb3React } from '@web3-react/core'
-  
-
-
 
 interface componentprops {
   isOpen: boolean
@@ -25,11 +21,9 @@ interface componentprops {
 
 const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   const fromChainInfo = useAppStore(state => state.fromChain)
-  const toChainInfo = useAppStore(state => state.toChain)
+
   const fromChainID = useAppStore(state => state.fromChainID)
-  const toChainID = useAppStore(state => state.toChainID)
-  const input = useAppStore(state => state.input)
-  const output = useAppStore(state => state.willReceiveToken)
+
   const gasFee = useAppStore(state => state.gasFee)
   const fee = useAppStore(state => state.fee)
   const RelayCall = useRelayCall()
@@ -42,7 +36,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   const fromToken = useAppStore(state => state.fromToken)
   const toToken = useAppStore(state => state.toToken)
   const CusRecipientAddress = useCusRecipientAddress()
-  const {account}= useWeb3React()
+  const { account } = useWeb3React()
 
   useEffect(() => {
     if (isTxLoading) {
@@ -75,6 +69,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     try {
       const { hash } = await RelayCall.doSwapFetch()
       setTxHash(hash)
+      //eslint-disable-next-line  @typescript-eslint/no-explicit-any
     } catch (ex: any) {
       setTxHash(null)
     }
@@ -94,15 +89,13 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     setStep(-1)
   }, [closeModal, setTxHash])
 
-  const RecipientAddress=useMemo(()=>{
-    return CusRecipientAddress||account 
-  },[CusRecipientAddress,account])
+  const RecipientAddress = useMemo(() => {
+    return CusRecipientAddress || account
+  }, [CusRecipientAddress, account])
 
   if (fromToken == null || toToken == null) {
     return <></>
   }
-
-
 
   return (
     <div>
@@ -142,9 +135,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                         <div>》</div>
                         <TokenAndChainInfo isFrom={false}></TokenAndChainInfo>
                       </div>
-              
-                
-                     
+
                       <div className="flex border-t border-gray-200 py-2">
                         <span className="text-gray-500">Average time</span>
                         <span className="ml-auto text-gray-900">{AverageTime}</span>
@@ -155,9 +146,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                       </div>
                       <div className="flex border-t border-gray-200 py-2">
                         <span className="text-gray-500">Recipient Address</span>
-                        <span className="ml-auto text-gray-900">
-                          {RecipientAddress&&cutOut(RecipientAddress,6,6)}
-                        </span>
+                        <span className="ml-auto text-gray-900">{RecipientAddress && cutOut(RecipientAddress, 6, 6)}</span>
                       </div>
                       <div className="flex border-t border-b mb-6 border-gray-200 py-2">
                         <span className="text-gray-500">Protocol Fee</span>
@@ -165,8 +154,6 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                           {formatUnitsErc20(fee, fromChainInfo?.nativeCurrency.symbol || '', fromChainInfo?.nativeCurrency.decimals || 18)}
                         </span>
                       </div>
-                      
-                    
                     </div>
                   </div>
 

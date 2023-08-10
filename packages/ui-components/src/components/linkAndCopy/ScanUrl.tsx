@@ -1,19 +1,17 @@
-import { useParams } from 'react-router-dom'
 import { FC } from 'react'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid'
-import { useWeb3React } from '@web3-react/core'
+
 import { getChainInfo } from '../../constants/chainInfo'
 import { SupportedChainId } from '../../constants/chains'
 
 type Prop = {
-  addr?: string|null
-  chainId?:SupportedChainId|null
+  addr?: string | null
+  chainId?: SupportedChainId | null
 }
-const ScanUrl: FC<Prop> = ({ addr,chainId }) => {
-
-  if(addr==undefined||addr==null||chainId==undefined||chainId==null){
+const ScanUrl: FC<Prop> = ({ addr, chainId }) => {
+  if (addr == undefined || addr == null || chainId == undefined || chainId == null) {
     return <></>
-  }  
+  }
   const ChainInfo = getChainInfo(chainId)
 
   const data = addr
@@ -24,7 +22,7 @@ const ScanUrl: FC<Prop> = ({ addr,chainId }) => {
       rel="noreferrer"
       target={'_blank'}
       href={`${ChainInfo?.explorer}tx/${data}`}
-      className=' outline-none'
+      className=" outline-none"
     >
       <ArrowTopRightOnSquareIcon className=" h-4 w-4 text-blue-500 "></ArrowTopRightOnSquareIcon>
     </a>

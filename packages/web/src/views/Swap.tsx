@@ -1,10 +1,7 @@
-import React from 'react'
-import TokenSwapPanel from "@monorepo/ui-components/src/components/TokenSwapPanel/Index"
+import TokenSwapPanel from '@monorepo/ui-components/src/components/TokenSwapPanel/Index'
 
 const Swap = () => {
-  return (
-    <TokenSwapPanel></TokenSwapPanel>
-  )
+  return <TokenSwapPanel></TokenSwapPanel>
 }
 
 export default Swap

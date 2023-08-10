@@ -1,26 +1,24 @@
 import useSWR from 'swr'
-import { useAppStore } from '../state/index'
-import { useWeb3React } from '@web3-react/core'
-import { useEffect, useState } from 'react'
+
 import { BaseUrl } from '../constants/relayer'
-import { Interface, fetchJson } from 'ethers/lib/utils'
+
 import api from '../api/fetch'
 
 interface statusType {
-  "code":number,
-  "data":{
-    "attest":string,
-    "mint":string,
-    "scan":string
+  code: number
+  data: {
+    attest: string
+    mint: string
+    scan: string
   }
 }
 
-async function fetcher(txhash: string|undefined ): Promise< statusType | undefined> {
+async function fetcher(txhash: string | undefined): Promise<statusType | undefined> {
   if (txhash == null || txhash == undefined) {
     return
   }
-  
-  const res:statusType = await api.get(BaseUrl+"?txhash="+txhash)
+
+  const res: statusType = await api.get(BaseUrl + '?txhash=' + txhash)
   if (res) {
     return res
   } else {
@@ -28,14 +26,11 @@ async function fetcher(txhash: string|undefined ): Promise< statusType | undefin
   }
 }
 
-export default function useTxStatus(txhash: string|undefined) {
-
-
+export default function useTxStatus(txhash: string | undefined) {
   const { data, error, isLoading } = useSWR(txhash ? ['/smw/txhash', txhash] : null, () => fetcher(txhash), {
     refreshInterval: 1000 * 15
   })
 
-  
   return {
     data: data,
     error,

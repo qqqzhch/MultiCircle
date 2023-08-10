@@ -1,13 +1,12 @@
-import React from 'react';
-import RecipientModel from './RecipientModel';
+import RecipientModel from './RecipientModel'
 
 const TokenSwapRecipient = () => {
-    return (
-        <div className="flex items-center justify-between">
+  return (
+    <div className="flex items-center justify-between">
       <span className="text-valuerouter-primary font-medium">Recipient Address</span>
-      <RecipientModel></RecipientModel>     
-     </div>
-    );
-};
+      <RecipientModel></RecipientModel>
+    </div>
+  )
+}
 
-export default TokenSwapRecipient;
+export default TokenSwapRecipient

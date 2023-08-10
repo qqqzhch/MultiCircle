@@ -8,7 +8,6 @@ import polygonMaticLogo from '../assets/icon/polygon-matic-logo.svg'
 // import { darkTheme } from 'theme/colors'
 // import ms from 'ms.macro'
 
-
 import { SupportedChainId, SupportedL1ChainId, SupportedL2ChainId } from './chains'
 import { ARBITRUM_LIST, CELO_LIST, OPTIMISM_LIST } from './lists'
 import avaxLogo from '../assets/icon/avax_logo.svg'
@@ -17,7 +16,7 @@ import avaxLogo from '../assets/icon/avax_logo.svg'
 
 export enum NetworkType {
   L1,
-  L2,
+  L2
 }
 interface BaseChainInfo {
   readonly networkType: NetworkType
@@ -37,7 +36,6 @@ interface BaseChainInfo {
   }
   readonly color?: string
   readonly backgroundColor?: string
-  
 }
 
 export interface L1ChainInfo extends BaseChainInfo {
@@ -64,7 +62,7 @@ const CHAIN_INFO: ChainInfoMap = {
     infoLink: 'https://info.uniswap.org/#/',
     label: 'Ethereum',
     logoUrl: ethereumLogoUrl,
-    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 }
     // color: darkTheme.chain_1,
   },
   [SupportedChainId.RINKEBY]: {
@@ -74,7 +72,7 @@ const CHAIN_INFO: ChainInfoMap = {
     infoLink: 'https://info.uniswap.org/#/',
     label: 'Rinkeby',
     logoUrl: ethereumLogoUrl,
-    nativeCurrency: { name: 'Rinkeby Ether', symbol: 'rETH', decimals: 18 },
+    nativeCurrency: { name: 'Rinkeby Ether', symbol: 'rETH', decimals: 18 }
     // color: darkTheme.chain_4,
   },
   [SupportedChainId.ROPSTEN]: {
@@ -84,7 +82,7 @@ const CHAIN_INFO: ChainInfoMap = {
     infoLink: 'https://info.uniswap.org/#/',
     label: 'Ropsten',
     logoUrl: ethereumLogoUrl,
-    nativeCurrency: { name: 'Ropsten Ether', symbol: 'ropETH', decimals: 18 },
+    nativeCurrency: { name: 'Ropsten Ether', symbol: 'ropETH', decimals: 18 }
     // color: darkTheme.chain_3,
   },
   [SupportedChainId.KOVAN]: {
@@ -94,7 +92,7 @@ const CHAIN_INFO: ChainInfoMap = {
     infoLink: 'https://info.uniswap.org/#/',
     label: 'Kovan',
     logoUrl: ethereumLogoUrl,
-    nativeCurrency: { name: 'Kovan Ether', symbol: 'kovETH', decimals: 18 },
+    nativeCurrency: { name: 'Kovan Ether', symbol: 'kovETH', decimals: 18 }
     // color: darkTheme.chain_420,
   },
   [SupportedChainId.GOERLI]: {
@@ -104,7 +102,7 @@ const CHAIN_INFO: ChainInfoMap = {
     infoLink: 'https://info.uniswap.org/#/',
     label: 'Görli',
     logoUrl: ethereumLogoUrl,
-    nativeCurrency: { name: 'Görli Ether', symbol: 'görETH', decimals: 18 },
+    nativeCurrency: { name: 'Görli Ether', symbol: 'görETH', decimals: 18 }
     // color: darkTheme.chain_5,
   },
   [SupportedChainId.OPTIMISM]: {
@@ -121,7 +119,7 @@ const CHAIN_INFO: ChainInfoMap = {
     circleLogoUrl: optimismLogoUrl,
     statusPage: 'https://optimism.io/status',
     helpCenterUrl: 'https://help.uniswap.org/en/collections/3137778-uniswap-on-optimistic-ethereum-oξ',
-    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 }
     // color: darkTheme.chain_10,
     // backgroundColor: darkTheme.chain_10_background,
   },
@@ -137,7 +135,7 @@ const CHAIN_INFO: ChainInfoMap = {
     logoUrl: optimismLogoUrl,
     statusPage: 'https://optimism.io/status',
     helpCenterUrl: 'https://help.uniswap.org/en/collections/3137778-uniswap-on-optimistic-ethereum-oξ',
-    nativeCurrency: { name: 'Optimism Goerli Ether', symbol: 'görOpETH', decimals: 18 },
+    nativeCurrency: { name: 'Optimism Goerli Ether', symbol: 'görOpETH', decimals: 18 }
     // color: darkTheme.chain_420,
   },
   [SupportedChainId.ARBITRUM_ONE]: {
@@ -152,7 +150,7 @@ const CHAIN_INFO: ChainInfoMap = {
     circleLogoUrl: arbitrumCircleLogoUrl,
     defaultListUrl: ARBITRUM_LIST,
     helpCenterUrl: 'https://help.uniswap.org/en/collections/3137787-uniswap-on-arbitrum',
-    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 }
     // color: darkTheme.chain_42,
     // backgroundColor: darkTheme.chain_42161_background,
   },
@@ -167,7 +165,7 @@ const CHAIN_INFO: ChainInfoMap = {
     logoUrl: arbitrumLogoUrl,
     defaultListUrl: ARBITRUM_LIST,
     helpCenterUrl: 'https://help.uniswap.org/en/collections/3137787-uniswap-on-arbitrum',
-    nativeCurrency: { name: 'Goerli Arbitrum Ether', symbol: 'goerliArbETH', decimals: 18 },
+    nativeCurrency: { name: 'Goerli Arbitrum Ether', symbol: 'goerliArbETH', decimals: 18 }
     // color: darkTheme.chain_421611,
   },
   [SupportedChainId.POLYGON]: {
@@ -180,7 +178,7 @@ const CHAIN_INFO: ChainInfoMap = {
     label: 'Polygon',
     logoUrl: polygonMaticLogo,
     circleLogoUrl: polygonCircleLogoUrl,
-    nativeCurrency: { name: 'Polygon Matic', symbol: 'MATIC', decimals: 18 },
+    nativeCurrency: { name: 'Polygon Matic', symbol: 'MATIC', decimals: 18 }
     // color: darkTheme.chain_137,
     // backgroundColor: darkTheme.chain_137_background,
   },
@@ -193,7 +191,7 @@ const CHAIN_INFO: ChainInfoMap = {
     infoLink: 'https://info.uniswap.org/#/polygon/',
     label: 'Polygon Mumbai',
     logoUrl: polygonMaticLogo,
-    nativeCurrency: { name: 'Polygon Mumbai Matic', symbol: 'mMATIC', decimals: 18 },
+    nativeCurrency: { name: 'Polygon Mumbai Matic', symbol: 'mMATIC', decimals: 18 }
   },
   [SupportedChainId.CELO]: {
     networkType: NetworkType.L1,
@@ -206,7 +204,7 @@ const CHAIN_INFO: ChainInfoMap = {
     logoUrl: celoLogo,
     circleLogoUrl: celoCircleLogoUrl,
     nativeCurrency: { name: 'Celo', symbol: 'CELO', decimals: 18 },
-    defaultListUrl: CELO_LIST,
+    defaultListUrl: CELO_LIST
   },
   [SupportedChainId.CELO_ALFAJORES]: {
     networkType: NetworkType.L1,
@@ -218,7 +216,7 @@ const CHAIN_INFO: ChainInfoMap = {
     label: 'Celo Alfajores',
     logoUrl: celoLogo,
     nativeCurrency: { name: 'Celo', symbol: 'CELO', decimals: 18 },
-    defaultListUrl: CELO_LIST,
+    defaultListUrl: CELO_LIST
   },
   [SupportedChainId.AVALANCHE_FUJITEST]: {
     networkType: NetworkType.L1,
@@ -249,9 +247,7 @@ const CHAIN_INFO: ChainInfoMap = {
 export function getChainInfo(chainId: SupportedL1ChainId): L1ChainInfo
 export function getChainInfo(chainId: SupportedL2ChainId): L2ChainInfo
 export function getChainInfo(chainId: SupportedChainId): L1ChainInfo | L2ChainInfo
-export function getChainInfo(
-  chainId: SupportedChainId | SupportedL1ChainId | SupportedL2ChainId | number | undefined
-): L1ChainInfo | L2ChainInfo | undefined
+export function getChainInfo(chainId: SupportedChainId | SupportedL1ChainId | SupportedL2ChainId | number | undefined): L1ChainInfo | L2ChainInfo | undefined
 
 /**
  * Overloaded method for returning ChainInfo given a chainID
@@ -261,6 +257,7 @@ export function getChainInfo(
  * SupportedL1ChainId -> returns L1ChainInfo
  * SupportedL2ChainId -> returns L2ChainInfo
  */
+//eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export function getChainInfo(chainId: any): any {
   if (chainId) {
     return CHAIN_INFO[chainId] ?? undefined

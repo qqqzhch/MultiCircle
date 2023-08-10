@@ -1,28 +1,27 @@
-import React,{FC, useMemo} from 'react'
-import { useAppStore } from '../../state'
-import { formatUnitsErc20, formatUnits, cutOut } from '../../utils'
+import { FC } from 'react'
+
+import { formatUnitsErc20, cutOut } from '../../utils'
 import { Token } from '../../types/token'
-import {L1ChainInfo,L2ChainInfo, getChainInfo} from '../../constants/chainInfo'
+import { getChainInfo } from '../../constants/chainInfo'
 import { SupportedChainId } from '../../constants/chains'
-import ScanUrl from '../linkAndCopy/ScanUrl';
-import CopyAddressBtn from '../linkAndCopy/CopyAddressBtn';
+import ScanUrl from '../linkAndCopy/ScanUrl'
+import CopyAddressBtn from '../linkAndCopy/CopyAddressBtn'
 import { When } from 'react-if'
 
+type proteType = {
+  Tokeninfo: Token
+  ChainID: SupportedChainId
+  Amount: string
+  isFrom: boolean
+  txhash: string | undefined
+}
 
-type proteType={
-  Tokeninfo:Token,
-  ChainID:SupportedChainId,
-  Amount:string,
-  isFrom:boolean
-  txhash:string|undefined
-  }
+const TokenAndChainInfo: FC<proteType> = ({ Tokeninfo, ChainID, Amount, isFrom, txhash }) => {
+  const ChainInfo = getChainInfo(ChainID)
 
-const TokenAndChainInfo:FC<proteType> = ({Tokeninfo,ChainID,Amount, isFrom,txhash}) => {
-   const ChainInfo = getChainInfo(ChainID)
-
- if(Tokeninfo==null){
+  if (Tokeninfo == null) {
     return <></>
- }
+  }
 
   return (
     <div className=" bg-slate-50 flex rounded-md items-center space-x-1 p-4 flex-wrap w-full sm:w-1/2 ">
@@ -31,16 +30,16 @@ const TokenAndChainInfo:FC<proteType> = ({Tokeninfo,ChainID,Amount, isFrom,txhas
         <img width={20} src={ChainInfo?.logoUrl}></img>
       </div>
       <div>
-        <div>{isFrom?"From":"To"}  {ChainInfo?.label}</div>
-        <div className=' flex flex-wrap'>{formatUnitsErc20(Amount, Tokeninfo.symbol, Tokeninfo.decimals)}</div>
-      
-      </div>
-      <div className=' flex items-center  mt-2 space-x-2'>
-          <When condition={txhash}>
-          Tx Hash:  {txhash&&cutOut(txhash,2,2)} <ScanUrl addr={txhash} chainId={ChainID}></ScanUrl>   <CopyAddressBtn addr={txhash}></CopyAddressBtn>
-          </When>
-       
+        <div>
+          {isFrom ? 'From' : 'To'} {ChainInfo?.label}
         </div>
+        <div className=" flex flex-wrap">{formatUnitsErc20(Amount, Tokeninfo.symbol, Tokeninfo.decimals)}</div>
+      </div>
+      <div className=" flex items-center  mt-2 space-x-2">
+        <When condition={txhash}>
+          Tx Hash: {txhash && cutOut(txhash, 2, 2)} <ScanUrl addr={txhash} chainId={ChainID}></ScanUrl> <CopyAddressBtn addr={txhash}></CopyAddressBtn>
+        </When>
+      </div>
     </div>
   )
 }
