@@ -7,6 +7,7 @@ import { BigNumber, ethers } from 'ethers'
 import { useDebounce } from 'react-use'
 import useEthBalance from '../../hooks/useEthBalance';
 
+
 type proteType={
   isFrom:boolean
 }
@@ -19,6 +20,8 @@ const InputAndBalance:FC<proteType> = ({isFrom}) => {
   const [inputError,setinputError]=useState<string|undefined>()
   const setInput = useAppStore((state)=>state.setInput)
   const input = useAppStore((state)=>state.input)
+
+  const setGasFeeStore = useAppStore(state => state.setGasFee)
 
   const inputAmount= useMemo(()=>{
     const valueHaveUnits=ethers.utils.formatUnits(input,fromToken?.decimals).toString()
@@ -33,10 +36,11 @@ const InputAndBalance:FC<proteType> = ({isFrom}) => {
       const valueHaveUnits=ethers.utils.parseUnits(inputValue,fromToken?.decimals).toString()
       if(inputError==undefined){
         setInput(valueHaveUnits)
+        setGasFeeStore('0')
       }
       
 
-    },300,[inputValue,inputError,fromToken])
+    },300,[inputValue,inputError,fromToken,setGasFeeStore])
 
   const inputAmountChange = useCallback((value:string)=>{
       console.log('inputAmountChange')

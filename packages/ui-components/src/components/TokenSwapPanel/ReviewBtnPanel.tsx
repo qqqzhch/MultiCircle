@@ -22,6 +22,7 @@ const ReviewBtnPanel = () => {
     const { addToast } = useToasts()
     const usdcBalance=  useErc20Balance(fromToken?.address)
     const ethBalance = useEthBalance()
+    const gasFee = useAppStore((state)=>state.gasFee)
    
 
     const [isPreviewOpen, setPreviewOpen] = useState(false)
@@ -71,8 +72,8 @@ const ReviewBtnPanel = () => {
         <>
         <button
                   onClick={()=>{ValidateAmountFN()}}
-                
-                className="px-6 py-3.5 text-white flex-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              disabled={gasFee==="0"}
+                className="px-6 py-3.5 text-white flex-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto text-center disabled:bg-slate-700"
               >
               Review
               </button>
