@@ -9,6 +9,7 @@ const ReceiveAmount = () => {
   const input = useAppStore((state)=>state.willReceiveToken)
   const toToken = useAppStore((state)=>state.toToken)
   const {gasFeeLoading} = useRelayCallSwapGasFee()
+  console.log('willReceiveToken',input)
   // return <>
   //     <Skeleton  baseColor='red' ></Skeleton> 
   // </>
@@ -27,7 +28,7 @@ const ReceiveAmount = () => {
             <input
             type="number"
             className="skt-w skt-w-input text-valuerouter-primary w-full min-w-full max-w-[180px] bg-transparent pt-0.5 text-lg font-bold focus:max-w-none focus-visible:outline-none sm:max-w-full sm:text-xl"
-            placeholder={toToken==undefined?"":formatUnitsErc20(input,toToken?.symbol,toToken?.decimals)}
+            placeholder={toToken==null?"0.0":formatUnitsErc20(input,toToken?.symbol,toToken?.decimals)}
             spellCheck="false"
             readOnly
             
