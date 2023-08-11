@@ -1,4 +1,4 @@
-import { FC, useState, useMemo, useCallback } from 'react'
+import { FC, useState, useMemo, useCallback, useEffect } from 'react'
 import Balance from './Balance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 import { useAppStore } from '../../state'
@@ -28,7 +28,10 @@ const InputAndBalance: FC<proteType> = ({ isFrom }) => {
     return valueHaveUnits
   }, [input, fromToken])
 
-  const [inputValue, setInputValue] = useState(inputAmount)
+  const [inputValue, setInputValue] = useState('0')
+  useEffect(() => {
+    setInputValue(inputAmount)
+  }, [inputAmount, setInputValue])
 
   useDebounce(
     () => {

@@ -36,6 +36,8 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
 
   const fromToken = useAppStore(state => state.fromToken)
   const toToken = useAppStore(state => state.toToken)
+  const setInput = useAppStore(state => state.setInput)
+
   const CusRecipientAddress = useCusRecipientAddress()
   const { account } = useWeb3React()
 
@@ -71,13 +73,14 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       const { hash } = await RelayCall.doSwapFetch()
       setTxHash(hash)
       EventEmitter.emit('Refresh')
+      setInput('0')
       //eslint-disable-next-line  @typescript-eslint/no-explicit-any
     } catch (ex: any) {
       setTxHash(null)
     }
     setIsTxLoading(false)
     setStep(-1)
-  }, [RelayCall, setTxHash, setIsTxLoading])
+  }, [RelayCall, setTxHash, setIsTxLoading, setInput])
 
   // useEffect(()=>{
   //  if(statusMint.step==3){
