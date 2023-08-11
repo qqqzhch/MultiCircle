@@ -24,7 +24,7 @@ export default function useErc20Approve() {
 
       const result = await contract.approve(checkAddress, inputAmount)
       addToast('Approving', { appearance: 'success' })
-      await result.wait([1])
+
       // console.log('checkallowance event')
       // EventEmitter.emit('checkallowance')
 

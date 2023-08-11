@@ -23,7 +23,7 @@ export default function useRelayCallGasFee() {
   const setGasFeeStore = useAppStore(state => state.setGasFee)
   const setError = useAppStore(state => state.setError)
 
-  const { Validation2, allowanceValue } = useErcCheckAllowance()
+  const { Validation2, allowanceValue, fetchAllowanceData } = useErcCheckAllowance()
 
   const fromToken = useAppStore(state => state.fromToken)
   const SwapParameter = useSwapParameter()
@@ -78,6 +78,15 @@ export default function useRelayCallGasFee() {
       if (isestimateGas) {
         setGasFeeLoading(true)
         try {
+          if (fromToken?.address !== '') {
+            const AllowanceData = await fetchAllowanceData()
+            const isApprove = Validation2(AllowanceData, inputAmount)
+            if (isApprove == false) {
+              setGasFeeLoading(true)
+              console.info('need approve')
+              return
+            }
+          }
           const result = await contract.estimateGas.swapAndBridge(sellArgs, buyArgs, destDomain, accounthex32, gasAndValue)
           setGasFeeStore(result.toString())
         } catch (error: unknown) {
@@ -109,7 +118,9 @@ export default function useRelayCallGasFee() {
       inputAmount,
       fromToken?.address,
       CusRecipientAddress,
-      setError
+      setError,
+      fetchAllowanceData,
+      Validation2
     ]
   )
 

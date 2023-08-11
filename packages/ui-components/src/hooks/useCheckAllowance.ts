@@ -42,7 +42,7 @@ export default function useErcCheckAllowance() {
     }
   }, [account, contractAddress, RelayerAddress, library])
 
-  const { data, isLoading } = useSWR([account, chainId, contractAddress, RelayerAddress, 'erc20allowance', fetchCheck], fetchData, { refreshInterval: 5000 })
+  const { data, isLoading } = useSWR([account, chainId, contractAddress, RelayerAddress, 'erc20allowance', fetchCheck], fetchData, { refreshInterval: 2000 })
 
   const fnback = useCallback(
     (inputAmount: string) => {
