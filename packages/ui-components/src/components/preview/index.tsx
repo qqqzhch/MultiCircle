@@ -13,6 +13,7 @@ import SetepLoading from './StepperLoading'
 import TokenAndChainInfo from './TokenAndChainInfo'
 import useCusRecipientAddress from '../../hooks/useCusRecipientAddress'
 import { useWeb3React } from '@web3-react/core'
+import EventEmitter from '../../EventEmitter/index'
 
 interface componentprops {
   isOpen: boolean
@@ -69,6 +70,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     try {
       const { hash } = await RelayCall.doSwapFetch()
       setTxHash(hash)
+      EventEmitter.emit('Refresh')
       //eslint-disable-next-line  @typescript-eslint/no-explicit-any
     } catch (ex: any) {
       setTxHash(null)

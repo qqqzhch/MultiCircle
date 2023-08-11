@@ -30,20 +30,19 @@ export default function useErcCheckAllowance() {
     }
   }, [setFetchCheck])
 
-  const { data, isLoading } = useSWR(
-    [account, chainId, contractAddress, RelayerAddress, 'erc20allowance', fetchCheck],
-    async ([account, chainId, contractAddress, checkAddress]) => {
-      if (account && contractAddress && library != undefined) {
-        const contract = new Contract(contractAddress, erc20ABI, library)
+  const fetchData = useCallback(async () => {
+    if (account && contractAddress && library != undefined) {
+      console.info('erc20allowance')
+      const contract = new Contract(contractAddress, erc20ABI, library)
 
-        const allowance: BigNumber = await contract.allowance(account, RelayerAddress)
-        // setAllowance(allowance )
+      const allowance: BigNumber = await contract.allowance(account, RelayerAddress)
+      // setAllowance(allowance )
 
-        return allowance
-      }
-    },
-    { refreshInterval: 5 }
-  )
+      return allowance
+    }
+  }, [account, contractAddress, RelayerAddress, library])
+
+  const { data, isLoading } = useSWR([account, chainId, contractAddress, RelayerAddress, 'erc20allowance', fetchCheck], fetchData, { refreshInterval: 5000 })
 
   const fnback = useCallback(
     (inputAmount: string) => {
@@ -71,6 +70,7 @@ export default function useErcCheckAllowance() {
     // dofetch,
     // checkAmountAsync,
     allowanceValue: data,
-    isLoading
+    isLoading,
+    fetchAllowanceData: fetchData
   }
 }

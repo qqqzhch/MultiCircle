@@ -81,6 +81,7 @@ export default function useRelayCallGasFee() {
           const result = await contract.estimateGas.swapAndBridge(sellArgs, buyArgs, destDomain, accounthex32, gasAndValue)
           setGasFeeStore(result.toString())
         } catch (error: unknown) {
+          setGasFeeLoading(false)
           const errorInfo = error as { reason: string }
           setError(errorInfo.reason || 'call swap failed')
           throw error as Error
