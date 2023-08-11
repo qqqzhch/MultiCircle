@@ -70,27 +70,29 @@ export default function useRelayCallGasFee() {
       const buyArgs = SwapParameter.buyArgs
       const value = fromToken?.address == '' ? inputAmount : '0'
       const accounthex32 = ethers.utils.hexZeroPad(CusRecipientAddress || account, 32)
-      try {
-        setGasFeeLoading(true)
 
-        const gasAndValue: { value?: string; gaslimit?: number } = {}
-        if (value != '0') {
-          gasAndValue.value = value
-        }
-        if (isestimateGas) {
+      const gasAndValue: { value?: string; gaslimit?: number } = {}
+      if (value != '0') {
+        gasAndValue.value = value
+      }
+      if (isestimateGas) {
+        setGasFeeLoading(true)
+        try {
           const result = await contract.estimateGas.swapAndBridge(sellArgs, buyArgs, destDomain, accounthex32, gasAndValue)
           setGasFeeStore(result.toString())
-        } else {
+        } catch (error: unknown) {
+          const errorInfo = error as { reason: string }
+          setError(errorInfo.reason || 'call swap failed')
+          throw error as Error
+        }
+        setGasFeeLoading(false)
+      } else {
+        try {
           const result = await contract.swapAndBridge(sellArgs, buyArgs, destDomain, accounthex32, gasAndValue)
           return result
+        } catch (error: unknown) {
+          throw error as Error
         }
-
-        setGasFeeLoading(false)
-      } catch (error: unknown) {
-        setGasFeeLoading(false)
-        const errorInfo = error as { reason: string }
-        setError(errorInfo.reason || 'call swap failed')
-        throw error as Error
       }
     },
     [

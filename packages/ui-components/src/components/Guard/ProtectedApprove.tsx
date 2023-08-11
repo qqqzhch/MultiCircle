@@ -25,7 +25,7 @@ const ProtectedApprove = ({ children, className }: { children: JSX.Element; clas
   const Submit = useCallback(async () => {
     setIsisLoading(true)
     const result = await ApproveUSDT.doFetch()
-
+    result.await([1])
     if (result !== undefined) {
       EventEmitter.emit('Refresh')
     }

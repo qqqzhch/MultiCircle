@@ -41,7 +41,8 @@ export default function useErcCheckAllowance() {
 
         return allowance
       }
-    }
+    },
+    { refreshInterval: 5 }
   )
 
   const fnback = useCallback(
