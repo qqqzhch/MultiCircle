@@ -21,6 +21,7 @@ const InputAndBalance: FC<proteType> = ({ isFrom }) => {
   const input = useAppStore(state => state.input)
 
   const setGasFeeStore = useAppStore(state => state.setGasFee)
+  const setError = useAppStore(state => state.setError)
 
   const inputAmount = useMemo(() => {
     const valueHaveUnits = ethers.utils.formatUnits(input, fromToken?.decimals).toString()
@@ -35,10 +36,11 @@ const InputAndBalance: FC<proteType> = ({ isFrom }) => {
       if (inputError == undefined) {
         setInput(valueHaveUnits)
         setGasFeeStore('0')
+        setError('')
       }
     },
     300,
-    [inputValue, inputError, fromToken, setGasFeeStore]
+    [inputValue, inputError, fromToken, setGasFeeStore, setError]
   )
 
   const inputAmountChange = useCallback(

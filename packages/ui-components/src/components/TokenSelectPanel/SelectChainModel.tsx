@@ -31,6 +31,7 @@ const SelectChainModal: FC<componentprops> = ({ isOpen, closeModal, isFrom }) =>
   const fromToken = useAppStore(state => state.fromToken)
   const toToken = useAppStore(state => state.toToken)
   const [searchKey, setSearchKey] = useState('')
+  const setError = useAppStore(state => state.setError)
 
   const listIng = useMemo(() => {
     // if(isFrom==false){
@@ -95,19 +96,21 @@ const SelectChainModal: FC<componentprops> = ({ isOpen, closeModal, isFrom }) =>
   const selectToken = useCallback(
     (data: Token | null) => {
       setToken(isFrom, data)
+      setError('')
       if (data !== null) {
         closeModal()
       }
     },
-    [setToken, closeModal, isFrom]
+    [setToken, closeModal, isFrom, setError]
   )
 
   const clickFn = useCallback(
     async (network: L1ChainInfo | L2ChainInfo, chainId: SupportedChainId) => {
       setFromOrTOChain(network, isFrom, chainId)
       selectToken(null)
+      setError('')
     },
-    [isFrom, setFromOrTOChain, selectToken]
+    [isFrom, setFromOrTOChain, selectToken, setError]
   )
 
   return (

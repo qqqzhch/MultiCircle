@@ -55,6 +55,8 @@ interface AppState {
   setCustomRecipientAddress: (address: string) => void
   removeCustomRecipientAddress: () => void
   updateHistoryBytxhash: (txhash: string, toTxhash: string) => void
+  error: string
+  setError: (msg: string) => void
 }
 
 const intialState = {
@@ -71,7 +73,8 @@ const intialState = {
   fromToken: null,
   toToken: null,
   willReceiveToken: '0',
-  CustomRecipientAddress: null
+  CustomRecipientAddress: null,
+  error: ''
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -176,6 +179,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 }
               })
             },
+            setError: (msg: string) => {
+              set(state => {
+                state.error = msg
+              })
+            },
             setToken: (dataType: boolean, data: Token | null) => {
               set(state => {
                 if (dataType) {
@@ -186,7 +194,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
               })
             }
           }),
-          { name: 'app-storage-v0.1' }
+          { name: 'app-storage-v0.1', partialize: state => ({ ...state, error: '' }) }
         )
       )
     )

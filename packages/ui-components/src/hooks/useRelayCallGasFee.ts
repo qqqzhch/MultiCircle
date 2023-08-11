@@ -12,7 +12,6 @@ import useErcCheckAllowance from './useCheckAllowance'
 
 import useSwapParameter from './useSwapParameter'
 import useCusRecipientAddress from './useCusRecipientAddress'
-import { useToasts } from 'react-toast-notifications'
 
 export default function useRelayCallGasFee() {
   const { library, account } = useWeb3React()
@@ -22,6 +21,7 @@ export default function useRelayCallGasFee() {
   const inputAmount = useAppStore(state => state.input)
   const toChainID = useAppStore(state => state.toChainID)
   const setGasFeeStore = useAppStore(state => state.setGasFee)
+  const setError = useAppStore(state => state.setError)
 
   const { Validation2, allowanceValue } = useErcCheckAllowance()
 
@@ -30,7 +30,6 @@ export default function useRelayCallGasFee() {
 
   const [gasFeeLoading, setGasFeeLoading] = useState(false)
   const CusRecipientAddress = useCusRecipientAddress()
-  const { addToast } = useToasts()
 
   const isAllowance = useMemo(() => {
     return Validation2(allowanceValue, inputAmount) || fromToken?.address == ''
@@ -38,9 +37,9 @@ export default function useRelayCallGasFee() {
 
   useEffect(() => {
     if (SwapParameter.error) {
-      addToast(SwapParameter.error?.message)
+      setError(SwapParameter.error?.message)
     }
-  }, [SwapParameter.error, addToast])
+  }, [SwapParameter.error, setError])
 
   const getgas = useCallback(
     async (isestimateGas: boolean) => {
@@ -89,6 +88,8 @@ export default function useRelayCallGasFee() {
         setGasFeeLoading(false)
       } catch (error: unknown) {
         setGasFeeLoading(false)
+        const errorInfo = error as { reason: string }
+        setError(errorInfo.reason || 'call swap failed')
         throw error as Error
       }
     },
@@ -104,7 +105,8 @@ export default function useRelayCallGasFee() {
       isAllowance,
       inputAmount,
       fromToken?.address,
-      CusRecipientAddress
+      CusRecipientAddress,
+      setError
     ]
   )
 

@@ -41,7 +41,11 @@ export default function useQuote(isneedSwap: boolean, isFrom: boolean, sellAmoun
         if (data.code == undefined) {
           return data
         } else {
-          throw new Error(data.reason)
+          if (data.validationErrors && data.validationErrors.length > 0) {
+            throw new Error(data.validationErrors[0].description)
+          } else {
+            throw new Error(data.reason)
+          }
         }
       }
     }

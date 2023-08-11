@@ -11,7 +11,7 @@ async function fetcher(txhash: string | undefined | null): Promise<SearchTxhash 
   }
 
   const res = await api.get<SearchTxhash>(BaseUrl + '/search/?txhash=' + txhash)
-  if (res && res.code == 0) {
+  if (res && res.code == 0 && res.data) {
     return res
   } else {
     throw new Error('get Accounts info error ')
