@@ -5,7 +5,7 @@ import { NativeCoinAddress } from '../constants/usdc'
 import useQuote from './useQuote'
 import { BigNumber, ethers } from 'ethers'
 import useRelayerFeeRate from './useRelayerFeeRate'
-import { perThousandRatioForFee } from '../utils'
+import { perThousandRatioForFee,percentageValue } from '../utils'
 
 export default function useSwapParameter() {
   const fromChainID = useAppStore(state => state.fromChainID)
@@ -30,20 +30,20 @@ export default function useSwapParameter() {
 
   const quoteDataSell = useQuote(isFromNeedSwap, true)
 
-  const quotebuyAmount = useMemo(() => {
-    let fromNum: string | undefined
+  // const quotebuyAmount = useMemo(() => {
+  //   let fromNum: string | undefined
 
-    if (isFromNeedSwap) {
-      fromNum = quoteDataSell.data?.grossBuyAmount
-    } else {
-      fromNum = input
-    }
-    if (fromNum == undefined || dataFee == undefined) return undefined
+  //   if (isFromNeedSwap) {
+  //     fromNum = quoteDataSell.data?.grossBuyAmount
+  //   } else {
+  //     fromNum = input
+  //   }
+  //   if (fromNum == undefined || dataFee == undefined) return undefined
 
-    const result = perThousandRatioForFee(BigNumber.from(fromNum), dataFee)
+  //   const result = perThousandRatioForFee(BigNumber.from(fromNum), dataFee)
 
-    return result?.toString()
-  }, [quoteDataSell.data, isFromNeedSwap, input, dataFee])
+  //   return result?.toString()
+  // }, [quoteDataSell.data, isFromNeedSwap, input, dataFee])
 
   const isToNeedSwap = useMemo(() => {
     if (toToken?.address == usdcTo) {
@@ -52,6 +52,25 @@ export default function useSwapParameter() {
       return true
     }
   }, [toToken, usdcTo])
+
+  const quotebuyAmount= useMemo(()=>{
+    let fromNum: string | undefined
+    if(quoteDataSell.data==undefined){
+      return 
+    }
+
+    if(isToNeedSwap&&isFromNeedSwap){
+      fromNum=percentageValue(BigNumber.from(quoteDataSell.data?.grossBuyAmount),1).toString()
+    }else{
+      fromNum = input
+    }
+    if (fromNum == undefined || dataFee == undefined){
+      return
+    }
+    const result = perThousandRatioForFee(BigNumber.from(fromNum), dataFee)
+    return result
+
+  },[isFromNeedSwap,isToNeedSwap,input,quoteDataSell.data,dataFee])
 
   const quoteDataBuy = useQuote(isToNeedSwap, false, quotebuyAmount)
 
