@@ -30,20 +30,20 @@ export default function useSwapParameter() {
 
   const quoteDataSell = useQuote(isFromNeedSwap, true)
 
-  const quotebuyAmount = useMemo(() => {
-    let fromNum: string | undefined
+  // const quotebuyAmount = useMemo(() => {
+  //   let fromNum: string | undefined
 
-    if (isFromNeedSwap) {
-      fromNum = quoteDataSell.data?.grossBuyAmount
-    } else {
-      fromNum = input
-    }
-    if (fromNum == undefined || dataFee == undefined) return undefined
+  //   if (isFromNeedSwap) {
+  //     fromNum = quoteDataSell.data?.grossBuyAmount
+  //   } else {
+  //     fromNum = input
+  //   }
+  //   if (fromNum == undefined || dataFee == undefined) return undefined
 
-    const result = perThousandRatioForFee(BigNumber.from(fromNum), dataFee)
+  //   const result = perThousandRatioForFee(BigNumber.from(fromNum), dataFee)
 
-    return result?.toString()
-  }, [quoteDataSell.data, isFromNeedSwap, input, dataFee])
+  //   return result?.toString()
+  // }, [quoteDataSell.data, isFromNeedSwap, input, dataFee])
 
   const isToNeedSwap = useMemo(() => {
     if (toToken?.address == usdcTo) {
@@ -52,6 +52,28 @@ export default function useSwapParameter() {
       return true
     }
   }, [toToken, usdcTo])
+
+  const quotebuyAmount = useMemo(() => {
+    let fromNum: string | undefined
+    if (quoteDataSell.data == undefined) {
+      return
+    }
+
+    if (isFromNeedSwap) {
+      fromNum = quoteDataSell.data?.grossBuyAmount
+      fromNum =BigNumber.from(fromNum).sub(5).toString()
+      //Reduced values provide success rates
+    } else {
+      fromNum = input
+    }
+    if (fromNum == undefined || dataFee == undefined) {
+      return
+    }
+    console.log(fromNum,dataFee)
+    const result = perThousandRatioForFee(BigNumber.from(fromNum), dataFee)
+    console.log(result)
+    return result
+  }, [isFromNeedSwap, input, quoteDataSell.data, dataFee])
 
   const quoteDataBuy = useQuote(isToNeedSwap, false, quotebuyAmount)
 
@@ -80,7 +102,7 @@ export default function useSwapParameter() {
     const sellcallgas = isFromNeedSwap ? quoteDataSell.data?.gas : '0'
     const sellcalldata = isFromNeedSwap ? quoteDataSell.data?.data : '0x0000000000000000000000000000000000000000000000000000000000000000'
 
-    const grossBuyAmountSmall = isFromNeedSwap ? BigNumber.from(quoteDataSell.data?.grossBuyAmount).sub(50).toString() : '0'
+    const grossBuyAmountSmall = isFromNeedSwap ? BigNumber.from(quoteDataSell.data?.grossBuyAmount).toString() : '0'
 
     const guaranteedBuyAmount = isFromNeedSwap ? grossBuyAmountSmall : '0'
 
@@ -99,7 +121,7 @@ export default function useSwapParameter() {
       return null
     }
     const buyToken = isToNeedSwap ? (toToken.address == '' ? NativeCoinAddress : toToken.address) : usdcTo
-    const grossBuyAmountSmall = isToNeedSwap ? BigNumber.from(quoteDataBuy.data?.grossBuyAmount).sub(50).toString() : '0'
+    const grossBuyAmountSmall = isToNeedSwap ? BigNumber.from(quoteDataBuy.data?.grossBuyAmount).toString() : '0'
     const guaranteedBuyAmount = isToNeedSwap ? grossBuyAmountSmall : quotebuyAmount
     const buycallgas = isToNeedSwap ? quoteDataBuy.data?.gas : '0'
     const buycalldata = isToNeedSwap ? quoteDataBuy.data?.data : '0x0000000000000000000000000000000000000000000000000000000000000000'
