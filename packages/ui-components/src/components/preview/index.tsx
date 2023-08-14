@@ -13,7 +13,10 @@ import SetepLoading from './StepperLoading'
 import TokenAndChainInfo from './TokenAndChainInfo'
 import useCusRecipientAddress from '../../hooks/useCusRecipientAddress'
 import { useWeb3React } from '@web3-react/core'
+import { ChevronDoubleRightIcon } from '@heroicons/react/24/solid'
 // import EventEmitter from '../../EventEmitter/index'
+
+
 
 interface componentprops {
   isOpen: boolean
@@ -139,7 +142,9 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                     <div className="w-full  lg:py-6 mb-6 lg:mb-0">
                       <div className=" flex  justify-around mb-2 items-center">
                         <TokenAndChainInfo isFrom={true}></TokenAndChainInfo>
-                        <div>》</div>
+                        <div>
+                          <ChevronDoubleRightIcon className=' w-4 h-4'></ChevronDoubleRightIcon>
+                        </div>
                         <TokenAndChainInfo isFrom={false}></TokenAndChainInfo>
                       </div>
 
@@ -155,12 +160,12 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                         <span className="text-gray-500">Recipient Address</span>
                         <span className="ml-auto text-gray-900">{RecipientAddress && cutOut(RecipientAddress, 6, 6)}</span>
                       </div>
-                      <div className="flex border-t border-b mb-6 border-gray-200 py-2">
+                      {/* <div className="flex border-t border-b mb-6 border-gray-200 py-2">
                         <span className="text-gray-500">Protocol Fee</span>
                         <span className="ml-auto text-gray-900">
                           {formatUnitsErc20(fee, fromChainInfo?.nativeCurrency.symbol || '', fromChainInfo?.nativeCurrency.decimals || 18)}
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
 

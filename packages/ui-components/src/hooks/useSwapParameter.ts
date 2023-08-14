@@ -61,13 +61,17 @@ export default function useSwapParameter() {
 
     if (isFromNeedSwap) {
       fromNum = quoteDataSell.data?.grossBuyAmount
+      fromNum =BigNumber.from(fromNum).sub(5).toString()
+      //Reduced values provide success rates
     } else {
       fromNum = input
     }
     if (fromNum == undefined || dataFee == undefined) {
       return
     }
+    console.log(fromNum,dataFee)
     const result = perThousandRatioForFee(BigNumber.from(fromNum), dataFee)
+    console.log(result)
     return result
   }, [isFromNeedSwap, input, quoteDataSell.data, dataFee])
 
