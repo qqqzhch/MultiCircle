@@ -57,6 +57,8 @@ interface AppState {
   updateHistoryBytxhash: (txhash: string, toTxhash: string) => void
   error: string
   setError: (msg: string) => void
+  isOpenPreview: boolean
+  setOpenPreview: (isopen: boolean) => void
 }
 
 const intialState = {
@@ -74,7 +76,8 @@ const intialState = {
   toToken: null,
   willReceiveToken: '0',
   CustomRecipientAddress: null,
-  error: ''
+  error: '',
+  isOpenPreview: false
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -182,6 +185,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
             setError: (msg: string) => {
               set(state => {
                 state.error = msg
+              })
+            },
+            setOpenPreview: (isopen: boolean) => {
+              set(state => {
+                state.isOpenPreview = isopen
               })
             },
             setToken: (dataType: boolean, data: Token | null) => {
