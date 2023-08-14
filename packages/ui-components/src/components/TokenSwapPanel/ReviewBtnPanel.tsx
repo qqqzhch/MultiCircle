@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { useAppStore } from '../../state'
 import { useToasts } from 'react-toast-notifications'
 import { BigNumber } from 'ethers'
 import useErc20Balance from '../../hooks/useErc20Balance'
-import PreviewModal from '../preview'
+
 import { USECHAIN_IDS } from '../../constants/chains'
 import useEthBalance from '../../hooks/useEthBalance'
 
@@ -18,7 +18,7 @@ const ReviewBtnPanel = () => {
   const ethBalance = useEthBalance()
   const gasFee = useAppStore(state => state.gasFee)
 
-  const [isPreviewOpen, setPreviewOpen] = useState(false)
+  const setPreviewOpen = useAppStore(state => state.setOpenPreview)
 
   const ValidateAmountFN = useCallback(() => {
     if (fromChainID == null || toChainID == null || USECHAIN_IDS.includes(fromChainID) == false || USECHAIN_IDS.includes(toChainID) == false) {
@@ -43,11 +43,7 @@ const ReviewBtnPanel = () => {
       addToast('Please check the values entered', { appearance: 'error' })
       return false
     }
-  }, [inputNumer, usdcBalance, addToast, fromChainID, toChainID, ethBalance, fromToken])
-
-  const closePreModel = useCallback(() => {
-    setPreviewOpen(false)
-  }, [setPreviewOpen])
+  }, [inputNumer, usdcBalance, addToast, fromChainID, toChainID, ethBalance, fromToken, setPreviewOpen])
 
   return (
     <>
@@ -60,7 +56,6 @@ const ReviewBtnPanel = () => {
       >
         Review
       </button>
-      <PreviewModal isOpen={isPreviewOpen} closeModal={closePreModel}></PreviewModal>
     </>
   )
 }

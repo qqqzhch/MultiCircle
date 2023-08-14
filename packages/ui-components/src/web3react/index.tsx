@@ -28,7 +28,7 @@ export const Web3Provider: FC<Props> = ({ children }) => {
       <ToastProvider components={{ Toast: MyCustomToast }} autoDismiss={true} autoDismissTimeout={2000} placement={'top-center'}>
         <SWRConfig
           value={{
-            refreshInterval: 1000 * 30
+            refreshInterval: 0
           }}
         >
           {children}
