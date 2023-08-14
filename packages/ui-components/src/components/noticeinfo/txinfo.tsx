@@ -53,7 +53,7 @@ const Txinfo: FC<{ Item: txItem }> = ({ Item }) => {
           ChainID={Item.toChainID}
           Amount={Item.output}
           isFrom={false}
-          txhash={status.data?.data.to?.txhash}
+          txhash={status.data?.data.to?.tx_hash}
         ></TokenAndChainInfo>
       </div>
 

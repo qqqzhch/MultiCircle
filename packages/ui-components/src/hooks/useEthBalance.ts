@@ -24,7 +24,7 @@ export default function useEthBalance() {
     }
   }, [StaticJsonRpcProvider, account])
 
-  const { data, error, isLoading } = useSWR(['EthBalance', account, fromChainID], fetchData)
+  const { data, error, isLoading } = useSWR(['EthBalance', account, fromChainID], fetchData, { refreshInterval: 10 * 1000 })
 
   return {
     balance: data,

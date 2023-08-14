@@ -36,7 +36,7 @@ export default function useErc20Balance(address: string | undefined) {
     }
   }, [StaticJsonRpcProvider, account, contractAddress])
 
-  const { data, error, isLoading } = useSWR(['erc20balanceOf', account, selectcontract, fromChainID], fetchData)
+  const { data, error, isLoading } = useSWR(['erc20balanceOf', account, selectcontract, fromChainID], fetchData, { refreshInterval: 10 * 1000 })
 
   // useEffect(() => {
 
