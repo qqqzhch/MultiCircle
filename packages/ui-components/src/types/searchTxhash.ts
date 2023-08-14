@@ -28,7 +28,7 @@ export interface Tokeninfo {
 }
 
 export interface To {
-  txhash: string
+  tx_hash: string
   chainid: string
   tokenaddress: string
   recipient: string

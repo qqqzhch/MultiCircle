@@ -2,8 +2,19 @@ import TokenSelectPanel from '../TokenSelectPanel/Index'
 import TokenSwichPanel from '../TokenSwichPanel'
 import SwapBtn from './SwapBtn'
 import TokenSwapRecipient from '../TokenSwapRecipient/Index'
+import PreviewModal from '../preview'
+import { useAppStore } from '../../state'
+import { useCallback } from 'react'
 
 const Index = () => {
+  // const [isPreviewOpen, setPreviewOpen] = useState(false)
+  const isPreviewOpen = useAppStore(state => state.isOpenPreview)
+  const setOpenPreview = useAppStore(state => state.setOpenPreview)
+
+  const closePreModel = useCallback(() => {
+    setOpenPreview(false)
+  }, [setOpenPreview])
+
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
       <img
@@ -35,6 +46,7 @@ const Index = () => {
           <div>
             <TokenSwapRecipient></TokenSwapRecipient>
           </div>
+          <PreviewModal isOpen={isPreviewOpen} closeModal={closePreModel}></PreviewModal>
         </div>
       </div>
     </div>
