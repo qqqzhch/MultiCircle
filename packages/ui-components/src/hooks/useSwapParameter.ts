@@ -5,7 +5,7 @@ import { NativeCoinAddress } from '../constants/usdc'
 import useQuote from './useQuote'
 import { BigNumber, ethers } from 'ethers'
 import useRelayerFeeRate from './useRelayerFeeRate'
-import { perThousandRatioForFee,percentageValue } from '../utils'
+import { perThousandRatioForFee } from '../utils'
 
 export default function useSwapParameter() {
   const fromChainID = useAppStore(state => state.fromChainID)
@@ -53,24 +53,23 @@ export default function useSwapParameter() {
     }
   }, [toToken, usdcTo])
 
-  const quotebuyAmount= useMemo(()=>{
+  const quotebuyAmount = useMemo(() => {
     let fromNum: string | undefined
-    if(quoteDataSell.data==undefined){
-      return 
+    if (quoteDataSell.data == undefined) {
+      return
     }
 
-    if(isToNeedSwap&&isFromNeedSwap){
-      fromNum=percentageValue(BigNumber.from(quoteDataSell.data?.grossBuyAmount),1).toString()
-    }else{
+    if (isFromNeedSwap) {
+      fromNum = quoteDataSell.data?.grossBuyAmount
+    } else {
       fromNum = input
     }
-    if (fromNum == undefined || dataFee == undefined){
+    if (fromNum == undefined || dataFee == undefined) {
       return
     }
     const result = perThousandRatioForFee(BigNumber.from(fromNum), dataFee)
     return result
-
-  },[isFromNeedSwap,isToNeedSwap,input,quoteDataSell.data,dataFee])
+  }, [isFromNeedSwap, input, quoteDataSell.data, dataFee])
 
   const quoteDataBuy = useQuote(isToNeedSwap, false, quotebuyAmount)
 
@@ -99,7 +98,7 @@ export default function useSwapParameter() {
     const sellcallgas = isFromNeedSwap ? quoteDataSell.data?.gas : '0'
     const sellcalldata = isFromNeedSwap ? quoteDataSell.data?.data : '0x0000000000000000000000000000000000000000000000000000000000000000'
 
-    const grossBuyAmountSmall = isFromNeedSwap ? BigNumber.from(quoteDataSell.data?.grossBuyAmount).sub(50).toString() : '0'
+    const grossBuyAmountSmall = isFromNeedSwap ? BigNumber.from(quoteDataSell.data?.grossBuyAmount).toString() : '0'
 
     const guaranteedBuyAmount = isFromNeedSwap ? grossBuyAmountSmall : '0'
 
@@ -118,7 +117,7 @@ export default function useSwapParameter() {
       return null
     }
     const buyToken = isToNeedSwap ? (toToken.address == '' ? NativeCoinAddress : toToken.address) : usdcTo
-    const grossBuyAmountSmall = isToNeedSwap ? BigNumber.from(quoteDataBuy.data?.grossBuyAmount).sub(50).toString() : '0'
+    const grossBuyAmountSmall = isToNeedSwap ? BigNumber.from(quoteDataBuy.data?.grossBuyAmount).toString() : '0'
     const guaranteedBuyAmount = isToNeedSwap ? grossBuyAmountSmall : quotebuyAmount
     const buycallgas = isToNeedSwap ? quoteDataBuy.data?.gas : '0'
     const buycalldata = isToNeedSwap ? quoteDataBuy.data?.data : '0x0000000000000000000000000000000000000000000000000000000000000000'
