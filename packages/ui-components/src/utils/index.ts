@@ -83,3 +83,19 @@ export function perThousandRatioForFee(num: BigNumber, data: BigNumber) {
 export function calculateGasMargin(value: BigNumber): BigNumber {
   return value.mul(120).div(100)
 }
+
+/**
+ * Returns the gas value plus a margin for unexpected or variable gas costs
+ * @param value the gas value to pad
+ */
+export function percentageValue(value: BigNumber, num: number): BigNumber {
+  return value.mul(100 - num).div(100)
+}
+
+/**
+ * Returns the gas value plus a margin for unexpected or variable gas costs
+ * @param value the gas value to pad
+ */
+export function ThousandageValue(value: BigNumber, num: number): BigNumber {
+  return value.mul(1000 - num).div(1000)
+}

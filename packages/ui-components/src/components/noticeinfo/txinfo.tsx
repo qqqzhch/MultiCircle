@@ -6,6 +6,7 @@ import useTxStatus from '../../hooks/useTxStatus'
 import { Else, If, Then, When } from 'react-if'
 
 import TokenAndChainInfo from './TokenAndChainInfo'
+import { ChevronDoubleRightIcon } from '@heroicons/react/24/solid'
 
 //txItem
 const Txinfo: FC<{ Item: txItem }> = ({ Item }) => {
@@ -46,7 +47,9 @@ const Txinfo: FC<{ Item: txItem }> = ({ Item }) => {
       <div className=" flex flex-col sm:flex-row justify-around   items-stretch">
         <TokenAndChainInfo Tokeninfo={Item.fromToken} ChainID={Item.fromChainID} Amount={Item.input} isFrom={true} txhash={Item.txhash}></TokenAndChainInfo>
         <div className=" flex">
-          <span className=" m-auto">{'>'}</span>
+          <span className=" m-auto p-2">
+          <ChevronDoubleRightIcon className=' w-4 h-4'></ChevronDoubleRightIcon>
+          </span>
         </div>
         <TokenAndChainInfo
           Tokeninfo={Item.toToken}
