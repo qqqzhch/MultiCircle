@@ -99,7 +99,10 @@ export default function useSwapParameter() {
     }
     const sellToken = isFromNeedSwap ? (fromToken.address == '' ? NativeCoinAddress : fromToken.address) : usdcFrom
     const sellAmount = input
-    const sellcallgas = isFromNeedSwap ? quoteDataSell.data?.gas : '0'
+    let sellcallgas = isFromNeedSwap ? quoteDataSell.data?.gas : '0'
+    
+    sellcallgas=BigNumber.from(sellcallgas).mul(2).toString()
+
     const sellcalldata = isFromNeedSwap ? quoteDataSell.data?.data : '0x0000000000000000000000000000000000000000000000000000000000000000'
 
     const grossBuyAmountSmall = isFromNeedSwap ? BigNumber.from(quoteDataSell.data?.grossBuyAmount).toString() : '0'
@@ -123,7 +126,8 @@ export default function useSwapParameter() {
     const buyToken = isToNeedSwap ? (toToken.address == '' ? NativeCoinAddress : toToken.address) : usdcTo
     const grossBuyAmountSmall = isToNeedSwap ? BigNumber.from(quoteDataBuy.data?.grossBuyAmount).toString() : '0'
     const guaranteedBuyAmount = isToNeedSwap ? grossBuyAmountSmall : quotebuyAmount
-    const buycallgas = isToNeedSwap ? quoteDataBuy.data?.gas : '0'
+    let buycallgas = isToNeedSwap ? quoteDataBuy.data?.gas : '0'
+    buycallgas=BigNumber.from(buycallgas).mul(2).toString()
     const buycalldata = isToNeedSwap ? quoteDataBuy.data?.data : '0x0000000000000000000000000000000000000000000000000000000000000000'
     if (buyToken == undefined) {
       return null
